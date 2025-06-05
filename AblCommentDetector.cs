@@ -440,6 +440,10 @@ namespace AblCommentDetector
                 {
                     writer.WriteLine($"/*[BLANK]*/                      {result.Content}");
                 }
+                else if (result.Type == LineType.ExecutableCode || result.Type == LineType.MixedContent)
+                {
+                    writer.WriteLine($"/*[EXECUTABLE]*/                 {result.Content}");
+                }
                 else
                 {
                     writer.WriteLine($"{result.Content}");
