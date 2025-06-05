@@ -15,6 +15,7 @@ namespace AblCommentDetector
         static void Main(string[] args)
         {
             // Ensure root-level outputs directory exists
+            // This is important for consistent output regardless of where the program is run from
             string projectRoot = GetProjectRoot();
             Directory.CreateDirectory(Path.Combine(projectRoot, "outputs"));
 
@@ -23,6 +24,7 @@ namespace AblCommentDetector
             Console.WriteLine("Based on grammar patterns from https://github.com/ezequielgandolfi/openedge-zext.git");
             Console.WriteLine();
 
+            // Display usage information if no arguments provided
             if (args.Length == 0)
             {
                 Console.WriteLine("Usage:");
@@ -40,6 +42,7 @@ namespace AblCommentDetector
             
             try
             {
+                // Determine if we're processing a single file or a directory
                 if (File.Exists(inputPath))
                 {
                     ProcessSingleFile(inputPath);
@@ -60,7 +63,11 @@ namespace AblCommentDetector
             }
         }
 
-        // Helper method to get project root directory using relative paths
+        /// <summary>
+        /// Gets the project root directory regardless of where the application is run from.
+        /// This is crucial for consistent file path resolution and output generation.
+        /// </summary>
+        /// <returns>The absolute path to the project root directory</returns>
         static string GetProjectRoot()
         {
             // Get the directory where the executable is running
@@ -102,29 +109,36 @@ namespace AblCommentDetector
             return currentDir;
         }
 
+        /// <summary>
+        /// Processes a single ABL file, analyzing its contents for comments and procedure calls
+        /// </summary>
+        /// <param name="filePath">Path to the ABL file to process</param>
         static void ProcessSingleFile(string filePath)
         {
             Console.WriteLine($"Analyzing file: {Path.GetFileName(filePath)}");
             Console.WriteLine();
 
+            // Create detector instance and analyze the file
             var detector = new AblCommentDetector();
             var results = detector.AnalyzeFile(filePath);
 
-            // Use project root for output paths
+            // Set up output paths relative to project root
+            // This ensures consistent output locations regardless of where the tool is run from
             string projectRoot = GetProjectRoot();
             string fileName = Path.GetFileNameWithoutExtension(filePath);
             string outputDir = Path.Combine(projectRoot, "outputs", fileName);
             Directory.CreateDirectory(outputDir);
 
-            // Copy original file to output directory
+            // Copy original file to output directory for reference
             string originalOutputPath = Path.Combine(outputDir, Path.GetFileName(filePath));
             File.Copy(filePath, originalOutputPath, true);
 
-            // Generate modified file in output directory
+            // Generate modified file in output directory with comment annotations
             string modifiedFileName = $"{fileName}-modified{Path.GetExtension(filePath)}";
             string modifiedOutputPath = Path.Combine(outputDir, modifiedFileName);
             detector.GenerateReport(filePath, modifiedOutputPath);
 
+            // Display statistics and examples to the console
             DisplayStatistics(results, detector);
             DisplayExamples(results);
 
@@ -133,6 +147,7 @@ namespace AblCommentDetector
             Console.WriteLine();
             
             // Generate analysis-result.txt for verification
+            // This contains details about all categories of lines and procedure calls
             var stats = detector.CalculateStatistics(results);
             var procedureInfo = detector.GetProcedureInfo();
             
@@ -296,29 +311,60 @@ namespace AblCommentDetector
             Console.WriteLine("Analysis complete!");
         }
 
+        /// <summary>
+        /// Class representing the analysis results for a single ABL file
+        /// Used both for console output and generating the analysis-result.txt file
+        /// </summary>
         public class FileAnalysisResult
         {
+            /// <summary>The name of the analyzed file</summary>
             public string FileName { get; set; } = "";
+            
+            /// <summary>Total number of lines in the file</summary>
             public int OriginalLines { get; set; }
+            
+            /// <summary>Number of lines containing executable code (not in uncalled procedures)</summary>
             public int ExecutableLines { get; set; }
+            
+            /// <summary>Number of lines containing only comments</summary>
             public int CommentLines { get; set; }
+            
+            /// <summary>Number of empty or whitespace-only lines</summary>
             public int BlankLines { get; set; }
+            
+            /// <summary>Number of lines in procedures that are never called</summary>
             public int UncalledProcedureLines { get; set; }
+            
+            /// <summary>List of procedure names that are called at least once</summary>
             public List<string> CalledProcedures { get; set; } = new List<string>();
+            
+            /// <summary>List of procedure names that are never called</summary>
             public List<string> UncalledProcedures { get; set; } = new List<string>();
             
+            /// <summary>
+            /// Total number of lines that are not part of executed code
+            /// This includes comments, blank lines, and uncalled procedures
+            /// </summary>
             public int TotalUnusedLines => UncalledProcedureLines + CommentLines + BlankLines;
         }
 
+        /// <summary>
+        /// Generates the analysis-result.txt file which contains detailed statistics 
+        /// about each analyzed file, including line counts and procedure information
+        /// </summary>
+        /// <param name="fileResults">List of file analysis results to include in the report</param>
         static void GenerateAnalysisResultFile(List<FileAnalysisResult> fileResults)
         {
+            // Use the project root to ensure consistent output location
             string projectRoot = GetProjectRoot();
             var outputPath = Path.Combine(projectRoot, "outputs", "analysis-result.txt");
             
             using (var writer = new StreamWriter(outputPath))
             {
+                // Write detailed information for each file
                 foreach (var file in fileResults.OrderBy(f => f.FileName))
                 {
+                    // File header and basic line counts
                     writer.WriteLine($"FILE: {file.FileName}");
                     writer.WriteLine("------------------");
                     writer.WriteLine($"Original Lines: {file.OriginalLines}");
@@ -328,9 +374,12 @@ namespace AblCommentDetector
                     writer.WriteLine($"Total Unused Lines: {file.TotalUnusedLines}");
                     writer.WriteLine($"Executable LOC: {file.ExecutableLines}");
                     writer.WriteLine();
+                    
+                    // Verification line showing that all categories add up to the total
                     writer.WriteLine($"Verification: {file.OriginalLines} = {file.UncalledProcedureLines} (uncalled) + {file.CommentLines} (comments) + {file.BlankLines} (blank) + {file.ExecutableLines} (executable)");
                     writer.WriteLine();
                     
+                    // Lists of called and uncalled procedures
                     string calledProcs = file.CalledProcedures.Count > 0 ? string.Join(",", file.CalledProcedures) : "None";
                     string uncalledProcs = file.UncalledProcedures.Count > 0 ? string.Join(",", file.UncalledProcedures) : "None";
                     
@@ -344,11 +393,18 @@ namespace AblCommentDetector
             Console.WriteLine($"Analysis summary saved to: {outputPath}");
         }
 
+        /// <summary>
+        /// Displays a summary of the file analysis statistics to the console
+        /// </summary>
+        /// <param name="results">The line-by-line analysis results</param>
+        /// <param name="detector">The detector instance used for analysis</param>
         static void DisplayStatistics(System.Collections.Generic.List<AblCommentDetector.LineAnalysisResult> results, AblCommentDetector detector)
         {
+            // Calculate various statistics from the analysis results
             var stats = detector.CalculateStatistics(results);
             var procedureInfo = detector.GetProcedureInfo();
             
+            // Display line count breakdown by category
             Console.WriteLine("Analysis Summary:");
             Console.WriteLine($"  Total lines: {results.Count}");
             Console.WriteLine($"  Executable code: {stats.ExecutableLines} lines ({stats.ExecutablePercentage:F1}%)");
@@ -358,6 +414,7 @@ namespace AblCommentDetector
             Console.WriteLine($"  Uncalled procedures: {stats.UncalledProcedures} lines ({stats.UncalledPercentage:F1}%)");
             Console.WriteLine();
 
+            // Display procedure count breakdown
             var calledProcedures = procedureInfo.Values.Count(p => p.IsCalled);
             var uncalledProcedures = procedureInfo.Count - calledProcedures;
 
@@ -368,25 +425,31 @@ namespace AblCommentDetector
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Displays examples of each line category to help users understand the classification
+        /// </summary>
+        /// <param name="results">The line-by-line analysis results</param>
         static void DisplayExamples(System.Collections.Generic.List<AblCommentDetector.LineAnalysisResult> results)
         {
             Console.WriteLine("Example classifications:");
             Console.WriteLine("========================");
             Console.WriteLine();
 
-            // Show examples of each type
+            // Show examples of executable code lines (excluding uncalled procedures)
             var executableExamples = results.Where(r => r.Type == AblCommentDetector.LineType.ExecutableCode && !r.IsUncalledProcedure).Take(3);
             if (executableExamples.Any())
             {
                 Console.WriteLine("Executable Code Examples:");
                 foreach (var example in executableExamples)
                 {
+                    // Truncate long lines for better display
                     var content = example.Content.Length > 60 ? example.Content.Substring(0, 60) + "..." : example.Content;
                     Console.WriteLine($"  Line {example.LineNumber,6}: {content}");
                 }
                 Console.WriteLine();
             }
 
+            // Show examples of pure comment lines
             var commentExamples = results.Where(r => r.Type == AblCommentDetector.LineType.PureComment).Take(3);
             if (commentExamples.Any())
             {
@@ -399,6 +462,7 @@ namespace AblCommentDetector
                 Console.WriteLine();
             }
 
+            // Show examples of mixed content (code + comments on same line)
             var mixedExamples = results.Where(r => r.Type == AblCommentDetector.LineType.MixedContent && !r.IsUncalledProcedure).Take(3);
             if (mixedExamples.Any())
             {
@@ -411,6 +475,7 @@ namespace AblCommentDetector
                 Console.WriteLine();
             }
 
+            // Show examples of uncalled procedure lines
             var uncalledExamples = results.Where(r => r.IsUncalledProcedure).Take(3);
             if (uncalledExamples.Any())
             {

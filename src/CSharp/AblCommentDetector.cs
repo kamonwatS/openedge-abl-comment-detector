@@ -30,49 +30,99 @@ namespace AblCommentDetector
             public bool IsUncalledProcedure { get; set; }
         }
 
+        /// <summary>
+        /// Defines the different types of lines in OpenEdge ABL code
+        /// </summary>
         public enum LineType
         {
+            /// <summary>Line contains only executable code</summary>
             ExecutableCode,
+            
+            /// <summary>Line contains only comments</summary>
             PureComment,
+            
+            /// <summary>Line contains both executable code and comments</summary>
             MixedContent,
+            
+            /// <summary>Line is empty or contains only whitespace</summary>
             EmptyLine
         }
 
+        // Depth counter for nested block comments /* */
         private int _currentCommentDepth = 0;
+        
+        // Storage for line-by-line analysis results
         private readonly List<LineAnalysisResult> _results = new List<LineAnalysisResult>();
+        
+        // Dictionary mapping procedure names to their detailed information
         private readonly Dictionary<string, ProcedureInfo> _procedures = new Dictionary<string, ProcedureInfo>();
+        
+        // Set of procedure names that have been called at least once
         private readonly HashSet<string> _calledProcedures = new HashSet<string>();
+        
+        // List of procedure boundaries (start/end lines) for uncalled detection
         private readonly List<ProcedureBoundary> _procedureBoundaries = new List<ProcedureBoundary>();
 
+        /// <summary>
+        /// Information about a procedure or function in the ABL code
+        /// </summary>
         public class ProcedureInfo
         {
+            /// <summary>Name of the procedure</summary>
             public string Name { get; set; }
+            
+            /// <summary>Line number where the procedure is defined</summary>
             public int LineNumber { get; set; }
+            
+            /// <summary>Whether the procedure is called at least once</summary>
             public bool IsCalled { get; set; }
+            
+            /// <summary>The text of the procedure definition</summary>
             public string Definition { get; set; }
         }
 
+        /// <summary>
+        /// Records the boundaries (start and end lines) of a procedure
+        /// </summary>
         public class ProcedureBoundary
         {
+            /// <summary>Name of the procedure</summary>
             public string Name { get; set; }
+            
+            /// <summary>Line number where the procedure starts</summary>
             public int StartLine { get; set; }
+            
+            /// <summary>Line number where the procedure ends</summary>
             public int EndLine { get; set; }
+            
+            /// <summary>Whether this procedure is never called</summary>
             public bool IsUncalled { get; set; }
         }
 
         /// <summary>
         /// Enhanced comment state tracker that handles strings and line continuations
+        /// This class is responsible for tracking the lexical state while processing code:
+        /// - Block comment depth (for nested /* */ comments)
+        /// - String literal state (single and double quotes)
+        /// - Line continuation using the tilde (~) character
         /// </summary>
         private class CommentStateTracker
         {
-            private int _depth = 0;
-            private bool _inSingleQuoteString = false;
-            private bool _inDoubleQuoteString = false;
-            private bool _lineContinuation = false;
+            private int _depth = 0;                // Current nesting depth of /* */ comments
+            private bool _inSingleQuoteString = false;  // Whether we're in a single-quoted string
+            private bool _inDoubleQuoteString = false;  // Whether we're in a double-quoted string
+            private bool _lineContinuation = false;     // Whether the previous line ended with ~
 
+            /// <summary>Current comment nesting depth</summary>
             public int Depth => _depth;
+            
+            /// <summary>Whether currently inside a comment block</summary>
             public bool InComment => _depth > 0;
 
+            /// <summary>
+            /// Process a line of code, updating internal state trackers
+            /// </summary>
+            /// <param name="line">The line of code to process</param>
             public void ProcessLine(string line)
             {
                 // Handle line continuation from previous line
@@ -89,13 +139,14 @@ namespace AblCommentDetector
                     var nextChar = i + 1 < chars.Length ? chars[i + 1] : '\0';
 
                     // Handle escape sequences in strings
+                    // In ABL, the tilde (~) is used to escape characters in strings
                     if ((_inSingleQuoteString || _inDoubleQuoteString) && currentChar == '~')
                     {
                         i++; // Skip next character (it's escaped)
                         continue;
                     }
 
-                    // Handle string boundaries
+                    // Handle string boundaries - only if not in a comment
                     if (!InComment)
                     {
                         if (currentChar == '"' && !_inSingleQuoteString)
@@ -117,14 +168,14 @@ namespace AblCommentDetector
                     // Handle comment delimiters
                     if (currentChar == '/' && nextChar == '*')
                     {
-                        _depth++;
+                        _depth++; // Increase nesting depth when entering a comment block
                         i++; // Skip the '*'
                         continue;
                     }
                     if (currentChar == '*' && nextChar == '/')
                     {
                         if (_depth > 0)
-                            _depth--;
+                            _depth--; // Decrease nesting depth when exiting a comment block
                         i++; // Skip the '/'
                         continue;
                     }
@@ -133,6 +184,7 @@ namespace AblCommentDetector
                     if (!InComment && currentChar == '/' && nextChar == '/')
                     {
                         // Rest of line is comment, but doesn't affect depth
+                        // Single-line comments don't affect nesting depth
                         break;
                     }
                 }
@@ -144,7 +196,8 @@ namespace AblCommentDetector
                     _lineContinuation = true;
                 }
 
-                // Reset string state if no line continuation (strings don't span lines in ABL unless continued)
+                // Reset string state if no line continuation 
+                // (strings don't span lines in ABL unless continued with ~)
                 if (!_lineContinuation)
                 {
                     _inSingleQuoteString = false;
@@ -152,6 +205,9 @@ namespace AblCommentDetector
                 }
             }
 
+            /// <summary>
+            /// Reset all state trackers to their initial values
+            /// </summary>
             public void Reset()
             {
                 _depth = 0;
@@ -161,7 +217,20 @@ namespace AblCommentDetector
             }
         }
 
+        /// <summary>
+        /// The comment state tracker keeps track of the current lexical state 
+        /// when processing a file line by line.
+        /// </summary>
         private readonly CommentStateTracker _stateTracker = new CommentStateTracker();
+
+        /// <summary>
+        /// Creates a new instance of the AblCommentDetector
+        /// </summary>
+        public AblCommentDetector()
+        {
+            // Initialize the detector in a clean state
+            Reset();
+        }
 
         // Regex patterns for procedure analysis
         private static readonly Regex ProcedureDefinitionRegex = new Regex(
@@ -172,6 +241,9 @@ namespace AblCommentDetector
             @"^\s*FUNCTION\s+([a-zA-Z_][a-zA-Z0-9_]*)\s+RETURNS\s+",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        // Regex to identify procedure calls using RUN statements in ABL
+        // This pattern matches "RUN" followed by whitespace then captures the procedure name
+        // The procedure name must start with a letter or underscore and can contain letters, numbers, or underscores
         private static readonly Regex ProcedureCallRegex = new Regex(
             @"RUN\s+([a-zA-Z_][a-zA-Z0-9_]*)",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -217,29 +289,40 @@ namespace AblCommentDetector
 
         /// <summary>
         /// First pass: Analyze procedures and their calls
+        /// This is a critical method that identifies all procedure definitions and calls in two passes:
+        /// 1. First pass: Find all procedure and function definitions
+        /// 2. Second pass: Find all procedure and function calls
         /// </summary>
+        /// <param name="lines">Array of lines from the file being analyzed</param>
         private void AnalyzeProcedures(string[] lines)
         {
+            // Create a temporary state tracker to maintain comment state during scanning
             var tempStateTracker = new CommentStateTracker();
 
+            // ==========================================
             // FIRST PASS: Find all procedure and function definitions
+            // ==========================================
             for (int i = 0; i < lines.Length; i++)
             {
                 var line = lines[i];
                 var lineNumber = i + 1;
                 
                 // Track comment state but use more robust detection
+                // We need to know if a line is inside a comment block
                 bool startedInComment = tempStateTracker.InComment;
                 tempStateTracker.ProcessLine(line);
                 bool endedInComment = tempStateTracker.InComment;
                 
                 // Only skip if the entire line is within a comment block
+                // This allows detection of procedures even if they appear on
+                // lines that have comments in them
                 if (startedInComment && endedInComment)
                 {
                     continue;
                 }
 
                 // Skip single-line comments and hash comments (but not mixed content)
+                // This prevents detecting procedures defined in commented-out code
                 var trimmed = line.TrimStart();
                 if ((trimmed.StartsWith("//") || trimmed.StartsWith("#")) && !HasCodeBeforeComment(line, trimmed.StartsWith("//") ? "//" : "#"))
                 {
@@ -253,12 +336,14 @@ namespace AblCommentDetector
                 }
 
                 // Look for procedure definitions
+                // Format: PROCEDURE name:
                 var procMatch = ProcedureDefinitionRegex.Match(line);
                 if (procMatch.Success)
                 {
                     var procName = procMatch.Groups[1].Value;
                     if (!_procedures.ContainsKey(procName.ToUpper()))
                     {
+                        // Store procedure information, defaulting to not called
                         _procedures[procName.ToUpper()] = new ProcedureInfo
                         {
                             Name = procName,
@@ -270,12 +355,14 @@ namespace AblCommentDetector
                 }
 
                 // Look for function definitions
+                // Format: FUNCTION name RETURNS type
                 var funcMatch = FunctionDefinitionRegex.Match(line);
                 if (funcMatch.Success)
                 {
                     var funcName = funcMatch.Groups[1].Value;
                     if (!_procedures.ContainsKey(funcName.ToUpper()))
                     {
+                        // Store function information, defaulting to not called
                         _procedures[funcName.ToUpper()] = new ProcedureInfo
                         {
                             Name = funcName,
@@ -290,7 +377,9 @@ namespace AblCommentDetector
             // Reset state tracker for second pass
             tempStateTracker.Reset();
             
+            // ==========================================
             // SECOND PASS: Find all procedure and function calls
+            // ==========================================
             for (int i = 0; i < lines.Length; i++)
             {
                 var line = lines[i];
@@ -321,23 +410,28 @@ namespace AblCommentDetector
                 }
 
                 // Look for procedure calls (RUN statements) - enhanced detection
+                // Format: RUN procedure-name
                 var runMatches = ProcedureCallRegex.Matches(line);
                 foreach (Match match in runMatches)
                 {
                     var procName = match.Groups[1].Value.ToUpper();
                     
                     // Check if the RUN statement is inside a comment or string literal
+                    // This is a critical enhancement to prevent false positives
                     if (!IsInNonExecutableContext(line, match.Index))
                     {
+                        // Add to called procedures set and mark as called in the procedures dictionary
                         _calledProcedures.Add(procName);
                         if (_procedures.ContainsKey(procName))
                         {
                             _procedures[procName].IsCalled = true;
                         }
                     }
+                    // If RUN is in a comment or string, it's not a real call and is ignored
                 }
 
                 // Look for function calls (function_name())
+                // Format: function-name(
                 var funcMatches = FunctionCallRegex.Matches(line);
                 foreach (Match match in funcMatches)
                 {
@@ -346,6 +440,7 @@ namespace AblCommentDetector
                     // Skip built-in ABL functions and keywords and calls in non-executable contexts
                     if (!IsBuiltInFunction(funcName) && !IsInNonExecutableContext(line, match.Index))
                     {
+                        // Add to called procedures set and mark as called
                         _calledProcedures.Add(funcName);
                         if (_procedures.ContainsKey(funcName))
                         {
@@ -872,6 +967,12 @@ namespace AblCommentDetector
             _procedureBoundaries.Clear();
         }
 
+        /// <summary>
+        /// Determines if a position in a line is inside a non-executable context (comment or string literal)
+        /// </summary>
+        /// <param name="line">The line of code to analyze</param>
+        /// <param name="index">The position within the line to check</param>
+        /// <returns>True if the position is inside a comment or string literal; false otherwise</returns>
         private bool IsInNonExecutableContext(string line, int index)
         {
             // Skip check if index is invalid
@@ -879,10 +980,11 @@ namespace AblCommentDetector
                 return false;
         
             // Track state for comments and string literals
-            bool inComment = false;
-            bool inString = false;
-            char stringChar = '\0';
+            bool inComment = false;     // Whether we're currently inside a block comment /* */
+            bool inString = false;      // Whether we're currently inside a string literal
+            char stringChar = '\0';     // The character used to start the string (' or ")
         
+            // Process the line character by character up to the index position
             for (int i = 0; i < index; i++)
             {
                 // Skip if we don't have enough characters left
@@ -893,12 +995,14 @@ namespace AblCommentDetector
                 char next = i + 1 < line.Length ? line[i + 1] : '\0';
             
                 // Handle string literals - if we're not in a comment
+                // In ABL, string literals can be delimited by either single or double quotes
                 if (!inComment && !inString && (current == '"' || current == '\''))
                 {
                     inString = true;
                     stringChar = current;
                     continue;
                 }
+                // Check for end of string, but be careful about escaped quotes (using ~)
                 if (!inComment && inString && current == stringChar && (i == 0 || line[i - 1] != '~'))
                 {
                     inString = false;
@@ -908,29 +1012,31 @@ namespace AblCommentDetector
                 // Skip other checks if in string
                 if (inString) continue;
             
-                // Handle single-line comments
+                // Handle single-line comments (//)
+                // Once we hit a //, everything after it on the line is a comment
                 if (!inComment && current == '/' && next == '/')
                 {
                     // Everything after // is a comment
                     return true;
                 }
             
-                // Handle block comment delimiters
+                // Handle block comment delimiters (/* and */)
                 if (!inComment && current == '/' && next == '*')
                 {
                     inComment = true;
-                    i++; // Skip the next character
+                    i++; // Skip the next character (the *)
                     continue;
                 }
                 if (inComment && current == '*' && next == '/')
                 {
                     inComment = false;
-                    i++; // Skip the next character
+                    i++; // Skip the next character (the /)
                     continue;
                 }
             }
         
-            // Return true if we're in a comment OR a string at the position
+            // Return true if the position is in a comment OR a string
+            // This means that procedure calls in either context are not counted as real calls
             return inComment || inString;
         }
     }
