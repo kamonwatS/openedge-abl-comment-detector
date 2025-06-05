@@ -1,0 +1,839 @@
+/*========================================================================*/
+/* Program Name : WxzCDoc1.P                                              */
+/*                Program Running Document                                */
+/* CREATE  By   : Tantawan Ch.   ASSIGN: A61-0019 (Date 19/12/2019)       */
+/*========================================================================*/
+/* Modify By    : Tantawan Ch.   ASSIGN: A62-0279  DATE : 29/01/2020      */
+/*              : »Ô´¡ÒÃ GEN Qeue SEND Mail                               */
+/*========================================================================*/
+/* Modify By    :  Songkran P.  ASSIGN: A62-0279  DATE : 01/02/2020      */
+/*              : à¾ÔèÁ loop repeat Ç¹ËÒàÅ¢¨¹¡ÇèÒ¨Ðä´éàÅ¢àÍ¡ÊÒÃ           */
+/*========================================================================*/
+
+/*1*/  DEF INPUT   PARAMETER  gv_choice      AS INT.  /* 1 , 2 , 3 ...     */
+/*2*/  DEF INPUT   PARAMETER  gv_DocYr       AS INT.  /* 2019              */
+/*3*/  DEF INPUT   PARAMETER  gv_DocType     AS CHAR. /* M = Receipt , S = Invoice , T = Sticker , C = Certificate ...*/
+/*4*/  DEF INPUT   PARAMETER  gv_bc          AS CHAR. /* "D0" , "ALL" , "STY" , "B300222"     */
+/*5*/  DEF INPUT   PARAMETER  gv_usrid       AS CHAR.
+DEF INPUT   PARAMETER  gv_auto        AS LOG.
+/*6*/  DEF OUTPUT  PARAMETER  gv_docrun1     AS CHAR.
+/*7*/  DEF OUTPUT  PARAMETER  gv_docrun2     AS CHAR.
+/*8*/  DEF OUTPUT  PARAMETER  gv_docrun3     AS CHAR.
+/*9*/  DEF OUTPUT  PARAMETER  gv_error       AS CHAR.
+
+DEF VAR nv_prog      AS CHAR INIT "WXZCDOC1".
+DEF VAR nv_YrPref    AS CHAR.
+DEF VAR nv_docdup    AS LOG.
+DEF VAR nv_first     AS LOG.
+DEF VAR nv_catecd    AS CHAR.
+
+DEF VAR nv_Quota     AS DECI.
+DEF VAR nv_docgrp    AS CHAR.
+
+DEF BUFFER bDocRunn   FOR DocRunn.
+
+ASSIGN
+   gv_docrun1 = ""
+   gv_docrun2 = ""
+   gv_docrun3 = ""
+   gv_error   = ""
+   nv_catecd  = "".
+
+nv_YrPref = SUBSTRING(STRING(gv_DocYr + 543),3,2).
+
+FIND FIRST DocMst USE-INDEX DocMst01 
+    WHERE DocMst.b_c = gv_bc NO-LOCK NO-ERROR.
+IF NOT AVAIL DocMst THEN DO :
+    gv_error = "Not found Document Master Parameter Setup for Code :" + gv_bc .
+    RETURN.
+END.
+ELSE 
+    ASSIGN
+    nv_catecd = DocMst.CateCd
+    nv_docgrp = DocMst.Docgrp.
+
+IF gv_DocType = "S" OR gv_DocType = "B" OR gv_DocType = "D" OR gv_DocType = "C" THEN 
+    ASSIGN
+    /*nv_catecd = "ALL"*/
+    nv_docgrp = "8".
+
+OUTPUT TO RunDoc-Log.TXT APPEND.
+PUT TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+            "PARAM: "
+        "gv_choice: " string(gv_choice)  FORMAT "X(5)"
+       "gv_Doctype: " gv_Doctype         FORMAT "X(5)"
+ "       nv_docgrp: " nv_docgrp          FORMAT "X(16)"
+        "nv_catecd: " nv_catecd          FORMAT "X(16)" SKIP.
+OUTPUT CLOSE.
+
+IF gv_error = "" THEN DO:
+    /* Single Type */
+    IF gv_choice = 1 OR gv_choice = 2 OR gv_choice = 3 THEN DO:
+
+        IF gv_DocType = "T" THEN DO:  /* Type 'T' = Sticker */
+            /*
+            RUN  RunSticker (INPUT  gv_DocType,
+                             OUTPUT gv_docrun1,
+                             OUTPUT gv_error).
+            */
+            RUN  RunSticker2 (INPUT  gv_DocType,
+                              OUTPUT gv_docrun1,
+                              OUTPUT gv_error).
+        END.  
+        ELSE DO: /* Type <> "T" */
+            
+            RUN  RunDocument (INPUT  gv_DocType,
+                              OUTPUT gv_docrun1,
+                              OUTPUT gv_error).
+        END.
+    END. 
+    
+    IF gv_error = "" THEN DO:
+    
+        IF gv_choice = 2 OR gv_choice = 3 THEN DO: /* Receipt + Invoice */
+
+            gv_docrun2 = gv_docrun1. /* Receipt & Invoice ãªéàÅ¢à´ÕÂÇ¡Ñ¹ */
+
+        END.
+
+        IF gv_choice = 3 THEN DO: /**/
+            /*
+            RUN  RunSticker (INPUT  "T",
+                             OUTPUT gv_docrun3, /* Êè§¤èÒ Sticker ¡ÅÑº */
+                             OUTPUT gv_error).
+            */
+            RUN  RunSticker2 (INPUT  gv_DocType,
+                              OUTPUT gv_docrun3,
+                              OUTPUT gv_error).
+        END.
+    END.
+
+END. /* gv_error = "" */
+RELEASE DocRunn.
+RELEASE bDocRunn.
+
+RETURN.
+
+/********************************************************************/
+PROCEDURE RunDocument:
+
+ DEF INPUT  PARAMETER pv_DocType  AS CHAR.
+ DEF OUTPUT PARAMETER pv_docrun1  AS CHAR.
+ DEF OUTPUT PARAMETER pv_error    AS CHAR.
+
+ DEF VAR nv_lineCins  AS INT  NO-UNDO.
+ DEF VAR nv_next      AS DECI INIT 0.
+ DEF VAR nv_dup       AS LOG.
+
+ pv_error = "".
+ loop_RunDoc:
+ REPEAT:
+    FIND FIRST DocRunn USE-INDEX DocRunn01
+                WHERE DocRunn.DocYr   = gv_DocYr
+                AND   DocRunn.DocTyp  = pv_DocType
+                AND   DocRunn.DocGrp  = nv_docgrp
+                AND   DocRunn.CateCd  = nv_CateCd 
+                AND   DECI(DocRunn.docpref + DocRunn.docnoto) >= DocRunn.DocNext EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+    IF NOT AVAIL DocRunn THEN DO:
+        IF LOCKED DocRunn THEN DO:
+            nv_lineCins  = 0.
+            DO WHILE nv_lineCins  <= 100 :
+              nv_lineCins  = nv_lineCins  + 1.
+            END.   
+            /*pv_error = "Record is Locked".*/
+            NEXT loop_RunDoc.
+        END.
+        ELSE DO:
+
+            IF gv_auto THEN DO:  /* ¡Ã³ÕµéÍ§¡ÒÃ auto setup àÁ×èÍ¢Öé¹»ÕãËÁè */
+                /* ËÒ Doc Running »Õ»Ñ¨¨ØºÑ¹ */
+                FIND LAST DocRunn USE-INDEX DocRunn01
+                    WHERE DocRunn.DocYr   = gv_DocYr
+                    AND   DocRunn.DocTyp  = pv_DocType
+                    AND   DocRunn.DocGrp  = nv_docgrp
+                    AND   DocRunn.CateCd  = nv_CateCd NO-LOCK NO-ERROR NO-WAIT.
+                IF AVAIL DocRunn THEN DO:  /* ¶éÒÁÕáÊ´§ÁÕ¡ÒÃ Set áÅéÇáµè Running àµçÁ */
+                    pv_error = "(1)Document running is full, Please contract Helpdesk...!".
+                END.
+                ELSE DO:  /* ¶éÒäÁè¾º  ¶×ÍÇèÒà»ç¹ New Set ¢Í§»ÕãËÁè */
+
+                    /* Find Previous data Lot áÃ¡ */
+                    FIND FIRST bDocRunn USE-INDEX DocRunn01
+                        WHERE bDocRunn.DocTyp  = pv_DocType
+                        AND   bDocRunn.DocGrp  = nv_docgrp
+                        AND   bDocRunn.CateCd  = nv_CateCd  NO-LOCK NO-ERROR.
+                    IF NOT AVAIL bDocRunn THEN DO:
+                        pv_error = "(1)Not found document running parameter setup Year " + STRING(gv_DocYr,"9999") + " Type:" + pv_DocType + " Category:" + nv_CateCd + ", Please contract Helpdesk...!".
+                    END.
+                    ELSE DO:
+                        nv_dup = NO.
+                        /* Check Dup ¡èÍ¹¨Ð Auto Create */
+                        RUN Chk_Dup (INPUT  bDocRunn.doctyp, 
+                                            bDocRunn.docnofr,
+                                            bDocRunn.docnoto,
+                                     OUTPUT nv_dup).
+    
+                        IF nv_dup = NO THEN DO:  /* äÁè«éÓ Create ä´é */
+                            /* Auto Create */
+                            CREATE DocRunn.
+                            ASSIGN 
+                                DocRunn.docyr    =  gv_DocYr     
+                                DocRunn.doctyp   =  bDocRunn.doctyp     
+                                DocRunn.docgrp   =  bDocRunn.docgrp     
+                                DocRunn.b_c      =  bDocRunn.b_c        
+                                DocRunn.acno     =  bDocRunn.acno       
+                                DocRunn.catecd   =  bDocRunn.catecd 
+                                DocRunn.doclotno =  1
+                                
+                                DocRunn.docpref  =  bDocRunn.docgrp + nv_YrPref    
+                                DocRunn.docnofr  =  bDocRunn.docnofr    
+                                DocRunn.docnoto  =  bDocRunn.docnoto    
+                                DocRunn.docnext  =  DECI(bDocRunn.docgrp + nv_YrPref + bDocRunn.docnofr)  /* ¤èÒàÃÔèÁµé¹à·èÒ¡Ñº Document From */
+                                
+                                DocRunn.usrid    =  gv_usrid
+                                DocRunn.entdat   =  TODAY     
+                                DocRunn.enttim   =  STRING(TIME,"HH:MM:SS")
+                                DocRunn.prog     =  nv_prog
+                                DocRunn.revdat   =  TODAY
+                                DocRunn.remark   =  "Auto Create".
+                
+                            IF DEC(DocRunn.DocNext) > DEC(DocRunn.DocPref + DocRunn.DocnoTo) THEN DO:
+                                DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+                                pv_error = "(2)Document running is full, Please contract Helpdesk...!".
+                            END.
+                            ELSE DO:
+                                pv_docrun1 = STRING(DocRunn.DocNext,"9999999999").
+                                nv_next    = 0.
+                                nv_next    = DocRunn.DocNext.
+                
+                                ASSIGN
+                                  DocRunn.DocNext = nv_next  + 1
+                                  DocRunn.usrid   = gv_usrid
+                                  DocRunn.revdat  = TODAY.
+                                IF nv_next >= DECI(DocRunn.DocPref + STRING(DocRunn.DocnoTo,"9999999")) THEN DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+
+                                /*-- A62-0279 -- »Ô´ Queue  ---
+                                nv_Quota = DECI(DocRunn.docpref + DocRunn.docnoto) - DECI(DocRunn.docNext).
+                                RUN PD_GenQMail (INPUT nv_Quota ,
+                                                       DocRunn.docyr ,
+                                                       DocRunn.doctyp,
+                                                       DocRunn.CateCd,
+                                                       DocRunn.doclotno).
+                                -- A62-0279 -- »Ô´ Queue  ---*/                       
+                            END.
+                        END.
+                        ELSE pv_error = "(1)New Document running is duplicate, Please contract Helpdesk for manual setup Running...!".
+                    END.
+                END.
+            END. /* IF gv_auto = YES */
+            ELSE pv_error = "(2)Not found document running parameter setup Year " + STRING(gv_DocYr,"9999") + " Type:" + pv_DocType + " Category:" + nv_CateCd + ", Please contract Helpdesk...!".
+        END.
+    END.
+    ELSE DO: /* AVAIL */
+        /* ¶éÒÁÒ¡¡ÇèÒáÊ´§ÇèÒ running àµçÁ */
+        IF DEC(DocRunn.DocNext) > DEC(DocRunn.DocPref + DocRunn.DocnoTo) THEN DO:
+            DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+            pv_error = "(3)Document running is full, Please contract Helpdesk...!".
+        END.
+        ELSE DO:
+            pv_docrun1 = STRING(DocRunn.DocNext,"9999999999").
+            nv_next   =  DocRunn.DocNext.
+            
+            ASSIGN
+              DocRunn.DocNext = nv_next  + 1
+              DocRunn.usrid   = gv_usrid
+              DocRunn.revdat  = TODAY.
+            IF nv_next >= DECI(DocRunn.DocPref + STRING(DocRunn.DocnoTo,"9999999")) THEN DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+
+            /*-- A62-0279 -- »Ô´ Queue  ---
+            nv_Quota = DECI(DocRunn.docpref + DocRunn.docnoto) - DECI(DocRunn.docNext).
+            RUN PD_GenQMail (INPUT nv_Quota ,
+                                   DocRunn.docyr ,
+                                   DocRunn.doctyp,
+                                   DocRunn.CateCd,
+                                   DocRunn.doclotno).
+            -- A62-0279 -- »Ô´ Queue  ---*/
+            
+        END.
+    END.
+    LEAVE Loop_RunDoc.
+ END. /* REPEAT */ 
+ RELEASE DocRunn.
+ RELEASE bDocRunn.
+ 
+END.
+/********************************************************************/
+
+/********************************************************************/
+/* Running Sticker áºº Running áÂ¡µÒÁ»Õ */
+PROCEDURE RunSticker:
+
+    DEF INPUT  PARAMETER pv_DocType  AS CHAR.
+    DEF OUTPUT PARAMETER pv_docrun2   AS CHAR.
+    DEF OUTPUT PARAMETER pv_error    AS CHAR.
+
+    DEF VAR nv_lineCins  AS INT  NO-UNDO.
+    DEF VAR nv_StkNext   AS CHAR INIT "".
+    DEF VAR nv_dup       AS LOG.
+
+    pv_error = "".
+    Loop_RunStk:
+    REPEAT:
+        FIND FIRST DocRunn USE-INDEX DocRunn01
+            WHERE DocRunn.DocYr   = gv_DocYr
+            AND   DocRunn.DocTyp  = pv_DocType
+            AND   DocRunn.CateCd  = nv_CateCd 
+            AND   DocRunn.StkPref + STRING(DocRunn.Stknoto)  >= DocRunn.Stknext EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+        IF NOT AVAIL DocRunn THEN DO:
+            IF LOCKED DocRunn THEN DO:
+                nv_lineCins  = 0.
+                DO WHILE nv_lineCins  <= 100 :
+                  nv_lineCins  = nv_lineCins  + 1.
+                END.
+                /*pv_error = "Record is Locked".*/
+                NEXT Loop_RunStk.
+            END.
+            ELSE DO:
+                IF gv_auto THEN DO:  /* ¡Ã³ÕµéÍ§¡ÒÃ auto setup àÁ×èÍ¢Öé¹»ÕãËÁè */
+                    /* ËÒ Doc Running »Õ»Ñ¨¨ØºÑ¹ */
+                    FIND LAST DocRunn USE-INDEX DocRunn01
+                        WHERE DocRunn.DocYr   = gv_DocYr
+                        AND   DocRunn.DocTyp  = pv_DocType
+                        AND   DocRunn.CateCd  = nv_CateCd NO-LOCK NO-ERROR NO-WAIT.
+                    IF AVAIL DocRunn THEN DO:  /* ¶éÒÁÕáÊ´§ÁÕ¡ÒÃ Set áÅéÇáµè Running àµçÁ */
+                        pv_error = "(1)Sticker running is full, Please contract Helpdesk...!".
+                    END.
+                    ELSE DO:  /* ¶éÒäÁè¾º  ¶×ÍÇèÒà»ç¹ New Set ¢Í§»ÕãËÁè */
+        
+                        /* Find Previous data Lot áÃ¡ */
+                        FIND FIRST bDocRunn USE-INDEX DocRunn01
+                            WHERE bDocRunn.DocTyp  = pv_DocType
+                            AND   bDocRunn.CateCd  = nv_CateCd NO-LOCK NO-ERROR.
+                        IF NOT AVAIL bDocRunn THEN DO:
+                            pv_error = "(1)Not found sticker running parameter setup Type:" + pv_DocType + ", Please contract Helpdesk...!".
+                        END.
+                        ELSE DO:
+                            nv_dup = NO.
+                            /* Check Dup ¡èÍ¹¨Ð Auto Create */
+                            RUN Chk_Dup (INPUT  bDocRunn.doctyp, 
+                                                bDocRunn.Stknofr,
+                                                bDocRunn.Stknoto,
+                                         OUTPUT nv_dup).
+            
+                            IF nv_dup = NO THEN DO:  /* äÁè«éÓ Create ä´é */
+            
+                                /* Auto Create */
+                                CREATE DocRunn.
+                                ASSIGN 
+                                    DocRunn.docyr    =  gv_DocYr     
+                                    DocRunn.doctyp   =  bDocRunn.doctyp     
+                                    DocRunn.docgrp   =  bDocRunn.docgrp     
+                                    DocRunn.b_c      =  bDocRunn.b_c        
+                                    DocRunn.acno     =  bDocRunn.acno       
+                                    DocRunn.catecd   =  bDocRunn.catecd 
+                                    DocRunn.doclotno =  1
+        
+                                    DocRunn.StkPref  =  SUBSTRING(bDocRunn.StkPref,1,2) + bDocRunn.docgrp + nv_YrPref
+                                    DocRunn.Stknofr  =  bDocRunn.Stknofr    
+                                    DocRunn.Stknoto  =  bDocRunn.Stknoto    
+                                    DocRunn.Stknext  =  SUBSTRING(bDocRunn.StkPref,1,2) + bDocRunn.docgrp + nv_YrPref + bDocRunn.Stknofr /* ¤èÒàÃÔèÁµé¹à·èÒ¡Ñº Document From */
+                
+                                    DocRunn.usrid    =  gv_usrid
+                                    DocRunn.entdat   =  TODAY     
+                                    DocRunn.enttim   =  STRING(TIME,"HH:MM:SS")
+                                    DocRunn.prog     =  nv_prog
+                                    DocRunn.revdat   =  TODAY
+                                    DocRunn.remark   =  "Auto Create".
+                
+                                /* ¶éÒÁÒ¡¡ÇèÒáÊ´§ÇèÒ running àµçÁ */
+                                IF DEC(DocRunn.StkNext) > DEC(DocRunn.StkPref + DocRunn.StknoTo) THEN DO:
+                                    DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+                                    pv_error = "(2)Sticker running is full, Please contract Helpdesk...!".
+                                END.
+                                ELSE DO:
+                                    /* Sticker no ÂÑ§äÁèà¤Â¶Ù¡´Ö§ä»ãªé§Ò¹ */
+                                    IF STRING(DocRunn.StkPref + DocRunn.StknoFr,"9999999999999") = DocRunn.StkNext THEN DO:
+                                        nv_first = YES.
+                                        /* Run & Check Mod àÅ¢áÃ¡à¾×èÍ Update Å§  Sticker Next */
+                                        RUN StkMod (INPUT  DocRunn.StkNext,  /* XX16200000001  */
+                                                           nv_first ,
+                                                    OUTPUT nv_StkNext).
+                
+                                        /* Update  Sticker Next àºÍÃìáÃ¡ */
+                                        ASSIGN
+                                          DocRunn.StkNext = STRING(nv_StkNext,"9999999999999")
+                                          DocRunn.usrid   = gv_usrid
+                                          DocRunn.revdat  = TODAY.
+                                        IF nv_StkNext >= STRING(DocRunn.StkPref + DocRunn.StknoTo,"9999999999999") THEN DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+                                        /*-- A62-0279 -- »Ô´ Queue  ---
+                                        nv_Quota = DECI(DocRunn.Stkpref + DocRunn.Stknoto) - DECI(DocRunn.StkNext).
+                                        RUN PD_GenQMail (INPUT nv_Quota ,
+                                                               DocRunn.docyr ,
+                                                               DocRunn.doctyp,
+                                                               DocRunn.CateCd,
+                                                               DocRunn.doclotno).
+                                        -- A62-0279 -- »Ô´ Queue  ---*/
+                                    END.
+                
+                                    nv_first = NO.
+                                    /* */
+                                    pv_docrun2 = STRING(DocRunn.StkNext,"9999999999999").
+                                    /* Run & Check MOD */
+                                    RUN StkMod (INPUT  DocRunn.StkNext,  /* XX16200000001  */
+                                                       nv_first ,
+                                                OUTPUT nv_StkNext).
+                                    /* Update  Sticker Next */
+                                    ASSIGN
+                                      DocRunn.StkNext = STRING(nv_StkNext,"9999999999999")
+                                      DocRunn.usrid   = gv_usrid
+                                      DocRunn.revdat  = TODAY.
+                                    IF nv_StkNext >= STRING(DocRunn.StkPref + DocRunn.StknoTo,"9999999999999") THEN DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+                                    /*-- A62-0279 -- »Ô´ Queue  ---
+                                    nv_Quota = DECI(DocRunn.Stkpref + DocRunn.Stknoto) - DECI(DocRunn.StkNext).
+                                    RUN PD_GenQMail (INPUT nv_Quota ,
+                                                           DocRunn.docyr ,
+                                                           DocRunn.doctyp,
+                                                           DocRunn.CateCd,
+                                                           DocRunn.doclotno).
+                                    -- A62-0279 -- »Ô´ Queue  ---*/
+                                END.
+                            END.
+                            ELSE pv_error = "New Sticker running is duplicate, Please contract Helpdesk for manual setup Running...!".
+                        END.
+                    END.
+                END. /* IF gv_auto = YES */
+                ELSE pv_error = "(2)Not found sticker running parameter setup Type:" + pv_DocType + ", Please contract Helpdesk...!".
+            END.
+        END.
+        ELSE DO:  /* AVAIL */
+            /* ¶éÒÁÒ¡¡ÇèÒáÊ´§ÇèÒ running àµçÁ */
+            IF DEC(DocRunn.StkNext) > DEC(DocRunn.StkPref + DocRunn.StknoTo) THEN DO:
+                DocRunn.remark = "FULL - " + DocRunn.remark.
+                pv_error = "(3)Sticker running is full, Please contract Helpdesk...!".
+            END.
+            ELSE DO:
+                /* Sticker no ÂÑ§äÁèà¤Â¶Ù¡´Ö§ä»ãªé§Ò¹ */
+                IF STRING(DocRunn.StkPref + DocRunn.StknoFr,"9999999999999") = DocRunn.StkNext THEN DO:
+                    nv_first = YES.
+                    /* Run & Check Mod àÅ¢áÃ¡à¾×èÍ Update Å§  Sticker Next */
+                    RUN StkMod (INPUT  DocRunn.StkNext,  /* XX16200000001  */
+                                       nv_first ,
+                                OUTPUT nv_StkNext).
+        
+                    /* Update  Sticker Next àºÍÃìáÃ¡ */
+                    ASSIGN
+                      DocRunn.StkNext = STRING(DocRunn.Stkpref + nv_StkNext,"9999999999999")
+                      DocRunn.usrid   = gv_usrid
+                      DocRunn.revdat  = TODAY.
+                    IF nv_StkNext >= STRING(DocRunn.StkPref + DocRunn.StknoTo,"9999999999999") THEN DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+                    /*-- A62-0279 -- »Ô´ Queue  ---
+                    nv_Quota = DECI(DocRunn.Stknoto) - DECI(DocRunn.StkNext).
+                    RUN PD_GenQMail (INPUT nv_Quota ,
+                                           DocRunn.docyr ,
+                                           DocRunn.doctyp,
+                                           DocRunn.CateCd,
+                                           DocRunn.doclotno).
+                    -- A62-0279 -- »Ô´ Queue  ---*/
+                END.
+        
+                nv_first = NO.
+                /* */
+                pv_docrun2 = STRING(DocRunn.StkNext,"9999999999999").
+                /* Run & Check MOD */
+                RUN StkMod (INPUT  DocRunn.StkNext,  /* XX16200000001  */
+                                   nv_first ,
+                            OUTPUT nv_StkNext).
+                /* Update  Sticker Next */
+                ASSIGN
+                  DocRunn.StkNext = STRING(nv_StkNext,"9999999999999")
+                  DocRunn.usrid   = gv_usrid
+                  DocRunn.revdat  = TODAY.
+                IF nv_StkNext >= STRING(DocRunn.StkPref + DocRunn.StknoTo,"9999999999999") THEN DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+                /*-- A62-0279 -- »Ô´ Queue  ---
+                nv_Quota = DECI(DocRunn.Stkpref + DocRunn.Stknoto) - DECI(DocRunn.StkNext).
+                RUN PD_GenQMail (INPUT nv_Quota ,
+                                       DocRunn.docyr ,
+                                       DocRunn.doctyp,
+                                       DocRunn.CateCd,
+                                       DocRunn.doclotno).
+                -- A62-0279 -- »Ô´ Queue  ---*/
+    
+            END.
+        END.
+        LEAVE Loop_RunStk.
+    END. /* REPEAT */
+
+    RELEASE DocRunn.
+    RELEASE bDocRunn.
+END.
+
+/*---- 2020-02-07 -----
+/* Running Sticker áºº Running µèÍà¹×èÍ§¨¹¡ÇèÒ¨ÐàµçÁ  
+  äÁèÁÕ¡ÒÃ Auto Set Runnning                        */
+PROCEDURE RunSticker2:
+
+    DEF INPUT  PARAMETER pv_DocType  AS CHAR.
+    DEF OUTPUT PARAMETER pv_docrun2   AS CHAR.
+    DEF OUTPUT PARAMETER pv_error    AS CHAR.
+
+    DEF VAR nv_lineCins  AS INT  NO-UNDO.
+    DEF VAR nv_StkNext   AS CHAR INIT "".
+    DEF VAR nv_dup       AS LOG.
+
+    pv_error = "".
+    REPEAT:
+
+        FIND FIRST DocRunn USE-INDEX DocRunn01
+            WHERE DocRunn.DocYr = 2020
+            AND   DocRunn.DocTyp  = "T"
+            AND   DocRunn.CateCd  = nv_CateCd 
+            AND   DocRunn.StkPref + STRING(DocRunn.Stknoto)  >= DocRunn.Stknext EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+        IF NOT AVAIL DocRunn THEN DO:
+            IF LOCKED DocRunn THEN DO:
+                nv_lineCins  = 0.
+                DO WHILE nv_lineCins  <= 100 :
+                  nv_lineCins  = nv_lineCins  + 1.
+                END.
+
+/* OUTPUT TO Sticker-lock.txt APPEND.                            */
+/* PUT TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." */
+/*   " nv_CateCd : " nv_CateCd FORMAT "X(15)"                    */
+/*   " pv_docrun2 : " pv_docrun2 FORMAT "X(15)" SKIP.            */
+/* OUTPUT CLOSE.                                                 */
+
+                /*pv_error = "Record is Locked".*/
+                NEXT.
+            END.
+            ELSE pv_error = "(2)Not found sticker running parameter setup, Please contract Helpdesk...!".
+        END.
+        ELSE DO:  /* AVAIL */
+    
+            /* ¶éÒÁÒ¡¡ÇèÒáÊ´§ÇèÒ running àµçÁ */
+            IF DEC(DocRunn.StkNext) > DEC(DocRunn.StkPref + DocRunn.StknoTo) THEN DO:
+                DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+                pv_error = "(4)Sticker running is full, Please contract Helpdesk...!".
+            END.
+            ELSE DO:
+                /* Sticker no ÂÑ§äÁèà¤Â¶Ù¡´Ö§ä»ãªé§Ò¹ */
+
+                IF STRING(DocRunn.StkPref + DocRunn.StknoFr,"9999999999999") = DocRunn.StkNext THEN DO:
+                    nv_first = YES.
+                    /* Run & Check Mod àÅ¢áÃ¡à¾×èÍ Update Å§  Sticker Next */
+                    RUN StkMod (INPUT  DocRunn.StkNext,  /* XX16200000001  */
+                                       nv_first ,
+                                OUTPUT nv_StkNext).
+        
+                    /* Update  Sticker Next àºÍÃìáÃ¡ */
+                    DocRunn.StkNext = STRING(nv_StkNext,"9999999999999").
+                    /*-- A62-0279 -- »Ô´ Queue  ---
+                    nv_Quota = DECI(DocRunn.Stkpref + DocRunn.Stknoto) - DECI(DocRunn.StkNext).
+                    RUN PD_GenQMail (INPUT nv_Quota ,
+                                           DocRunn.docyr ,
+                                           DocRunn.doctyp,
+                                           DocRunn.CateCd,
+                                           DocRunn.doclotno).
+                    -- A62-0279 -- »Ô´ Queue  ---*/
+                END.
+        
+                nv_first = NO.
+                /* */
+                pv_docrun2 = STRING(DocRunn.StkNext,"9999999999999").
+
+/* OUTPUT TO Sticker.txt APPEND.                                 */
+/* PUT TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." */
+/*   " DocRunn.DocTyp : " DocRunn.DocTyp FORMAT "X(5)"           */
+/*   " nv_CateCd : " nv_CateCd FORMAT "X(15)"                    */
+/*   " pv_docrun2 : " pv_docrun2 FORMAT "X(15)" SKIP.            */
+/* OUTPUT CLOSE.                                                 */
+
+
+                /* Run & Check MOD */
+                RUN StkMod (INPUT  DocRunn.StkNext,  /* XX16200000001  */
+                                   nv_first ,
+                            OUTPUT nv_StkNext).
+                /* Update  Sticker Next */
+                DocRunn.StkNext = STRING(nv_StkNext,"9999999999999").
+                IF nv_StkNext >= STRING(DocRunn.StkPref + DocRunn.StknoTo,"9999999999999") THEN DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+                /*-- A62-0279 -- »Ô´ Queue  ---
+                nv_Quota = DECI(DocRunn.Stkpref + DocRunn.Stknoto) - DECI(DocRunn.StkNext).
+                RUN PD_GenQMail (INPUT nv_Quota ,
+                                       DocRunn.docyr ,
+                                       DocRunn.doctyp,
+                                       DocRunn.CateCd,
+                                       DocRunn.doclotno).
+                -- A62-0279 -- »Ô´ Queue  ---*/
+            END.
+        END.
+        LEAVE.
+    END.
+    RELEASE DocRunn.
+END.
+---- 2020-02-07 -----*/
+
+/* Running Sticker áºº Running µèÍà¹×èÍ§¨¹¡ÇèÒ¨ÐàµçÁ  
+  äÁèÁÕ¡ÒÃ Auto Set Runnning                        */
+PROCEDURE RunSticker2:
+
+    DEF INPUT  PARAMETER pv_DocType  AS CHAR.
+    DEF OUTPUT PARAMETER pv_docrun2   AS CHAR.
+    DEF OUTPUT PARAMETER pv_error    AS CHAR.
+
+    DEF VAR nv_lineCins  AS INT  NO-UNDO.
+    DEF VAR nv_StkNext   AS CHAR INIT "".
+    DEF VAR nv_dup       AS LOG.
+
+    pv_error = "".
+    Loop_RunStk:
+    REPEAT:
+        FIND FIRST DocRunn USE-INDEX DocRunn01
+            WHERE Docrunn.DocYr   >= 2020
+            AND   DocRunn.DocTyp  = pv_DocType
+            AND   DocRunn.CateCd  = nv_CateCd 
+            AND   DocRunn.StkPref + STRING(DocRunn.Stknoto)  >= DocRunn.Stknext EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+        IF NOT AVAIL DocRunn THEN DO:
+            IF LOCKED DocRunn THEN DO:
+                nv_lineCins  = 0.
+                DO WHILE nv_lineCins  <= 100 :
+                  nv_lineCins  = nv_lineCins  + 1.
+                END.
+                /*pv_error = "Record is Locked".*/
+                NEXT Loop_RunStk.
+            END.
+            ELSE pv_error = "(2)Not found sticker running parameter setup, Please contract Helpdesk...!".
+        END.
+        ELSE DO:  /* AVAIL */
+    
+            /* ¶éÒÁÒ¡¡ÇèÒáÊ´§ÇèÒ running àµçÁ */
+            IF DEC(DocRunn.StkNext) > DEC(DocRunn.StkPref + DocRunn.StknoTo) THEN DO:
+                DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+                pv_error = "(4)Sticker running is full, Please contract Helpdesk...!".
+            END.
+            ELSE DO:
+                /* Sticker no ÂÑ§äÁèà¤Â¶Ù¡´Ö§ä»ãªé§Ò¹ */
+
+                IF STRING(DocRunn.StkPref + DocRunn.StknoFr,"9999999999999") = DocRunn.StkNext THEN DO:
+                    nv_first = YES.
+                    /* Run & Check Mod àÅ¢áÃ¡à¾×èÍ Update Å§  Sticker Next */
+                    RUN StkMod (INPUT  DocRunn.StkNext,  /* XX16200000001  */
+                                       nv_first ,
+                                OUTPUT nv_StkNext).
+        
+                    /* Update  Sticker Next àºÍÃìáÃ¡ */
+                    ASSIGN
+                      DocRunn.StkNext = STRING(nv_StkNext,"9999999999999")
+                      DocRunn.usrid   = gv_usrid
+                      DocRunn.revdat  = TODAY.
+                    IF nv_StkNext >= STRING(DocRunn.StkPref + DocRunn.StknoTo,"9999999999999") THEN DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+                    /*-- A62-0279 -- »Ô´ Queue  ---
+                    nv_Quota = DECI(DocRunn.Stkpref + DocRunn.Stknoto) - DECI(DocRunn.StkNext).
+                    RUN PD_GenQMail (INPUT nv_Quota ,
+                                           DocRunn.docyr ,
+                                           DocRunn.doctyp,
+                                           DocRunn.CateCd,
+                                           DocRunn.doclotno).
+                    -- A62-0279 -- »Ô´ Queue  ---*/
+                END.
+        
+                nv_first = NO.
+                /* */
+                pv_docrun2 = STRING(DocRunn.StkNext,"9999999999999").
+                /* Run & Check MOD */
+                RUN StkMod (INPUT  DocRunn.StkNext,  /* XX16200000001  */
+                                   nv_first ,
+                            OUTPUT nv_StkNext).
+                /* Update  Sticker Next */
+                ASSIGN
+                  DocRunn.StkNext = STRING(nv_StkNext,"9999999999999")
+                  DocRunn.usrid   = gv_usrid
+                  DocRunn.revdat  = TODAY.
+                IF nv_StkNext >= STRING(DocRunn.StkPref + DocRunn.StknoTo,"9999999999999") THEN DocRunn.remark = "FULL - " + DocRunn.remark. /* áÊ´§Ê¶Ò¹ÐÇèÒ Full */
+                /*-- A62-0279 -- »Ô´ Queue  ---
+                nv_Quota = DECI(DocRunn.Stkpref + DocRunn.Stknoto) - DECI(DocRunn.StkNext).
+                RUN PD_GenQMail (INPUT nv_Quota ,
+                                       DocRunn.docyr ,
+                                       DocRunn.doctyp,
+                                       DocRunn.CateCd,
+                                       DocRunn.doclotno).
+                -- A62-0279 -- »Ô´ Queue  ---*/
+            END.
+        END.
+        LEAVE Loop_RunStk.
+    END.
+    RELEASE DocRunn.
+END.
+
+/********************************************************************/
+PROCEDURE StkMod:
+
+    DEF INPUT  PARAMETER  pv_stknext    AS CHAR.
+    DEF INPUT  PARAMETER  pv_first      AS LOG.
+    DEF OUTPUT PARAMETER  pv_StkNo      AS CHAR.
+    
+    DEF VAR chr_sticker AS CHAR .
+    DEF VAR nv_sck_no   AS CHAR.
+    
+    DEF VAR nv_leng12   AS INT.
+    DEF VAR nv_cnt2     AS INT.
+    
+    DEF VAR Chk_mod1    AS DECI.
+    DEF VAR Chk_mod2    AS DECI.
+    DEF VAR nv_modulo   AS DECI.
+    
+    DEF VAR nv_sticker  AS CHAR FORMAT "9999999999999".
+
+    /*===================== CheckMod =====================*/
+    ASSIGN
+       CHR_sticker = pv_stknext
+
+       nv_sck_no   = pv_stknext
+       nv_leng12   = LENGTH(nv_sck_no) - 1 .             /* 12 */
+       nv_sck_no   = SUBSTRING(nv_sck_no,1,nv_leng12).
+
+    IF pv_first THEN DO:   /* ãªé¤èÒ Sticker no µÑÇáÃ¡ä» MOD */ 
+        IF SUBSTRING(CHR_sticker,1,1) = "0" THEN chr_sticker  = "0" + STRING(DECI(nv_sck_no)).
+                                            ELSE chr_sticker  =       STRING(DECI(nv_sck_no)).
+    END.
+    ELSE DO:
+        IF SUBSTRING(CHR_sticker,1,1) = "0" THEN chr_sticker  = "0" + STRING(DECI(nv_sck_no) + 1).
+                                            ELSE chr_sticker  =       STRING(DECI(nv_sck_no) + 1).
+    END.
+
+    nv_cnt2      = LENGTH(chr_sticker).     /* 12 */
+
+    IF SUBSTRING (CHR_sticker,1,1) = "0"  THEN DO:
+
+        Chk_mod1 = DEC(SUBSTRING(chr_sticker,1,nv_cnt2)).            
+           
+        IF nv_cnt2 = 14 THEN DO:
+           Chk_mod2 = DEC(SUBSTRING(STRING( Chk_mod1 / 7,"99999999999999.999"  ),1,nv_cnt2)) * 7.
+        END.
+        ELSE IF nv_cnt2 = 12 THEN DO:
+           Chk_mod2 = DEC(SUBSTRING(STRING( Chk_mod1 / 7,"999999999999.999"  ),1,nv_cnt2)) * 7.
+        END.
+        ELSE IF nv_cnt2 = 10 THEN DO:
+           Chk_mod2 = DEC(SUBSTRING(STRING( Chk_mod1 / 7,"9999999999.999"  ),1,nv_cnt2)) * 7.
+        END.
+        ELSE IF nv_cnt2 = 8 THEN DO:
+           Chk_mod2 = DEC(SUBSTRING(STRING( Chk_mod1 / 7,"99999999.999"  ),1,nv_cnt2)) * 7.
+        END.
+        
+        nv_modulo = Chk_mod1 - Chk_mod2.  
+        nv_sticker = "0" + SUBSTRING(STRING(Chk_mod1),1,nv_cnt2) + STRING(nv_modulo). 
+    END.
+    ELSE DO:
+        
+        Chk_mod1 = DEC(SUBSTRING(chr_sticker,1,nv_cnt2)).      
+        Chk_mod2 = DEC(SUBSTRING(STRING( Chk_mod1 / 7),1,nv_cnt2)) * 7.
+        
+        nv_modulo  = Chk_mod1 - Chk_mod2.         
+        nv_sticker = SUBSTRING(STRING(Chk_mod1),1,nv_cnt2) + STRING(nv_modulo).
+        /*---------------------------------------------------*/
+    END.
+    
+    pv_StkNo = nv_sticker. /* return Sticker no ¡ÅÑº */
+
+END.
+/********************************************************************/
+
+
+PROCEDURE Chk_Dup.
+
+    DEF INPUT  PARAMETER   chk_doctype  AS CHAR.
+    DEF INPUT  PARAMETER   chk_docnofr  AS DECI.
+    DEF INPUT  PARAMETER   chk_docnoto  AS DECI.
+    DEF OUTPUT PARAMETER   chk_dup      AS LOG.
+
+    chk_dup = NO.
+    IF gv_DocType <> "T" THEN DO:
+    
+        FIND FIRST  DocRunn USE-INDEX DocRunn02
+          WHERE    (DocRunn.Doctyp  = chk_doctype
+          AND (DECI(DocRunn.DocPref + STRING(DocRunn.DocnoFr,"9999999"))  <= chk_docnoFr    /* Check From */
+          AND  DECI(DocRunn.DocPref + STRING(DocRunn.DocnoTo,"9999999"))  >= chk_docnoFr ))
+          OR   
+                   (DocRunn.Doctyp  = chk_doctype 
+          AND (DECI(DocRunn.DocPref + STRING(DocRunn.DocnoFr,"9999999"))  <= chk_docnoTo    /* Check To   */
+          AND  DECI(DocRunn.DocPref + STRING(DocRunn.DocnoTo,"9999999"))  >= chk_docnoTo )) NO-LOCK NO-ERROR.
+
+        IF AVAIL DocRunn THEN chk_dup = YES. /* Document Dupplicate */
+
+    END.
+    ELSE DO:
+    
+        FIND FIRST  DocRunn USE-INDEX DocRunn03
+          WHERE    (DocRunn.Doctyp  = chk_doctype 
+          AND (DECI(DocRunn.StkPref + STRING(DocRunn.StknoFr,"99999999")) <= chk_docnoFr    /* Check From */
+          AND  DECI(DocRunn.StkPref + STRING(DocRunn.StknoTo,"99999999")) >= chk_docnoFr ))
+          OR   
+                   (DocRunn.Doctyp  = chk_doctype 
+          AND (DECI(DocRunn.StkPref + STRING(DocRunn.StknoFr,"99999999")) <= chk_docnoTo    /* Check To   */
+          AND  DECI(DocRunn.StkPref + STRING(DocRunn.StknoTo,"99999999")) >= chk_docnoTo )) NO-LOCK NO-ERROR .
+
+        IF AVAIL DocRunn THEN chk_dup = YES.  /* Sticker Dupplicate */
+
+    END.
+END.
+
+/* Call Program Send mail */
+PROCEDURE PD_GenQMail.
+
+   DEF INPUT  PARAMETER  pv_DocQuota    AS DECI.
+   DEF INPUT  PARAMETER  pv_docyr       AS INT.
+   DEF INPUT  PARAMETER  pv_doctype     AS CHAR.
+   DEF INPUT  PARAMETER  pv_doccate     AS CHAR.
+   DEF INPUT  PARAMETER  pv_doclot      AS INT.
+
+   DEF  VAR  nv_mail        AS CHAR INIT "".
+   DEF  VAR  nv_mailcc      AS CHAR INIT "".
+   DEF  VAR  nv_bcName      AS CHAR INIT "".
+   DEF  VAR  nv_patch       AS CHAR INIT "".    
+
+   /* Check Document Quota ¤§àËÅ×Í·Ñé§ËÁ´·ÕèÁÕàºÔ¡äÇé ÃÇÁ¡Ñº lot ¶Ñ´ä» ¶éÒÁÕ */
+   FIND LAST DocRunn USE-INDEX DocRunn01
+       WHERE DocRunn.DocYr   = pv_docyr  
+       AND   DocRunn.DocTyp  = pv_doctype
+       AND   DocRunn.CateCd  = pv_doccate
+       AND   DocRunn.Doclot  = pv_doclot + 1 NO-LOCK NO-ERROR NO-WAIT.
+   IF AVAIL DocRunn THEN DO:  /* ¶éÒÁÕáÊ´§ÁÕ¡ÒÃ Set áÅéÇáµè Running àµçÁ */
+       IF pv_doctype = "T" THEN pv_DocQuota = pv_DocQuota + (DECI(DocRunn.Stkpref + DocRunn.stknoto) - DECI(DocRunn.stkNext)).
+                           ELSE pv_DocQuota = pv_DocQuota + (DECI(DocRunn.Docpref + DocRunn.docnoto) - DECI(DocRunn.docNext)).
+   END.
+
+   /* - §Ò¹ Web ·ÕèµéÍ§ÁÕ¡ÒÃàºÔ¡àÍ¡ÊÒÃãËéµÑÇá·¹  à¾ÔèÁãËéá¨é§àµ×Í¹·Ò§ mail ¡Ã³Õ ¨Ó¹Ç¹àÍ¡ÊÒÃàËÅ×Í¹éÍÂ 
+      µÒÁ¨Ó¹Ç¹·Õè¡ÓË¹´  
+      
+      ÃÐºº Premium äÁèÁÕ¡ÒÃ Set Branch , Company Code ·Õè Table Company ¨ÐäÁèà¢éÒ Loop ¹Õé
+   -----------------------------------------------------------------------------------------*/
+   /* ¶éÒ¨Ó¹Ç¹àÍ¡ÊÒÃ¤§àËÅ×ÍµÒÁ·Õè¡ÓË¹´ãËé Gen Queue Send mail á¨é§àµ×Í¹ BU. µÒÁ Mail ·Õè Set äÇé*/
+   IF pv_DocQuota = 500 OR pv_DocQuota = 250 OR pv_DocQuota = 70 OR pv_DocQuota = 50 THEN DO:
+   
+       FIND FIRST Company USE-INDEX company01
+           WHERE company.compno = gv_bc NO-LOCK NO-ERROR.
+       IF AVAIL Company THEN DO:
+           ASSIGN
+               nv_mail     = Company.EMail
+               nv_mailcc   = Company.Internet
+               nv_bcName   = Company.Name.
+
+           OUTPUT TO D:\TEMP\SendMailDocQuota-Log.TXT APPEND.
+           PUT TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." 
+                   "Company : " gv_bc     FORMAT "X(12)"  " : " nv_bcName FORMAT "X(45)"
+                  " Send To : " nv_mail   FORMAT "X(50)"
+                    " CC To : " nv_mailCC FORMAT "X(50)"
+                    "Quota Balance : " STRING(pv_docQuota)    FORMAT "X(5)"  SKIP.
+           OUTPUT CLOSE.
+    
+           RUN WSU/WSUGSEND.P (INPUT  pv_DocQuota,
+                                      gv_DocType ,
+                                      nv_mail    ,
+                                      nv_mailcc  ,
+                                      gv_bc      ,
+                                      nv_bcName  ,
+                                      gv_usrid   ,
+                               OUTPUT nv_patch   ).
+       END.
+   END.
+END.
+
+
+

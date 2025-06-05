@@ -165,7 +165,7 @@ namespace AblCommentDetector
 
         // Regex patterns for procedure analysis
         private static readonly Regex ProcedureDefinitionRegex = new Regex(
-            @"^\s*PROCEDURE\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*:",
+            @"^\s*PROCEDURE\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*[:\.]",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex FunctionDefinitionRegex = new Regex(
@@ -797,19 +797,19 @@ namespace AblCommentDetector
             {
                 if (result.Type == LineType.PureComment)
                 {
-                    writer.WriteLine($"/*[COMMENT]*/                    {result.Content}");
+                    writer.WriteLine($"/*[COMMENT]*/          {result.Content}");
                 }
                 else if (result.Type == LineType.EmptyLine)
                 {
-                    writer.WriteLine($"/*[BLANK]*/                      {result.Content}");
+                    writer.WriteLine($"/*[BLANK]*/            {result.Content}");
                 }
                 else if (result.IsUncalledProcedure)
                 {
-                    writer.WriteLine($"/*[UNCALLED]*/                   {result.Content}");
+                    writer.WriteLine($"/*[UNCALLED]*/         {result.Content}");
                 }
                 else if (result.Type == LineType.ExecutableCode || result.Type == LineType.MixedContent)
                 {
-                    writer.WriteLine($"/*[EXECUTABLE]*/                 {result.Content}");
+                    writer.WriteLine($"/*[EXECUTABLE]*/       {result.Content}");
                 }
                 else
                 {

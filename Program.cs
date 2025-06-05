@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using AblCommentDetector;
+using System.Collections.Generic;
 
 namespace AblCommentDetector
 {
@@ -16,121 +18,339 @@ namespace AblCommentDetector
             Console.WriteLine("Based on grammar patterns from https://github.com/ezequielgandolfi/openedge-zext.git");
             Console.WriteLine();
 
-            if (args.Length != 1)
+            if (args.Length == 0)
             {
-                Console.WriteLine("Usage: AblCommentDetector <input-file>");
-                Console.WriteLine("Output will be saved as: <input-file>-modified.w");
+                Console.WriteLine("Usage:");
+                Console.WriteLine("  dotnet run -- <file_path>       # Process single file");
+                Console.WriteLine("  dotnet run -- <directory_path>  # Process all ABL files in directory");
                 Console.WriteLine();
                 Console.WriteLine("Examples:");
-                Console.WriteLine("  AblCommentDetector WRSBQ7072.W");
-                Console.WriteLine("  -> Output: WRSBQ7072-modified.w");
+                Console.WriteLine("  dotnet run -- inputs/WRSBQ7072.W");
+                Console.WriteLine("  dotnet run -- inputs/sample-code.p");
+                Console.WriteLine("  dotnet run -- inputs/");
                 return;
             }
 
-            string inputFile = args[0];
+            string inputPath = args[0];
             
-            // Generate output filename: remove extension, add "-modified.w"
-            string outputFile = Path.GetFileNameWithoutExtension(inputFile) + "-modified.w";
-
             try
             {
-                Console.WriteLine($"Analyzing file: {inputFile}");
-                Console.WriteLine();
-
-                var detector = new AblCommentDetector();
-                var results = detector.AnalyzeFile(inputFile);
-                
-                // Calculate and display statistics
-                var stats = detector.CalculateStatistics(results);
-                var procedureInfo = detector.GetProcedureInfo();
-                
-                Console.WriteLine("Analysis Summary:");
-                Console.WriteLine($"  Total lines: {results.Count}");
-                Console.WriteLine($"  Executable code: {stats.ExecutableLines} lines ({stats.ExecutablePercentage:F1}%)");
-                Console.WriteLine($"  Pure comments: {stats.CommentLines} lines ({stats.CommentPercentage:F1}%)");
-                Console.WriteLine($"  Mixed content: {stats.MixedLines} lines ({stats.MixedPercentage:F1}%)");
-                Console.WriteLine($"  Empty lines: {stats.EmptyLines} lines ({stats.EmptyPercentage:F1}%)");
-                Console.WriteLine($"  Uncalled procedures: {stats.UncalledProcedures} lines ({stats.UncalledPercentage:F1}%)");
-                Console.WriteLine();
-
-                // Show procedure analysis summary
-                var totalProcedures = procedureInfo.Count;
-                var calledProcedures = procedureInfo.Values.Count(p => p.IsCalled);
-                var uncalledProcedures = totalProcedures - calledProcedures;
-                
-                Console.WriteLine("Procedure Analysis:");
-                Console.WriteLine($"  Total procedures/functions defined: {totalProcedures}");
-                Console.WriteLine($"  Called procedures/functions: {calledProcedures}");
-                Console.WriteLine($"  Uncalled procedures/functions: {uncalledProcedures}");
-                Console.WriteLine();
-
-                // Generate the output file
-                detector.GenerateReport(inputFile, outputFile);
-                Console.WriteLine($"Detailed report saved to: {outputFile}");
-                Console.WriteLine();
-
-                // Show some example classifications
-                Console.WriteLine("Example classifications:");
-                Console.WriteLine("========================");
-                Console.WriteLine();
-
-                // Show executable code examples
-                var executableExamples = results.Where(r => r.Type == AblCommentDetector.LineType.ExecutableCode).Take(3);
-                if (executableExamples.Any())
+                if (File.Exists(inputPath))
                 {
-                    Console.WriteLine("Executable Code Examples:");
-                    foreach (var example in executableExamples)
-                    {
-                        Console.WriteLine($"  Line {example.LineNumber,5}: {example.Content.Trim().Substring(0, Math.Min(80, example.Content.Trim().Length))}...");
-                    }
-                    Console.WriteLine();
+                    ProcessSingleFile(inputPath);
                 }
-
-                // Show comment examples
-                var commentExamples = results.Where(r => r.Type == AblCommentDetector.LineType.PureComment).Take(3);
-                if (commentExamples.Any())
+                else if (Directory.Exists(inputPath))
                 {
-                    Console.WriteLine("Pure Comment Examples:");
-                    foreach (var example in commentExamples)
-                    {
-                        Console.WriteLine($"  Line {example.LineNumber,5}: {example.Content.Trim()}");
-                    }
-                    Console.WriteLine();
+                    ProcessDirectory(inputPath);
                 }
-
-                // Show mixed content examples
-                var mixedExamples = results.Where(r => r.Type == AblCommentDetector.LineType.MixedContent).Take(3);
-                if (mixedExamples.Any())
+                else
                 {
-                    Console.WriteLine("Mixed Content Examples (treated as executable):");
-                    foreach (var example in mixedExamples)
-                    {
-                        Console.WriteLine($"  Line {example.LineNumber,5}: {example.Content.Trim().Substring(0, Math.Min(80, example.Content.Trim().Length))}...");
-                    }
-                    Console.WriteLine();
+                    Console.WriteLine($"Error: Path '{inputPath}' does not exist.");
+                    return;
                 }
-
-                // Show uncalled procedure examples
-                var uncalledExamples = results.Where(r => r.IsUncalledProcedure).Take(3);
-                if (uncalledExamples.Any())
-                {
-                    Console.WriteLine("Uncalled Procedure Examples:");
-                    foreach (var example in uncalledExamples)
-                    {
-                        Console.WriteLine($"  Line {example.LineNumber,5}: {example.Content.Trim().Substring(0, Math.Min(80, example.Content.Trim().Length))}...");
-                    }
-                    Console.WriteLine();
-                }
-
-                Console.WriteLine("Analysis complete!");
-            }
-            catch (FileNotFoundException)
-            {
-                Console.WriteLine($"Error: File '{inputFile}' not found.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        static void ProcessSingleFile(string filePath)
+        {
+            Console.WriteLine($"Analyzing file: {Path.GetFileName(filePath)}");
+            Console.WriteLine();
+
+            var detector = new AblCommentDetector();
+            var results = detector.AnalyzeFile(filePath);
+
+            // Create output subdirectory based on filename without extension
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+            string outputDir = Path.Combine("outputs", fileName);
+            Directory.CreateDirectory(outputDir);
+
+            // Copy original file to output directory
+            string originalOutputPath = Path.Combine(outputDir, Path.GetFileName(filePath));
+            File.Copy(filePath, originalOutputPath, true);
+
+            // Generate modified file in output directory
+            string modifiedFileName = $"{fileName}-modified{Path.GetExtension(filePath)}";
+            string modifiedOutputPath = Path.Combine(outputDir, modifiedFileName);
+            detector.GenerateReport(filePath, modifiedOutputPath);
+
+            DisplayStatistics(results, detector);
+            DisplayExamples(results);
+
+            Console.WriteLine($"Original file copied to: {originalOutputPath}");
+            Console.WriteLine($"Modified file saved to: {modifiedOutputPath}");
+            Console.WriteLine();
+            Console.WriteLine("Analysis complete!");
+        }
+
+        static void ProcessDirectory(string directoryPath)
+        {
+            // Get all ABL files in directory
+            string[] ablExtensions = { "*.w", "*.W", "*.p", "*.P", "*.i", "*.I" };
+            var ablFiles = ablExtensions
+                .SelectMany(ext => Directory.GetFiles(directoryPath, ext))
+                .ToArray();
+
+            if (ablFiles.Length == 0)
+            {
+                Console.WriteLine($"No OpenEdge ABL files found in directory: {directoryPath}");
+                return;
+            }
+
+            Console.WriteLine($"Found {ablFiles.Length} ABL files in directory: {directoryPath}");
+            Console.WriteLine();
+
+            var detector = new AblCommentDetector();
+            int processedCount = 0;
+            int totalExecutable = 0;
+            int totalComments = 0;
+            int totalMixed = 0;
+            int totalEmpty = 0;
+            int totalUncalled = 0;
+            int totalProcedures = 0;
+            int totalCalledProcedures = 0;
+
+            // List to store detailed file analysis results
+            var fileAnalysisResults = new List<FileAnalysisResult>();
+
+            foreach (string filePath in ablFiles)
+            {
+                try
+                {
+                    Console.WriteLine($"Processing: {Path.GetFileName(filePath)}");
+                    
+                    var results = detector.AnalyzeFile(filePath);
+
+                    // Create individual output subdirectory for each file
+                    string fileName = Path.GetFileNameWithoutExtension(filePath);
+                    string outputDir = Path.Combine("outputs", fileName);
+                    Directory.CreateDirectory(outputDir);
+
+                    // Copy original file to its own subdirectory
+                    string originalOutputPath = Path.Combine(outputDir, Path.GetFileName(filePath));
+                    File.Copy(filePath, originalOutputPath, true);
+
+                    // Generate modified file in the same subdirectory
+                    string modifiedFileName = $"{fileName}-modified{Path.GetExtension(filePath)}";
+                    string modifiedOutputPath = Path.Combine(outputDir, modifiedFileName);
+                    detector.GenerateReport(filePath, modifiedOutputPath);
+
+                    Console.WriteLine($"  -> Created: {outputDir}/");
+
+                    // Calculate detailed statistics for this file
+                    var stats = detector.CalculateStatistics(results);
+                    var procedureInfo = detector.GetProcedureInfo();
+                    
+                    // Collect detailed file analysis
+                    var fileResult = new FileAnalysisResult
+                    {
+                        FileName = Path.GetFileName(filePath),
+                        OriginalLines = results.Count,
+                        ExecutableLines = stats.ExecutableLines + stats.MixedLines, // Mixed content is treated as executable
+                        CommentLines = stats.CommentLines,
+                        BlankLines = stats.EmptyLines,
+                        UncalledProcedureLines = stats.UncalledProcedures,
+                        CalledProcedures = procedureInfo.Values.Where(p => p.IsCalled).Select(p => p.Name).ToList(),
+                        UncalledProcedures = procedureInfo.Values.Where(p => !p.IsCalled).Select(p => p.Name).ToList()
+                    };
+                    
+                    fileAnalysisResults.Add(fileResult);
+
+                    // Accumulate batch statistics
+                    totalExecutable += stats.ExecutableLines;
+                    totalComments += stats.CommentLines;
+                    totalMixed += stats.MixedLines;
+                    totalEmpty += stats.EmptyLines;
+                    totalUncalled += stats.UncalledProcedures;
+
+                    totalProcedures += procedureInfo.Count;
+                    totalCalledProcedures += procedureInfo.Values.Count(p => p.IsCalled);
+
+                    processedCount++;
+                    detector.Reset(); // Reset for next file
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"  Error processing {Path.GetFileName(filePath)}: {ex.Message}");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Analysis Results:");
+            Console.WriteLine("================");
+            Console.WriteLine();
+
+            // Display detailed analysis for each file (same format as analysis-result.txt)
+            foreach (var file in fileAnalysisResults.OrderBy(f => f.FileName))
+            {
+                Console.WriteLine($"FILE: {file.FileName}");
+                Console.WriteLine("------------------");
+                Console.WriteLine($"Original Lines: {file.OriginalLines}");
+                Console.WriteLine($"Uncalled Procedure LOC: {file.UncalledProcedureLines}");
+                Console.WriteLine($"Comments: {file.CommentLines}");
+                Console.WriteLine($"Blank Lines: {file.BlankLines}");
+                Console.WriteLine($"Total Unused Lines: {file.TotalUnusedLines}");
+                Console.WriteLine($"Executable LOC: {file.ExecutableLines}");
+                Console.WriteLine();
+                Console.WriteLine($"Verification: {file.OriginalLines} = {file.UncalledProcedureLines} (uncalled) + {file.CommentLines} (comments) + {file.BlankLines} (blank) + {file.ExecutableLines} (executable)");
+                Console.WriteLine();
+                
+                string calledProcs = file.CalledProcedures.Count > 0 ? string.Join(",", file.CalledProcedures) : "None";
+                string uncalledProcs = file.UncalledProcedures.Count > 0 ? string.Join(",", file.UncalledProcedures) : "None";
+                
+                Console.WriteLine($"Called Procedures: {calledProcs}");
+                Console.WriteLine($"Uncalled Procedures: {uncalledProcs}");
+                Console.WriteLine();
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("Batch Processing Summary:");
+            Console.WriteLine("========================");
+            Console.WriteLine($"Files processed: {processedCount}/{ablFiles.Length}");
+            Console.WriteLine($"Total executable lines: {totalExecutable:N0}");
+            Console.WriteLine($"Total comment lines: {totalComments:N0}");
+            Console.WriteLine($"Total mixed content lines: {totalMixed:N0}");
+            Console.WriteLine($"Total empty lines: {totalEmpty:N0}");
+            Console.WriteLine($"Total uncalled procedure lines: {totalUncalled:N0}");
+            Console.WriteLine($"Total procedures found: {totalProcedures}");
+            Console.WriteLine($"Total called procedures: {totalCalledProcedures}");
+            Console.WriteLine($"Total uncalled procedures: {totalProcedures - totalCalledProcedures}");
+            Console.WriteLine();
+            Console.WriteLine($"Individual subdirectories created in: outputs/");
+
+            // Generate analysis-result.txt
+            GenerateAnalysisResultFile(fileAnalysisResults);
+            
+            Console.WriteLine("Analysis complete!");
+        }
+
+        public class FileAnalysisResult
+        {
+            public string FileName { get; set; } = "";
+            public int OriginalLines { get; set; }
+            public int ExecutableLines { get; set; }
+            public int CommentLines { get; set; }
+            public int BlankLines { get; set; }
+            public int UncalledProcedureLines { get; set; }
+            public List<string> CalledProcedures { get; set; } = new List<string>();
+            public List<string> UncalledProcedures { get; set; } = new List<string>();
+            
+            public int TotalUnusedLines => UncalledProcedureLines + CommentLines + BlankLines;
+        }
+
+        static void GenerateAnalysisResultFile(List<FileAnalysisResult> fileResults)
+        {
+            var outputPath = Path.Combine("outputs", "analysis-result.txt");
+            
+            using (var writer = new StreamWriter(outputPath))
+            {
+                foreach (var file in fileResults.OrderBy(f => f.FileName))
+                {
+                    writer.WriteLine($"FILE: {file.FileName}");
+                    writer.WriteLine("------------------");
+                    writer.WriteLine($"Original Lines: {file.OriginalLines}");
+                    writer.WriteLine($"Uncalled Procedure LOC: {file.UncalledProcedureLines}");
+                    writer.WriteLine($"Comments: {file.CommentLines}");
+                    writer.WriteLine($"Blank Lines: {file.BlankLines}");
+                    writer.WriteLine($"Total Unused Lines: {file.TotalUnusedLines}");
+                    writer.WriteLine($"Executable LOC: {file.ExecutableLines}");
+                    writer.WriteLine();
+                    writer.WriteLine($"Verification: {file.OriginalLines} = {file.UncalledProcedureLines} (uncalled) + {file.CommentLines} (comments) + {file.BlankLines} (blank) + {file.ExecutableLines} (executable)");
+                    writer.WriteLine();
+                    
+                    string calledProcs = file.CalledProcedures.Count > 0 ? string.Join(",", file.CalledProcedures) : "None";
+                    string uncalledProcs = file.UncalledProcedures.Count > 0 ? string.Join(",", file.UncalledProcedures) : "None";
+                    
+                    writer.WriteLine($"Called Procedures: {calledProcs}");
+                    writer.WriteLine($"Uncalled Procedures: {uncalledProcs}");
+                    writer.WriteLine();
+                    writer.WriteLine();
+                }
+            }
+            
+            Console.WriteLine($"Analysis summary saved to: {outputPath}");
+        }
+
+        static void DisplayStatistics(System.Collections.Generic.List<AblCommentDetector.LineAnalysisResult> results, AblCommentDetector detector)
+        {
+            var stats = detector.CalculateStatistics(results);
+            var procedureInfo = detector.GetProcedureInfo();
+            
+            Console.WriteLine("Analysis Summary:");
+            Console.WriteLine($"  Total lines: {results.Count}");
+            Console.WriteLine($"  Executable code: {stats.ExecutableLines} lines ({stats.ExecutablePercentage:F1}%)");
+            Console.WriteLine($"  Pure comments: {stats.CommentLines} lines ({stats.CommentPercentage:F1}%)");
+            Console.WriteLine($"  Mixed content: {stats.MixedLines} lines ({stats.MixedPercentage:F1}%)");
+            Console.WriteLine($"  Empty lines: {stats.EmptyLines} lines ({stats.EmptyPercentage:F1}%)");
+            Console.WriteLine($"  Uncalled procedures: {stats.UncalledProcedures} lines ({stats.UncalledPercentage:F1}%)");
+            Console.WriteLine();
+
+            var calledProcedures = procedureInfo.Values.Count(p => p.IsCalled);
+            var uncalledProcedures = procedureInfo.Count - calledProcedures;
+
+            Console.WriteLine("Procedure Analysis:");
+            Console.WriteLine($"  Total procedures/functions defined: {procedureInfo.Count}");
+            Console.WriteLine($"  Called procedures/functions: {calledProcedures}");
+            Console.WriteLine($"  Uncalled procedures/functions: {uncalledProcedures}");
+            Console.WriteLine();
+        }
+
+        static void DisplayExamples(System.Collections.Generic.List<AblCommentDetector.LineAnalysisResult> results)
+        {
+            Console.WriteLine("Example classifications:");
+            Console.WriteLine("========================");
+            Console.WriteLine();
+
+            // Show examples of each type
+            var executableExamples = results.Where(r => r.Type == AblCommentDetector.LineType.ExecutableCode && !r.IsUncalledProcedure).Take(3);
+            if (executableExamples.Any())
+            {
+                Console.WriteLine("Executable Code Examples:");
+                foreach (var example in executableExamples)
+                {
+                    var content = example.Content.Length > 60 ? example.Content.Substring(0, 60) + "..." : example.Content;
+                    Console.WriteLine($"  Line {example.LineNumber,6}: {content}");
+                }
+                Console.WriteLine();
+            }
+
+            var commentExamples = results.Where(r => r.Type == AblCommentDetector.LineType.PureComment).Take(3);
+            if (commentExamples.Any())
+            {
+                Console.WriteLine("Pure Comment Examples:");
+                foreach (var example in commentExamples)
+                {
+                    var content = example.Content.Length > 60 ? example.Content.Substring(0, 60) + "..." : example.Content;
+                    Console.WriteLine($"  Line {example.LineNumber,6}: {content}");
+                }
+                Console.WriteLine();
+            }
+
+            var mixedExamples = results.Where(r => r.Type == AblCommentDetector.LineType.MixedContent && !r.IsUncalledProcedure).Take(3);
+            if (mixedExamples.Any())
+            {
+                Console.WriteLine("Mixed Content Examples (treated as executable):");
+                foreach (var example in mixedExamples)
+                {
+                    var content = example.Content.Length > 60 ? example.Content.Substring(0, 60) + "..." : example.Content;
+                    Console.WriteLine($"  Line {example.LineNumber,6}: {content}");
+                }
+                Console.WriteLine();
+            }
+
+            var uncalledExamples = results.Where(r => r.IsUncalledProcedure).Take(3);
+            if (uncalledExamples.Any())
+            {
+                Console.WriteLine("Uncalled Procedure Examples:");
+                foreach (var example in uncalledExamples)
+                {
+                    var content = example.Content.Length > 60 ? example.Content.Substring(0, 60) + "..." : example.Content;
+                    Console.WriteLine($"  Line {example.LineNumber,6}: {content}");
+                }
+                Console.WriteLine();
             }
         }
     }

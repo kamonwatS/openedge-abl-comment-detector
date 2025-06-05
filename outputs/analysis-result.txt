@@ -1,0 +1,45 @@
+FILE: sample-code.p
+------------------
+Original Lines: 132
+Uncalled Procedure LOC: 58
+Comments: 49
+Blank Lines: 20
+Total Unused Lines: 127
+Executable LOC: 5
+
+Verification: 132 = 58 (uncalled) + 49 (comments) + 20 (blank) + 5 (executable)
+
+Called Procedures: None
+Uncalled Procedures: PD_GenDataIntReSend,PD_GenDataIntReSend2
+
+
+FILE: WRSBQ7072.W
+------------------
+Original Lines: 8916
+Uncalled Procedure LOC: 1716
+Comments: 1302
+Blank Lines: 797
+Total Unused Lines: 3815
+Executable LOC: 5101
+
+Verification: 8916 = 1716 (uncalled) + 1302 (comments) + 797 (blank) + 5101 (executable)
+
+Called Procedures: disable_UI,enable_UI,Pc_CheckDataExt,Pc_CheckMsg,Pc_SAVECKAGT,Pc_SAVECKGrp,Pc_SAVEDUPL,Pc_SAVEFMRate,Pc_SavePDFLKT,Pc_SAVEPDResult,Pc_SAVEProduction,PD_ChkBlankForm,PD_ChkDataExt1,PD_ChkDataExt2,PD_ChkDataExt3,PD_ClearData,PD_ConDBExp,Pd_DeleteResultX,PD_DispData,PD_DispMess,PD_ErrorRunPol,PD_FNameAttach,PD_PUTError,Pd_saveCer,PD_SaveError,PD_SAVEPD1,PD_SAVEPD1ChkFile,PD_SAVEPD1ChkVehicle,PD_SAVEPD1FileAtt834,PD_SAVEPD1FileAttach,PD_SAVEPD1FileAtt_1,PD_SAVEPD1F_PrgName,PD_SAVEPD1IntS,PD_SAVEPD1_01,PD_SAVEPD1_02,PD_SAVEPD2,PD_SAVEPD3
+Uncalled Procedures: PD_Futil,PD_SAVEPD17072,PD_SAVEPD1FileAtt72,PD_SAVEPD1FileAttach2,PD_SAVEPD1FileAtt_Old,PD_SAVEPD1_OLD,PD_SAVEPD1_R,PD_SAVEQGwCtx,proc_FileAttach2
+
+
+FILE: WXZCDOC1.P
+------------------
+Original Lines: 839
+Uncalled Procedure LOC: 571
+Comments: 53
+Blank Lines: 36
+Total Unused Lines: 660
+Executable LOC: 179
+
+Verification: 839 = 571 (uncalled) + 53 (comments) + 36 (blank) + 179 (executable)
+
+Called Procedures: RunDocument,RunSticker2,StkMod,Chk_Dup
+Uncalled Procedures: RunSticker,PD_GenQMail
+
+
