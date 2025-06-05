@@ -3896,73 +3896,73 @@
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
 /*[BLANK]*/                      
 /*[EXECUTABLE]*/                 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE PD_Futil C-Win 
-/*[EXECUTABLE]*/                 PROCEDURE PD_Futil :
-/*[COMMENT]*/                    /*------------------------------------------------------------------------------
-/*[COMMENT]*/                      Purpose:     
-/*[COMMENT]*/                      Parameters:  <none>
-/*[COMMENT]*/                      Notes:       
-/*[COMMENT]*/                    ------------------------------------------------------------------------------*/
-/*[COMMENT]*/                    /**/
-/*[BLANK]*/                      
-/*[COMMENT]*/                    /*
-/*[BLANK]*/                      
-/*[COMMENT]*/                    DEFINE INPUT PARAMETER prm_PolicyTypeCd AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE INPUT PARAMETER prm_SumInsureAmt AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE INPUT PARAMETER prm_CompanyCode  AS CHARACTER NO-UNDO.
-/*[BLANK]*/                      
-/*[COMMENT]*/                    DEFINE INPUT-OUTPUT PARAMETER nv_okprn      AS LOGICAL   NO-UNDO.
-/*[BLANK]*/                      
-/*[COMMENT]*/                    DEFINE VARIABLE nv_UtilGrp    AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_Sumins     AS CHARACTER NO-UNDO.
-/*[BLANK]*/                      
-/*[COMMENT]*/                    /* ------------------------------------------------------------------------*/
-/*[BLANK]*/                      
-/*[COMMENT]*/                    nv_okprn = NO.
-/*[BLANK]*/                      
-/*[COMMENT]*/                    /*§Ò¹»2.1 2.2 ·Ø¹ 1áÊ¹/ 2áÊ¹ ãËé¾ÔÁ¾ì ¡ÃÁ¸ÃÃÁìä´é*/
-/*[BLANK]*/                      
-/*[COMMENT]*/                    IF    prm_PolicyTypeCd = "2.1" OR prm_PolicyTypeCd = "2.6"
-/*[COMMENT]*/                       OR prm_PolicyTypeCd = "2.2" OR prm_PolicyTypeCd = "2.7"
-/*[COMMENT]*/                       OR prm_PolicyTypeCd = "2.3" OR prm_PolicyTypeCd = "2.8"
-/*[COMMENT]*/                       OR prm_PolicyTypeCd = "2.4" OR prm_PolicyTypeCd = "2.9"
-/*[COMMENT]*/                       OR prm_PolicyTypeCd = "2.5"
-/*[COMMENT]*/                    THEN DO:
-/*[BLANK]*/                      
-/*[COMMENT]*/                           IF prm_PolicyTypeCd = "2.1" THEN nv_UtilGrp = "Prn21".
-/*[COMMENT]*/                      ELSE IF prm_PolicyTypeCd = "2.2" THEN nv_UtilGrp = "Prn22".
-/*[COMMENT]*/                      ELSE IF prm_PolicyTypeCd = "2.3" THEN nv_UtilGrp = "Prn23".
-/*[COMMENT]*/                      ELSE IF prm_PolicyTypeCd = "2.4" THEN nv_UtilGrp = "Prn24".
-/*[COMMENT]*/                      ELSE IF prm_PolicyTypeCd = "2.5" THEN nv_UtilGrp = "Prn25".
-/*[COMMENT]*/                      ELSE IF prm_PolicyTypeCd = "2.6" THEN nv_UtilGrp = "Prn26".
-/*[COMMENT]*/                      ELSE IF prm_PolicyTypeCd = "2.7" THEN nv_UtilGrp = "Prn27".
-/*[COMMENT]*/                      ELSE IF prm_PolicyTypeCd = "2.8" THEN nv_UtilGrp = "Prn28".
-/*[COMMENT]*/                      ELSE IF prm_PolicyTypeCd = "2.9" THEN nv_UtilGrp = "Prn29".
-/*[BLANK]*/                      
-/*[COMMENT]*/                      nv_Sumins = prm_SumInsureAmt.
-/*[BLANK]*/                      
-/*[COMMENT]*/                      IF INDEX(nv_Sumins,".") <> 0 THEN DO:
-/*[BLANK]*/                      
-/*[COMMENT]*/                        nv_Sumins = SUBSTR(nv_Sumins,1,INDEX(nv_Sumins,".") - 1).
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                      nv_Sumins = REPLACE(nv_Sumins,",","") .
-/*[BLANK]*/                      
-/*[COMMENT]*/                      FIND FIRST FUtilSetUp WHERE
-/*[COMMENT]*/                                 FUtilSetUp.UtilGrp     = nv_UtilGrp
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp1 = prm_PolicyTypeCd
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp2 = prm_CompanyCode
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp3 = "V70"
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp4 = "Policy"
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp5 = nv_Sumins
-/*[COMMENT]*/                             AND FUtilSetUp.EffDate    <= TODAY
-/*[COMMENT]*/                      NO-LOCK NO-ERROR NO-WAIT.
-/*[COMMENT]*/                      IF AVAILABLE FUtilSetUp THEN DO:
-/*[BLANK]*/                      
-/*[COMMENT]*/                        IF FUtilSetUp.UtilGrpCd1 = "YES" THEN nv_okprn = YES.
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                    END.
-/*[COMMENT]*/                    */
-/*[COMMENT]*/                    /**/
-/*[EXECUTABLE]*/                 END PROCEDURE.
+/*[UNCALLED]*/                   PROCEDURE PD_Futil :
+/*[UNCALLED]*/                   /*------------------------------------------------------------------------------
+/*[UNCALLED]*/                     Purpose:     
+/*[UNCALLED]*/                     Parameters:  <none>
+/*[UNCALLED]*/                     Notes:       
+/*[UNCALLED]*/                   ------------------------------------------------------------------------------*/
+/*[UNCALLED]*/                   /**/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   /*
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   DEFINE INPUT PARAMETER prm_PolicyTypeCd AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE INPUT PARAMETER prm_SumInsureAmt AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE INPUT PARAMETER prm_CompanyCode  AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   DEFINE INPUT-OUTPUT PARAMETER nv_okprn      AS LOGICAL   NO-UNDO.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_UtilGrp    AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_Sumins     AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   /* ------------------------------------------------------------------------*/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   nv_okprn = NO.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   /*§Ò¹»2.1 2.2 ·Ø¹ 1áÊ¹/ 2áÊ¹ ãËé¾ÔÁ¾ì ¡ÃÁ¸ÃÃÁìä´é*/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   IF    prm_PolicyTypeCd = "2.1" OR prm_PolicyTypeCd = "2.6"
+/*[UNCALLED]*/                      OR prm_PolicyTypeCd = "2.2" OR prm_PolicyTypeCd = "2.7"
+/*[UNCALLED]*/                      OR prm_PolicyTypeCd = "2.3" OR prm_PolicyTypeCd = "2.8"
+/*[UNCALLED]*/                      OR prm_PolicyTypeCd = "2.4" OR prm_PolicyTypeCd = "2.9"
+/*[UNCALLED]*/                      OR prm_PolicyTypeCd = "2.5"
+/*[UNCALLED]*/                   THEN DO:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                          IF prm_PolicyTypeCd = "2.1" THEN nv_UtilGrp = "Prn21".
+/*[UNCALLED]*/                     ELSE IF prm_PolicyTypeCd = "2.2" THEN nv_UtilGrp = "Prn22".
+/*[UNCALLED]*/                     ELSE IF prm_PolicyTypeCd = "2.3" THEN nv_UtilGrp = "Prn23".
+/*[UNCALLED]*/                     ELSE IF prm_PolicyTypeCd = "2.4" THEN nv_UtilGrp = "Prn24".
+/*[UNCALLED]*/                     ELSE IF prm_PolicyTypeCd = "2.5" THEN nv_UtilGrp = "Prn25".
+/*[UNCALLED]*/                     ELSE IF prm_PolicyTypeCd = "2.6" THEN nv_UtilGrp = "Prn26".
+/*[UNCALLED]*/                     ELSE IF prm_PolicyTypeCd = "2.7" THEN nv_UtilGrp = "Prn27".
+/*[UNCALLED]*/                     ELSE IF prm_PolicyTypeCd = "2.8" THEN nv_UtilGrp = "Prn28".
+/*[UNCALLED]*/                     ELSE IF prm_PolicyTypeCd = "2.9" THEN nv_UtilGrp = "Prn29".
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     nv_Sumins = prm_SumInsureAmt.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     IF INDEX(nv_Sumins,".") <> 0 THEN DO:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       nv_Sumins = SUBSTR(nv_Sumins,1,INDEX(nv_Sumins,".") - 1).
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     nv_Sumins = REPLACE(nv_Sumins,",","") .
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     FIND FIRST FUtilSetUp WHERE
+/*[UNCALLED]*/                                FUtilSetUp.UtilGrp     = nv_UtilGrp
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp1 = prm_PolicyTypeCd
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp2 = prm_CompanyCode
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp3 = "V70"
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp4 = "Policy"
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp5 = nv_Sumins
+/*[UNCALLED]*/                            AND FUtilSetUp.EffDate    <= TODAY
+/*[UNCALLED]*/                     NO-LOCK NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                     IF AVAILABLE FUtilSetUp THEN DO:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       IF FUtilSetUp.UtilGrpCd1 = "YES" THEN nv_okprn = YES.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                   END.
+/*[UNCALLED]*/                   */
+/*[UNCALLED]*/                   /**/
+/*[UNCALLED]*/                   END PROCEDURE.
 /*[BLANK]*/                      
 /*[COMMENT]*/                    /* _UIB-CODE-BLOCK-END */
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
@@ -4804,36 +4804,36 @@
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
 /*[BLANK]*/                      
 /*[EXECUTABLE]*/                 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE PD_SAVEPD17072 C-Win 
-/*[EXECUTABLE]*/                 PROCEDURE PD_SAVEPD17072 :
-/*[COMMENT]*/                    /*------------------------------------------------------------------------------
-/*[COMMENT]*/                      Purpose:     
-/*[COMMENT]*/                      Parameters:  <none>
-/*[COMMENT]*/                      Notes:       
-/*[COMMENT]*/                    ------------------------------------------------------------------------------*/
-/*[COMMENT]*/                    /* 20/03/2016
-/*[COMMENT]*/                    nv_octets = "".
-/*[COMMENT]*/                    FIND FIRST IntPol7072 WHERE IntPol7072.PolicyNumber = nv_PolicyV70  /*70,72*/
-/*[COMMENT]*/                        NO-ERROR NO-WAIT.
-/*[COMMENT]*/                    IF NOT AVAILABLE IntPol7072 THEN DO:
-/*[BLANK]*/                      
-/*[COMMENT]*/                        RUN WRS/WRSDigit.p (output nv_octets).
-/*[COMMENT]*/                        CREATE IntPol7072.
-/*[COMMENT]*/                    END.
-/*[COMMENT]*/                    ELSE nv_octets = IntPol7072.RqUID.
-/*[COMMENT]*/                    /*
-/*[COMMENT]*/                    FIND FIRST IntPol7072 WHERE IntPol7072.CMIPolicyNumber = nv_PolicyV72  /*72*/
-/*[COMMENT]*/                        NO-ERROR NO-WAIT.
-/*[COMMENT]*/                    IF NOT AVAILABLE IntPol7072 THEN DO:
-/*[BLANK]*/                      
-/*[COMMENT]*/                        nv_octets = "".
-/*[BLANK]*/                      
-/*[COMMENT]*/                        RUN WRS/WRSDigit.p (output nv_octets).
-/*[COMMENT]*/                        CREATE IntPol7072.
-/*[COMMENT]*/                    END.
-/*[COMMENT]*/                    ELSE nv_octets = IntPol7072.RqUID.
-/*[COMMENT]*/                         */
-/*[COMMENT]*/                    ---- */
-/*[EXECUTABLE]*/                 END PROCEDURE.
+/*[UNCALLED]*/                   PROCEDURE PD_SAVEPD17072 :
+/*[UNCALLED]*/                   /*------------------------------------------------------------------------------
+/*[UNCALLED]*/                     Purpose:     
+/*[UNCALLED]*/                     Parameters:  <none>
+/*[UNCALLED]*/                     Notes:       
+/*[UNCALLED]*/                   ------------------------------------------------------------------------------*/
+/*[UNCALLED]*/                   /* 20/03/2016
+/*[UNCALLED]*/                   nv_octets = "".
+/*[UNCALLED]*/                   FIND FIRST IntPol7072 WHERE IntPol7072.PolicyNumber = nv_PolicyV70  /*70,72*/
+/*[UNCALLED]*/                       NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                   IF NOT AVAILABLE IntPol7072 THEN DO:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       RUN WRS/WRSDigit.p (output nv_octets).
+/*[UNCALLED]*/                       CREATE IntPol7072.
+/*[UNCALLED]*/                   END.
+/*[UNCALLED]*/                   ELSE nv_octets = IntPol7072.RqUID.
+/*[UNCALLED]*/                   /*
+/*[UNCALLED]*/                   FIND FIRST IntPol7072 WHERE IntPol7072.CMIPolicyNumber = nv_PolicyV72  /*72*/
+/*[UNCALLED]*/                       NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                   IF NOT AVAILABLE IntPol7072 THEN DO:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       nv_octets = "".
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       RUN WRS/WRSDigit.p (output nv_octets).
+/*[UNCALLED]*/                       CREATE IntPol7072.
+/*[UNCALLED]*/                   END.
+/*[UNCALLED]*/                   ELSE nv_octets = IntPol7072.RqUID.
+/*[UNCALLED]*/                        */
+/*[UNCALLED]*/                   ---- */
+/*[UNCALLED]*/                   END PROCEDURE.
 /*[BLANK]*/                      
 /*[COMMENT]*/                    /* _UIB-CODE-BLOCK-END */
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
@@ -5129,14 +5129,14 @@
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
 /*[BLANK]*/                      
 /*[EXECUTABLE]*/                 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE PD_SAVEPD1FileAtt72 C-Win 
-/*[EXECUTABLE]*/                 PROCEDURE PD_SAVEPD1FileAtt72 :
-/*[COMMENT]*/                    /*------------------------------------------------------------------------------
-/*[COMMENT]*/                      Purpose:     
-/*[COMMENT]*/                      Parameters:  <none>
-/*[COMMENT]*/                      Notes:       
-/*[COMMENT]*/                    ------------------------------------------------------------------------------*/
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                 END PROCEDURE.
+/*[UNCALLED]*/                   PROCEDURE PD_SAVEPD1FileAtt72 :
+/*[UNCALLED]*/                   /*------------------------------------------------------------------------------
+/*[UNCALLED]*/                     Purpose:     
+/*[UNCALLED]*/                     Parameters:  <none>
+/*[UNCALLED]*/                     Notes:       
+/*[UNCALLED]*/                   ------------------------------------------------------------------------------*/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   END PROCEDURE.
 /*[BLANK]*/                      
 /*[COMMENT]*/                    /* _UIB-CODE-BLOCK-END */
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
@@ -5989,494 +5989,494 @@
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
 /*[BLANK]*/                      
 /*[EXECUTABLE]*/                 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE PD_SAVEPD1FileAttach2 C-Win 
-/*[EXECUTABLE]*/                 PROCEDURE PD_SAVEPD1FileAttach2 :
-/*[COMMENT]*/                    /*------------------------------------------------------------------------------
-/*[COMMENT]*/                      Purpose:     
-/*[COMMENT]*/                      Parameters:  <none>
-/*[COMMENT]*/                      Notes:       
-/*[COMMENT]*/                    ------------------------------------------------------------------------------*/
-/*[EXECUTABLE]*/                 DEFINE INPUT PARAMETER nv_RECIDIntPol7072 AS RECID NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE INPUT PARAMETER nv_RECIDIntS7072   AS RECID NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_errortext     AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_INPUTFileName AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_COPYTOFILE    AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_LineSeqno     AS INTEGER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE NV_Lwaitcount    AS INTEGER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE NV_LcountAgain   AS INTEGER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE NV_Lcount        AS INTEGER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE NV_StartCount    AS INTEGER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE NV_LastCount     AS INTEGER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_SAVECompanyNo AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_SAVEmsgerror  AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_BrokerCompany AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_BrokerBranch  AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_Acno1      AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_Agent      AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_errort     AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_NameCompCd AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_PrgName    AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_PrmPrg     AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_firstchk   AS LOGICAL   NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE VARIABLE nv_verror     AS CHARACTER NO-UNDO.
-/*[EXECUTABLE]*/                 ASSIGN
-/*[EXECUTABLE]*/                 NV_Lwaitcount = 110000
-/*[EXECUTABLE]*/                 NV_StartCount = 0
-/*[EXECUTABLE]*/                 NV_LastCount  = 6220000. /*3ÇÔ¹Ò·Õ¡ÇèÒæ*/
-/*[EXECUTABLE]*/                 FOR EACH TFileAttach: DELETE TFileAttach. END.
-/*[EXECUTABLE]*/                 FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RECIDIntPol7072
-/*[EXECUTABLE]*/                 NO-ERROR NO-WAIT.
-/*[EXECUTABLE]*/                 IF NOT AVAILABLE IntPol7072 THEN RETURN.
-/*[EXECUTABLE]*/                 nv_LineSeqno = 0.
-/*[BLANK]*/                      
-/*[COMMENT]*/                    /*¾ÔÁ¾ì file pdf Êè§ÍÍ¡*/
-/*[COMMENT]*/                       /* 2.1                             110 */
-/*[EXECUTABLE]*/                 IF IntPol7072.PolicyTypeCd <> "" AND IntPol7072.RateGroup <> "" THEN DO:
-/*[EXECUTABLE]*/                   RUN WSP/WSPMCpny.P
-/*[EXECUTABLE]*/                        (IntPol7072.CompanyCode
-/*[EXECUTABLE]*/                        ,IntPol7072.BranchCd
-/*[EXECUTABLE]*/                        ,"V70"
-/*[EXECUTABLE]*/                        ,OUTPUT nv_BrokerCompany /*ËÒºÃÔÉÑ··Õèsetã¹ÃÐºº*/
-/*[EXECUTABLE]*/                        ,OUTPUT nv_BrokerBranch 
-/*[EXECUTABLE]*/                        ,OUTPUT nv_Acno1
-/*[EXECUTABLE]*/                        ,OUTPUT nv_Agent
-/*[EXECUTABLE]*/                        ,OUTPUT nv_errort).
-/*[EXECUTABLE]*/                   IF nv_errort <> "" THEN RETURN.
-/*[COMMENT]*/                      /* ProgramPrint form PDF ¡ÃÁ¸ÃÃÁì V70 àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
-/*[EXECUTABLE]*/                   ASSIGN nv_NameCompCd = "" nv_PrmPrg = "" nv_PrgName = "".
-/*[EXECUTABLE]*/                   RUN PD_FNameAttach
-/*[EXECUTABLE]*/                       (INPUT IntPol7072.CompanyCode
-/*[EXECUTABLE]*/                       ,INPUT "V70"      /*v70,v72*/
-/*[EXECUTABLE]*/                       ,INPUT IntPol7072.PolicyTypeCd
-/*[COMMENT]*/                          /**/
-/*[EXECUTABLE]*/                       ,INPUT-OUTPUT nv_NameCompCd
-/*[EXECUTABLE]*/                       ,INPUT-OUTPUT nv_PrgName
-/*[EXECUTABLE]*/                       ,INPUT-OUTPUT nv_PrmPrg ).
-/*[COMMENT]*/                      /**/
-/*[EXECUTABLE]*/                   IF    IntPol7072.PolicyTypeCd = "1"
-/*[EXECUTABLE]*/                      OR IntPol7072.PolicyTypeCd = "2"
-/*[EXECUTABLE]*/                      OR IntPol7072.PolicyTypeCd = "3"
-/*[EXECUTABLE]*/                   THEN DO:
-/*[EXECUTABLE]*/                       IF  (IntPol7072.PolicyTypeCd = "3"   AND substr(IntPol7072.PolicyNumber,1,1) <> "R" ) OR  /*kridtiya i.*/
-/*[COMMENT]*/                              /*TEST Prn cover 1*/
-/*[EXECUTABLE]*/                          (IntPol7072.CompanyCode  = "242" AND IntPol7072.PolicyTypeCd = "1" )
-/*[COMMENT]*/                              /*Isuzu */
-/*[COMMENT]*/                          /*OR (IntPol7072.CompanyCode  = "476" AND IntPol7072.PolicyTypeCd = "1" )*/
-/*[EXECUTABLE]*/                       OR (IntPol7072.CompanyCode  = "476" ) OR (IntPol7072.CompanyCode  = "839") /*Add ART*/
-/*[EXECUTABLE]*/                       THEN DO:
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                         IF nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr701_1".
-/*[EXECUTABLE]*/                                            ELSE nv_PrgName = "Wctx/" + nv_PrgName. /*Wctxr701A4.p*/
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                         RUN VALUE(nv_PrgName)
-/*[EXECUTABLE]*/                            (IntPol7072.CompanyCode  /*nv_BrokerCompany*/
-/*[EXECUTABLE]*/                            ,IntPol7072.PolicyNumber
-/*[EXECUTABLE]*/                            ,IntPol7072.Rencnt
-/*[EXECUTABLE]*/                            ,IntPol7072.Endcnt
-/*[EXECUTABLE]*/                            ,IntPol7072.DocumentUID
-/*[EXECUTABLE]*/                            ,IntPol7072.RqUID /*nv_code keyRequestIndRq*/
-/*[EXECUTABLE]*/                            ,""               /*n_user  */
-/*[EXECUTABLE]*/                            ,""               /*n_passwd */
-/*[EXECUTABLE]*/                            ,OUTPUT nv_SAVEmsgerror).
-/*[EXECUTABLE]*/                       END.
-/*[EXECUTABLE]*/                   END.
-/*[EXECUTABLE]*/                   ELSE DO:
-/*[COMMENT]*/                        /*».3.1 + àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
-/*[COMMENT]*/                        /*ãºàÊÃç¨/ãº¡Ó¡ÑºÀÒÉÕ à©¾ÒÐ »3, 3+*/
-/*[EXECUTABLE]*/                     IF SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "3"
-/*[EXECUTABLE]*/                        OR  ((IntPol7072.CompanyCode = "833" OR IntPol7072.CompanyCode = "834" OR IntPol7072.CompanyCode  = "839" /*Add ART*/
-/*[EXECUTABLE]*/                        OR    IntPol7072.CompanyCode = "442" OR IntPol7072.CompanyCode = "701"
-/*[EXECUTABLE]*/                        OR    IntPol7072.CompanyCode = "242" OR IntPol7072.CompanyCode = "476" ) /*isuzu*/
-/*[COMMENT]*/                               /**/
-/*[EXECUTABLE]*/                        AND (IntPol7072.PolicyTypeCd = "2.1" OR IntPol7072.PolicyTypeCd = "2.2") )
-/*[COMMENT]*/                                /*·Ø»»ÃÐ¡Ñ¹ 1 áÊ¹¾ÔÁ¾ì¡ÃÁ¸ÃÃÁìä´é*/
-/*[EXECUTABLE]*/                     THEN DO:
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                       IF nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr701_1".  /*"Wctx/Wctxr703_1".*/
-/*[EXECUTABLE]*/                                          ELSE nv_PrgName = "Wctx/" + nv_PrgName. /*Wctxr703A4*/
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                       RUN VALUE(nv_PrgName)
-/*[EXECUTABLE]*/                           (IntPol7072.CompanyCode
-/*[EXECUTABLE]*/                           ,IntPol7072.PolicyNumber
-/*[EXECUTABLE]*/                           ,IntPol7072.Rencnt
-/*[EXECUTABLE]*/                           ,IntPol7072.Endcnt
-/*[EXECUTABLE]*/                           ,IntPol7072.DocumentUID 
-/*[EXECUTABLE]*/                           ,IntPol7072.RqUID
-/*[EXECUTABLE]*/                           ,""
-/*[EXECUTABLE]*/                           ,""
-/*[EXECUTABLE]*/                           ,OUTPUT nv_SAVEmsgerror).
-/*[EXECUTABLE]*/                     END.
-/*[EXECUTABLE]*/                   END.
-/*[EXECUTABLE]*/                   IF nv_SAVEmsgerror <> "" THEN RETURN.
-/*[COMMENT]*/                      /* ---------------------------------------------------- */
-/*[EXECUTABLE]*/                   FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RECIDIntPol7072
-/*[EXECUTABLE]*/                   NO-ERROR NO-WAIT.
-/*[EXECUTABLE]*/                   nv_firstchk   = YES.
-/*[COMMENT]*/                      /*PAUSE 1 NO-MESSAGE.*/
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                   RUN PD_SAVEPD1ChkFile
-/*[EXECUTABLE]*/                       (INPUT nv_NameCompCd
-/*[EXECUTABLE]*/                       ,INPUT "V70"
-/*[EXECUTABLE]*/                       ,INPUT IntPol7072.PolicyTypeCd
-/*[EXECUTABLE]*/                       ,OUTPUT nv_SAVEmsgerror).
-/*[EXECUTABLE]*/                   IF nv_SAVEmsgerror <> "" THEN DO:
-/*[EXECUTABLE]*/                     nv_verror = "ERRPDF70_" + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99")
-/*[EXECUTABLE]*/                               + SUBSTR(STRING(TIME,"HH:MM:SS"),1,2)
-/*[EXECUTABLE]*/                               + SUBSTR(STRING(TIME,"HH:MM:SS"),4,2)
-/*[EXECUTABLE]*/                               + SUBSTR(STRING(TIME,"HH:MM:SS"),7,2)
-/*[EXECUTABLE]*/                               + ".TXT".
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                     OUTPUT TO VALUE(nv_verror).
-/*[EXECUTABLE]*/                     PUT 
-/*[EXECUTABLE]*/                     "Not found file pdf: Company: " IntPol7072.CompanyCode 
-/*[EXECUTABLE]*/                     " Policy no.: "   IntPol7072.PolicyNumber   FORMAT "X(16)"
-/*[EXECUTABLE]*/                     " Contract no.: " IntPol7072.ContractNumber FORMAT "X(20)"
-/*[EXECUTABLE]*/                     " " TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[EXECUTABLE]*/                     SKIP.
-/*[EXECUTABLE]*/                     OUTPUT CLOSE.
-/*[EXECUTABLE]*/                     RETURN. 
-/*[EXECUTABLE]*/                   END.
-/*[COMMENT]*/                      /* ËéÒÁ Åº µéÍ§ÃÍ PDFCreator file pdf ÁÔ©Ð¹Ñé¹¨ÐÁÕáµèª×èÍ File */
-/*[COMMENT]*/                      /* -------------------------------------------------------------------------------- */
-/*[COMMENT]*/                    /*
-/*[COMMENT]*/                      OUTPUT TO PrnTIME.txt APPEND.
-/*[COMMENT]*/                      PUT "3. SvFile:"
-/*[COMMENT]*/                         /*1234567890*/
-/*[COMMENT]*/                        IntPol7072.CompanyCode 
-/*[COMMENT]*/                        IntPol7072.PolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        IntPol7072.CMIPolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        TODAY FORMAT "99/99/9999" " "
-/*[COMMENT]*/                        STRING(TIME,"HH:MM:SS")   "." 
-/*[COMMENT]*/                        SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                      SKIP.
-/*[COMMENT]*/                      OUTPUT CLOSE.
-/*[COMMENT]*/                    */
-/*[EXECUTABLE]*/                   FOR EACH FNameAttach WHERE
-/*[EXECUTABLE]*/                            FNameAttach.CompanyCode  = nv_NameCompCd
-/*[EXECUTABLE]*/                        AND FNameAttach.PolicyTypeCd = "V70"
-/*[EXECUTABLE]*/                        AND FNameAttach.CoverTypeCd  = IntPol7072.PolicyTypeCd
-/*[EXECUTABLE]*/                        AND FNameAttach.EffDate     <= TODAY
-/*[EXECUTABLE]*/                   NO-LOCK
-/*[EXECUTABLE]*/                   BREAK BY FNameAttach.SelectNumber:
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                     IF FNameAttach.CopyFileName = "" THEN LEAVE.
-/*[EXECUTABLE]*/                                                      ELSE nv_INPUTFileName = FNameAttach.CopyFileName.
-/*[COMMENT]*/                        /**/
-/*[EXECUTABLE]*/                     IF FNameAttach.ToFileName   = "" THEN
-/*[EXECUTABLE]*/                            nv_COPYTOFILE = TRIM(IntPol7072.PolicyNumber) + ".PDF".
-/*[EXECUTABLE]*/                     ELSE DO:
-/*[EXECUTABLE]*/                       IF INDEX(FNameAttach.ToFileName, ".PDF") = 0 THEN
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                            nv_COPYTOFILE = TRIM(IntPol7072.PolicyNumber)          /*àºÍÃì¡ÃÁ¸ÃÃÁì*/
-/*[EXECUTABLE]*/                                          + TRIM(FNameAttach.ToFileName) + ".PDF". /*µÑÇÂèÍ§Ò¹*/
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                       ELSE nv_COPYTOFILE = FNameAttach.ToFileName.
-/*[EXECUTABLE]*/                     END.
-/*[EXECUTABLE]*/                     nv_errortext = "".
-/*[EXECUTABLE]*/                     IF nv_INPUTFileName = "" OR nv_COPYTOFILE = "" THEN LEAVE.
-/*[COMMENT]*/                        /**/
-/*[EXECUTABLE]*/                     loop1:
-/*[EXECUTABLE]*/                     REPEAT:
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                       IF nv_firstchk = NO THEN DO:   
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                         NV_Lcount = 0.
-/*[EXECUTABLE]*/                         DO  WHILE NV_Lcount <= NV_Lwaitcount:
-/*[EXECUTABLE]*/                           NV_Lcount = NV_Lcount + 1.
-/*[EXECUTABLE]*/                         END.
-/*[EXECUTABLE]*/                       END.
-/*[EXECUTABLE]*/                       nv_firstchk = NO.
-/*[EXECUTABLE]*/                       IF SEARCH(nv_INPUTFileName) = ? THEN DO:
-/*[EXECUTABLE]*/                         NV_StartCount = NV_StartCount + NV_Lcount.
-/*[EXECUTABLE]*/                         IF NV_StartCount >= NV_LastCount THEN LEAVE loop1.
-/*[EXECUTABLE]*/                         NEXT loop1.
-/*[EXECUTABLE]*/                       END.
-/*[COMMENT]*/                          /* nv_INPUTFileName = "FormCMI.PDF". /*"D:\WebBU\FormCMI.PDF".*/
-/*[COMMENT]*/                          nv_COPYTOFILE    = TRIM(IntPol7072.PolicyNumber) + ".PDF". */
-/*[EXECUTABLE]*/                       DOS SILENT COPY VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE)  /Y.
-/*[COMMENT]*/                          /*
-/*[COMMENT]*/                          DOS SILENT RENAME VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE). */
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                       IF SEARCH(nv_COPYTOFILE) = ? THEN DO:
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                         DOS SILENT COPY VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE)  /Y.
-/*[COMMENT]*/                            /*
-/*[COMMENT]*/                            NV_Lcount = 0.
-/*[COMMENT]*/                            DO  WHILE NV_Lcount <= 1000000:
-/*[COMMENT]*/                              NV_Lcount = NV_Lcount + 1.
-/*[COMMENT]*/                            END. */
-/*[EXECUTABLE]*/                       END.
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                       IF SEARCH(nv_COPYTOFILE) <> ? THEN DO:
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                         FOR EACH TFileAttach: DELETE TFileAttach. END.
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                         CREATE TFileAttach.
-/*[EXECUTABLE]*/                         TFileAttach.FileNameAttach = nv_COPYTOFILE.
-/*[COMMENT]*/                            /* TFileAttach.FileNameAttach = TRIM(IntPol7072.PolicyNumber) + ".PDF".*/
-/*[BLANK]*/                        
-/*[EXECUTABLE]*/                         COPY-LOB FROM FILE nv_COPYTOFILE TO TFileAttach.FileBinary NO-CONVERT NO-ERROR.
-/*[COMMENT]*/                            /* INPUTFileName  = "D:\TEMP\DBBUInt.zip".
-/*[COMMENT]*/                            OUTPUT TO FileAtt1.pdf BINARY NO-CONVERT.
-/*[COMMENT]*/                              EXPORT TFileAttach.FileBinary.
-/*[COMMENT]*/                            OUTPUT CLOSE. */
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                         IF ERROR-STATUS:ERROR  THEN DO:
-/*[EXECUTABLE]*/                           nv_errortext = "äÁèÊÒÁÒÃ¶ Load File: " + TRIM(nv_COPYTOFILE) + " "
-/*[EXECUTABLE]*/                                        + ERROR-STATUS:GET-MESSAGE(1) + ERROR-STATUS:GET-MESSAGE(2).
-/*[EXECUTABLE]*/                         END.
-/*[COMMENT]*/                            /* äÁèdelete à¾×èÍ monitor / ãªé¨ÃÔ§ àÍÒ remark ÍÍ¡
-/*[COMMENT]*/                            IF SEARCH(nv_COPYTOFILE) <> ? THEN DOS SILENT DEL VALUE(nv_COPYTOFILE). */
-/*[EXECUTABLE]*/                         IF SEARCH(nv_INPUTFileName) <> ? THEN DOS SILENT DEL VALUE(nv_INPUTFileName).
-/*[COMMENT]*/                            /**/
-/*[EXECUTABLE]*/                         FIND IntS7072 WHERE RECID(IntS7072) = nv_RECIDIntS7072
-/*[EXECUTABLE]*/                         NO-ERROR NO-WAIT.
-/*[EXECUTABLE]*/                         IF AVAILABLE IntS7072 THEN DO:
-/*[EXECUTABLE]*/                           nv_LineSeqno = nv_LineSeqno + 1. /*ÅÓ´Ñº¡ÒÃ add data*/
-/*[EXECUTABLE]*/                           IF nv_LineSeqno = 1 THEN DO:
-/*[EXECUTABLE]*/                             ASSIGN
-/*[EXECUTABLE]*/                             IntPol7072.FileNameAttach1 = TFileAttach.FileNameAttach
-/*[EXECUTABLE]*/                             IntPol7072.AttachFile1     = TFileAttach.FileBinary
-/*[EXECUTABLE]*/                             IntS7072.FileNameAttach1   = TFileAttach.FileNameAttach
-/*[EXECUTABLE]*/                             IntS7072.AttachFile1       = TFileAttach.FileBinary .
-/*[EXECUTABLE]*/                           END.
-/*[EXECUTABLE]*/                           IF nv_LineSeqno = 2 THEN DO:
-/*[EXECUTABLE]*/                             ASSIGN
-/*[EXECUTABLE]*/                             IntPol7072.FileNameAttach2 = TFileAttach.FileNameAttach
-/*[EXECUTABLE]*/                             IntPol7072.AttachFile2     = TFileAttach.FileBinary
-/*[EXECUTABLE]*/                             IntS7072.FileNameAttach2   = TFileAttach.FileNameAttach
-/*[EXECUTABLE]*/                             IntS7072.AttachFile2       = TFileAttach.FileBinary .
-/*[EXECUTABLE]*/                           END.
-/*[EXECUTABLE]*/                           IF nv_errortext <> "" THEN
-/*[EXECUTABLE]*/                             ASSIGN
-/*[EXECUTABLE]*/                             IntPol7072.RemarkText = TRIM(TRIM(IntPol7072.RemarkText) + " " + nv_errortext).
-/*[EXECUTABLE]*/                             IntS7072.RemarkText   = TRIM(TRIM(IntS7072.RemarkText)   + " " + nv_errortext).
-/*[EXECUTABLE]*/                         END.
-/*[EXECUTABLE]*/                       END. /*IF SEARCH(nv_COPYTOFILE) <> ?*/
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                       LEAVE loop1.
-/*[EXECUTABLE]*/                     END. /*loop1:*/
-/*[EXECUTABLE]*/                   END. /*FOR EACH FNameAttach*/
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                 END. /*IF IntPol7072.PolicyTypeCd <> "" AND IntPol7072.RateGroup <> ""*/
-/*[COMMENT]*/                    /*  -------------------------------------------------------------------------------------------- */
-/*[COMMENT]*/                    /* ¾Ãº. / Compulsory */
-/*[EXECUTABLE]*/                 IF IntPol7072.CMIPolicyTypeCd <> "" AND IntPol7072.CMIVehTypeCd <> "" THEN DO:
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                   RUN WSP/WSPMCpny.P
-/*[EXECUTABLE]*/                        (IntPol7072.CompanyCode
-/*[EXECUTABLE]*/                        ,IntPol7072.BranchCd
-/*[EXECUTABLE]*/                        ,"V72"
-/*[EXECUTABLE]*/                        ,OUTPUT nv_BrokerCompany /*ËÒºÃÔÉÑ··Õèsetã¹ÃÐºº*/
-/*[EXECUTABLE]*/                        ,OUTPUT nv_BrokerBranch 
-/*[EXECUTABLE]*/                        ,OUTPUT nv_Acno1
-/*[EXECUTABLE]*/                        ,OUTPUT nv_Agent
-/*[EXECUTABLE]*/                        ,OUTPUT nv_errort).
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                   IF nv_errort <> "" THEN RETURN.
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                   NV_StartCount = 0.
-/*[BLANK]*/                      
-/*[COMMENT]*/                      /* ---------------------------------------------------- */
-/*[COMMENT]*/                      /* ProgramPrint ¾Ãº. form PDF àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
-/*[EXECUTABLE]*/                   ASSIGN nv_NameCompCd = "" nv_PrmPrg = "" nv_PrgName = "".
-/*[EXECUTABLE]*/                   RUN PD_FNameAttach
-/*[EXECUTABLE]*/                       (INPUT        IntPol7072.CompanyCode
-/*[EXECUTABLE]*/                       ,INPUT        "V72"      /*v70,v72*/
-/*[EXECUTABLE]*/                       ,INPUT        IntPol7072.CMIPolicyTypeCd
-/*[COMMENT]*/                          /**/
-/*[EXECUTABLE]*/                       ,INPUT-OUTPUT nv_NameCompCd
-/*[EXECUTABLE]*/                       ,INPUT-OUTPUT nv_PrgName
-/*[EXECUTABLE]*/                       ,INPUT-OUTPUT nv_PrmPrg ).
-/*[COMMENT]*/                      /**/
-/*[BLANK]*/                      
-/*[COMMENT]*/                      /*Blank form Compulsory */
-/*[EXECUTABLE]*/                   IF IntPol7072.CompanyCode = "833" THEN DO:
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                     RUN PD_ChkBlankForm
-/*[EXECUTABLE]*/                          (INPUT-OUTPUT nv_NameCompCd
-/*[EXECUTABLE]*/                          ,INPUT-OUTPUT nv_PrgName
-/*[EXECUTABLE]*/                          ,INPUT-OUTPUT nv_PrmPrg).
-/*[EXECUTABLE]*/                   END.
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                   IF nv_PrgName = "" THEN DO:
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                     RUN Wctx/wctxr702.P
-/*[EXECUTABLE]*/                          (IntPol7072.CompanyCode     /*nv_BrokerCompany*/
-/*[EXECUTABLE]*/                          ,IntPol7072.CMIPolicyNumber
-/*[EXECUTABLE]*/                          ,IntPol7072.Rencnt
-/*[EXECUTABLE]*/                          ,IntPol7072.Endcnt
-/*[EXECUTABLE]*/                          ,IntPol7072.CMIDocumentUID
-/*[EXECUTABLE]*/                          ,IntPol7072.RqUID /*nv_code  keyRequestIndRq*/
-/*[EXECUTABLE]*/                          ,""         /*n_user   */
-/*[EXECUTABLE]*/                          ,""         /*n_passwd */
-/*[EXECUTABLE]*/                          ,nv_PrmPrg  /*Name Report*/
-/*[EXECUTABLE]*/                          ,OUTPUT nv_SAVEmsgerror).
-/*[EXECUTABLE]*/                   END.
-/*[EXECUTABLE]*/                   ELSE DO:
-/*[EXECUTABLE]*/                     nv_PrgName = "Wctx/" + nv_PrgName.
-/*[COMMENT]*/                        /*
-/*[COMMENT]*/                        RUN Wctx/wctxr702A4.P ( IntPol7072.CompanyCode */
-/*[EXECUTABLE]*/                     RUN VALUE(nv_PrgName)
-/*[EXECUTABLE]*/                          (IntPol7072.CompanyCode   /*nv_BrokerCompany*/
-/*[EXECUTABLE]*/                          ,IntPol7072.CMIPolicyNumber
-/*[EXECUTABLE]*/                          ,IntPol7072.Rencnt
-/*[EXECUTABLE]*/                          ,IntPol7072.Endcnt
-/*[EXECUTABLE]*/                          ,IntPol7072.CMIDocumentUID
-/*[EXECUTABLE]*/                          ,IntPol7072.RqUID /*nv_code  keyRequestIndRq*/
-/*[EXECUTABLE]*/                          ,""         /*n_user   */
-/*[EXECUTABLE]*/                          ,""         /*n_passwd */
-/*[EXECUTABLE]*/                          ,nv_PrmPrg  /*Name Report="V72A4"*/
-/*[EXECUTABLE]*/                          ,""         /*remark*/
-/*[EXECUTABLE]*/                          ,OUTPUT nv_SAVEmsgerror).
-/*[EXECUTABLE]*/                   END.
-/*[EXECUTABLE]*/                   IF nv_SAVEmsgerror <> "" THEN RETURN.
-/*[COMMENT]*/                    /*
-/*[COMMENT]*/                      OUTPUT TO PrnTIME.txt APPEND.
-/*[COMMENT]*/                      PUT "2. ChkPDF:"
-/*[COMMENT]*/                         /*1234567890*/
-/*[COMMENT]*/                        IntPol7072.CompanyCode 
-/*[COMMENT]*/                        IntPol7072.PolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        IntPol7072.CMIPolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        TODAY FORMAT "99/99/9999" " "
-/*[COMMENT]*/                        STRING(TIME,"HH:MM:SS")   "." 
-/*[COMMENT]*/                        SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                      SKIP.
-/*[COMMENT]*/                      OUTPUT CLOSE.
-/*[COMMENT]*/                    */
-/*[BLANK]*/                      
-/*[COMMENT]*/                      /*PAUSE 1 NO-MESSAGE.*/
-/*[EXECUTABLE]*/                   RUN PD_SAVEPD1ChkFile
-/*[EXECUTABLE]*/                       (INPUT nv_NameCompCd
-/*[EXECUTABLE]*/                       ,INPUT "V72"
-/*[EXECUTABLE]*/                       ,INPUT IntPol7072.CMIPolicyTypeCd
-/*[EXECUTABLE]*/                       ,OUTPUT nv_SAVEmsgerror).
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                   IF nv_SAVEmsgerror <> "" THEN DO:
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                     nv_verror = "ERRPDF72_" + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99")
-/*[EXECUTABLE]*/                               + SUBSTR(STRING(TIME,"HH:MM:SS"),1,2)
-/*[EXECUTABLE]*/                               + SUBSTR(STRING(TIME,"HH:MM:SS"),4,2)
-/*[EXECUTABLE]*/                               + SUBSTR(STRING(TIME,"HH:MM:SS"),7,2)
-/*[EXECUTABLE]*/                               + ".TXT".
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                     OUTPUT TO VALUE(nv_verror).
-/*[EXECUTABLE]*/                     PUT 
-/*[EXECUTABLE]*/                     "Not found file pdf: Company: " IntPol7072.CompanyCode 
-/*[EXECUTABLE]*/                     " Policy no.: "   IntPol7072.PolicyNumber   FORMAT "X(16)"
-/*[EXECUTABLE]*/                     " Contract no.: " IntPol7072.ContractNumber FORMAT "X(20)"
-/*[EXECUTABLE]*/                     " " TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[EXECUTABLE]*/                     SKIP.
-/*[EXECUTABLE]*/                     OUTPUT CLOSE.
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                     RETURN. 
-/*[EXECUTABLE]*/                   END.
-/*[COMMENT]*/                      /* -------------------------------------------------------------------------------- */
-/*[COMMENT]*/                    /*
-/*[COMMENT]*/                      OUTPUT TO PrnTIME.txt APPEND.
-/*[COMMENT]*/                      PUT "3. SvFile:"
-/*[COMMENT]*/                         /*1234567890*/
-/*[COMMENT]*/                        IntPol7072.CompanyCode 
-/*[COMMENT]*/                        IntPol7072.PolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        IntPol7072.CMIPolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        TODAY FORMAT "99/99/9999" " "
-/*[COMMENT]*/                        STRING(TIME,"HH:MM:SS")   "." 
-/*[COMMENT]*/                        SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                      SKIP.
-/*[COMMENT]*/                      OUTPUT CLOSE.
-/*[COMMENT]*/                    */
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                   ASSIGN
-/*[EXECUTABLE]*/                   nv_INPUTFileName = "" nv_COPYTOFILE = "" nv_firstchk = YES.
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                   FOR EACH FNameAttach WHERE
-/*[EXECUTABLE]*/                            FNameAttach.CompanyCode  = nv_NameCompCd
-/*[EXECUTABLE]*/                        AND FNameAttach.PolicyTypeCd = "V72"
-/*[EXECUTABLE]*/                        AND FNameAttach.CoverTypeCd  = IntPol7072.CMIPolicyTypeCd /*¾Ãº ËÃ×Í "T"*/
-/*[EXECUTABLE]*/                        AND FNameAttach.EffDate     <= TODAY
-/*[EXECUTABLE]*/                   NO-LOCK
-/*[EXECUTABLE]*/                   BREAK BY FNameAttach.SelectNumber
-/*[EXECUTABLE]*/                   :
-/*[EXECUTABLE]*/                     IF FNameAttach.CopyFileName = "" THEN LEAVE.
-/*[EXECUTABLE]*/                                                      ELSE nv_INPUTFileName = FNameAttach.CopyFileName.
-/*[COMMENT]*/                        /**/
-/*[EXECUTABLE]*/                     IF FNameAttach.ToFileName   = "" THEN
-/*[EXECUTABLE]*/                            nv_COPYTOFILE = TRIM(IntPol7072.CMIPolicyNumber) + ".PDF".
-/*[EXECUTABLE]*/                     ELSE DO:
-/*[EXECUTABLE]*/                       IF INDEX(FNameAttach.ToFileName, ".PDF") = 0 THEN
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                            nv_COPYTOFILE = TRIM(IntPol7072.CMIPolicyNumber)       /*àºÍÃì¡ÃÁ¸ÃÃÁì*/
-/*[EXECUTABLE]*/                                          + TRIM(FNameAttach.ToFileName) + ".PDF". /*µÑÇÂèÍ§Ò¹*/
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                       ELSE nv_COPYTOFILE = FNameAttach.ToFileName.
-/*[EXECUTABLE]*/                     END.
-/*[EXECUTABLE]*/                     nv_errortext = "".
-/*[EXECUTABLE]*/                     IF nv_INPUTFileName = "" OR nv_COPYTOFILE = "" THEN LEAVE.
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                     IF TRIM(nv_COPYTOFILE) = ".PDF" THEN
-/*[EXECUTABLE]*/                             nv_COPYTOFILE = TRIM(IntPol7072.CMIPolicyNumber) + ".PDF".
-/*[COMMENT]*/                        /**/
-/*[EXECUTABLE]*/                     loop2:
-/*[EXECUTABLE]*/                     REPEAT:
-/*[EXECUTABLE]*/                       IF nv_firstchk = NO THEN DO:   
-/*[EXECUTABLE]*/                         NV_Lcount = 0.
-/*[EXECUTABLE]*/                         DO  WHILE NV_Lcount <= NV_Lwaitcount:
-/*[EXECUTABLE]*/                           NV_Lcount = NV_Lcount + 1.
-/*[EXECUTABLE]*/                         END.
-/*[EXECUTABLE]*/                       END.
-/*[EXECUTABLE]*/                       nv_firstchk = NO.
-/*[EXECUTABLE]*/                       IF SEARCH(nv_INPUTFileName) = ? THEN DO:
-/*[EXECUTABLE]*/                         NV_StartCount = NV_StartCount + NV_Lcount.
-/*[EXECUTABLE]*/                         IF NV_StartCount >= NV_LastCount THEN LEAVE loop2.
-/*[EXECUTABLE]*/                         NEXT loop2.
-/*[EXECUTABLE]*/                       END.
-/*[EXECUTABLE]*/                       DOS SILENT COPY VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE)  /Y.
-/*[COMMENT]*/                          /*
-/*[COMMENT]*/                          DOS SILENT RENAME VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE). */
-/*[EXECUTABLE]*/                       IF SEARCH(nv_COPYTOFILE) <> ? THEN DO:
-/*[EXECUTABLE]*/                         FOR EACH TFileAttach: DELETE TFileAttach. END.
-/*[EXECUTABLE]*/                         CREATE TFileAttach.
-/*[EXECUTABLE]*/                         TFileAttach.FileNameAttach = nv_COPYTOFILE.
-/*[EXECUTABLE]*/                         COPY-LOB FROM FILE nv_COPYTOFILE TO TFileAttach.FileBinary NO-CONVERT NO-ERROR.
-/*[EXECUTABLE]*/                         IF ERROR-STATUS:ERROR  THEN DO:
-/*[EXECUTABLE]*/                           nv_errortext = "äÁèÊÒÁÒÃ¶ Load File: " + TRIM(nv_COPYTOFILE) + " "
-/*[EXECUTABLE]*/                                        + ERROR-STATUS:GET-MESSAGE(1) + ERROR-STATUS:GET-MESSAGE(2).
-/*[EXECUTABLE]*/                         END.
-/*[EXECUTABLE]*/                         IF SEARCH(nv_INPUTFileName) <> ? THEN DOS SILENT DEL VALUE(nv_INPUTFileName).
-/*[COMMENT]*/                            /**/
-/*[EXECUTABLE]*/                         FIND IntS7072 WHERE RECID(IntS7072) = nv_RECIDIntS7072
-/*[EXECUTABLE]*/                         NO-ERROR NO-WAIT.
-/*[EXECUTABLE]*/                         IF AVAILABLE IntS7072 THEN DO:
-/*[EXECUTABLE]*/                           nv_LineSeqno = nv_LineSeqno + 1. /*ÅÓ´Ñº¡ÒÃ add data ÍÔ§¡Ñº´éÒ¹º¹*/
-/*[EXECUTABLE]*/                           IF nv_LineSeqno = 1 THEN DO:
-/*[EXECUTABLE]*/                             ASSIGN
-/*[EXECUTABLE]*/                             IntPol7072.FileNameAttach1 = TFileAttach.FileNameAttach
-/*[EXECUTABLE]*/                             IntPol7072.AttachFile1     = TFileAttach.FileBinary
-/*[EXECUTABLE]*/                             IntS7072.FileNameAttach1   = TFileAttach.FileNameAttach
-/*[EXECUTABLE]*/                             IntS7072.AttachFile1       = TFileAttach.FileBinary .
-/*[EXECUTABLE]*/                           END.
-/*[EXECUTABLE]*/                           IF nv_LineSeqno = 2 THEN DO:
-/*[EXECUTABLE]*/                             ASSIGN
-/*[EXECUTABLE]*/                             IntPol7072.FileNameAttach2 = TFileAttach.FileNameAttach
-/*[EXECUTABLE]*/                             IntPol7072.AttachFile2     = TFileAttach.FileBinary
-/*[EXECUTABLE]*/                             IntS7072.FileNameAttach2   = TFileAttach.FileNameAttach
-/*[EXECUTABLE]*/                             IntS7072.AttachFile2       = TFileAttach.FileBinary .
-/*[EXECUTABLE]*/                           END.
-/*[EXECUTABLE]*/                           IF nv_errortext <> "" THEN
-/*[EXECUTABLE]*/                             ASSIGN
-/*[EXECUTABLE]*/                             IntPol7072.RemarkText = TRIM(TRIM(IntPol7072.RemarkText) + " " + nv_errortext).
-/*[EXECUTABLE]*/                             IntS7072.RemarkText   = TRIM(TRIM(IntS7072.RemarkText)   + " " + nv_errortext).
-/*[EXECUTABLE]*/                         END.
-/*[EXECUTABLE]*/                       END.
-/*[EXECUTABLE]*/                       LEAVE loop2.
-/*[EXECUTABLE]*/                     END. /*loop2:*/
-/*[EXECUTABLE]*/                   END. /*FOR EACH FNameAttach*/
-/*[EXECUTABLE]*/                 END. /*IF IntPol7072.CMIPolicyTypeCd <> "" AND IntPol7072.CMIVehTypeCd <> "" */
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                 FOR EACH TFileAttach: DELETE TFileAttach. END.
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                 RELEASE FNameAttach.
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                 END PROCEDURE.
+/*[UNCALLED]*/                   PROCEDURE PD_SAVEPD1FileAttach2 :
+/*[UNCALLED]*/                   /*------------------------------------------------------------------------------
+/*[UNCALLED]*/                     Purpose:     
+/*[UNCALLED]*/                     Parameters:  <none>
+/*[UNCALLED]*/                     Notes:       
+/*[UNCALLED]*/                   ------------------------------------------------------------------------------*/
+/*[UNCALLED]*/                   DEFINE INPUT PARAMETER nv_RECIDIntPol7072 AS RECID NO-UNDO.
+/*[UNCALLED]*/                   DEFINE INPUT PARAMETER nv_RECIDIntS7072   AS RECID NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_errortext     AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_INPUTFileName AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_COPYTOFILE    AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_LineSeqno     AS INTEGER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE NV_Lwaitcount    AS INTEGER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE NV_LcountAgain   AS INTEGER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE NV_Lcount        AS INTEGER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE NV_StartCount    AS INTEGER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE NV_LastCount     AS INTEGER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_SAVECompanyNo AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_SAVEmsgerror  AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_BrokerCompany AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_BrokerBranch  AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_Acno1      AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_Agent      AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_errort     AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_NameCompCd AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_PrgName    AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_PrmPrg     AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_firstchk   AS LOGICAL   NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_verror     AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   ASSIGN
+/*[UNCALLED]*/                   NV_Lwaitcount = 110000
+/*[UNCALLED]*/                   NV_StartCount = 0
+/*[UNCALLED]*/                   NV_LastCount  = 6220000. /*3ÇÔ¹Ò·Õ¡ÇèÒæ*/
+/*[UNCALLED]*/                   FOR EACH TFileAttach: DELETE TFileAttach. END.
+/*[UNCALLED]*/                   FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RECIDIntPol7072
+/*[UNCALLED]*/                   NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                   IF NOT AVAILABLE IntPol7072 THEN RETURN.
+/*[UNCALLED]*/                   nv_LineSeqno = 0.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   /*¾ÔÁ¾ì file pdf Êè§ÍÍ¡*/
+/*[UNCALLED]*/                      /* 2.1                             110 */
+/*[UNCALLED]*/                   IF IntPol7072.PolicyTypeCd <> "" AND IntPol7072.RateGroup <> "" THEN DO:
+/*[UNCALLED]*/                     RUN WSP/WSPMCpny.P
+/*[UNCALLED]*/                          (IntPol7072.CompanyCode
+/*[UNCALLED]*/                          ,IntPol7072.BranchCd
+/*[UNCALLED]*/                          ,"V70"
+/*[UNCALLED]*/                          ,OUTPUT nv_BrokerCompany /*ËÒºÃÔÉÑ··Õèsetã¹ÃÐºº*/
+/*[UNCALLED]*/                          ,OUTPUT nv_BrokerBranch 
+/*[UNCALLED]*/                          ,OUTPUT nv_Acno1
+/*[UNCALLED]*/                          ,OUTPUT nv_Agent
+/*[UNCALLED]*/                          ,OUTPUT nv_errort).
+/*[UNCALLED]*/                     IF nv_errort <> "" THEN RETURN.
+/*[UNCALLED]*/                     /* ProgramPrint form PDF ¡ÃÁ¸ÃÃÁì V70 àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
+/*[UNCALLED]*/                     ASSIGN nv_NameCompCd = "" nv_PrmPrg = "" nv_PrgName = "".
+/*[UNCALLED]*/                     RUN PD_FNameAttach
+/*[UNCALLED]*/                         (INPUT IntPol7072.CompanyCode
+/*[UNCALLED]*/                         ,INPUT "V70"      /*v70,v72*/
+/*[UNCALLED]*/                         ,INPUT IntPol7072.PolicyTypeCd
+/*[UNCALLED]*/                         /**/
+/*[UNCALLED]*/                         ,INPUT-OUTPUT nv_NameCompCd
+/*[UNCALLED]*/                         ,INPUT-OUTPUT nv_PrgName
+/*[UNCALLED]*/                         ,INPUT-OUTPUT nv_PrmPrg ).
+/*[UNCALLED]*/                     /**/
+/*[UNCALLED]*/                     IF    IntPol7072.PolicyTypeCd = "1"
+/*[UNCALLED]*/                        OR IntPol7072.PolicyTypeCd = "2"
+/*[UNCALLED]*/                        OR IntPol7072.PolicyTypeCd = "3"
+/*[UNCALLED]*/                     THEN DO:
+/*[UNCALLED]*/                         IF  (IntPol7072.PolicyTypeCd = "3"   AND substr(IntPol7072.PolicyNumber,1,1) <> "R" ) OR  /*kridtiya i.*/
+/*[UNCALLED]*/                             /*TEST Prn cover 1*/
+/*[UNCALLED]*/                            (IntPol7072.CompanyCode  = "242" AND IntPol7072.PolicyTypeCd = "1" )
+/*[UNCALLED]*/                             /*Isuzu */
+/*[UNCALLED]*/                         /*OR (IntPol7072.CompanyCode  = "476" AND IntPol7072.PolicyTypeCd = "1" )*/
+/*[UNCALLED]*/                         OR (IntPol7072.CompanyCode  = "476" ) OR (IntPol7072.CompanyCode  = "839") /*Add ART*/
+/*[UNCALLED]*/                         THEN DO:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                           IF nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr701_1".
+/*[UNCALLED]*/                                              ELSE nv_PrgName = "Wctx/" + nv_PrgName. /*Wctxr701A4.p*/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                           RUN VALUE(nv_PrgName)
+/*[UNCALLED]*/                              (IntPol7072.CompanyCode  /*nv_BrokerCompany*/
+/*[UNCALLED]*/                              ,IntPol7072.PolicyNumber
+/*[UNCALLED]*/                              ,IntPol7072.Rencnt
+/*[UNCALLED]*/                              ,IntPol7072.Endcnt
+/*[UNCALLED]*/                              ,IntPol7072.DocumentUID
+/*[UNCALLED]*/                              ,IntPol7072.RqUID /*nv_code keyRequestIndRq*/
+/*[UNCALLED]*/                              ,""               /*n_user  */
+/*[UNCALLED]*/                              ,""               /*n_passwd */
+/*[UNCALLED]*/                              ,OUTPUT nv_SAVEmsgerror).
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     ELSE DO:
+/*[UNCALLED]*/                       /*».3.1 + àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
+/*[UNCALLED]*/                       /*ãºàÊÃç¨/ãº¡Ó¡ÑºÀÒÉÕ à©¾ÒÐ »3, 3+*/
+/*[UNCALLED]*/                       IF SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "3"
+/*[UNCALLED]*/                          OR  ((IntPol7072.CompanyCode = "833" OR IntPol7072.CompanyCode = "834" OR IntPol7072.CompanyCode  = "839" /*Add ART*/
+/*[UNCALLED]*/                          OR    IntPol7072.CompanyCode = "442" OR IntPol7072.CompanyCode = "701"
+/*[UNCALLED]*/                          OR    IntPol7072.CompanyCode = "242" OR IntPol7072.CompanyCode = "476" ) /*isuzu*/
+/*[UNCALLED]*/                              /**/
+/*[UNCALLED]*/                          AND (IntPol7072.PolicyTypeCd = "2.1" OR IntPol7072.PolicyTypeCd = "2.2") )
+/*[UNCALLED]*/                               /*·Ø»»ÃÐ¡Ñ¹ 1 áÊ¹¾ÔÁ¾ì¡ÃÁ¸ÃÃÁìä´é*/
+/*[UNCALLED]*/                       THEN DO:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                         IF nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr701_1".  /*"Wctx/Wctxr703_1".*/
+/*[UNCALLED]*/                                            ELSE nv_PrgName = "Wctx/" + nv_PrgName. /*Wctxr703A4*/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                         RUN VALUE(nv_PrgName)
+/*[UNCALLED]*/                             (IntPol7072.CompanyCode
+/*[UNCALLED]*/                             ,IntPol7072.PolicyNumber
+/*[UNCALLED]*/                             ,IntPol7072.Rencnt
+/*[UNCALLED]*/                             ,IntPol7072.Endcnt
+/*[UNCALLED]*/                             ,IntPol7072.DocumentUID 
+/*[UNCALLED]*/                             ,IntPol7072.RqUID
+/*[UNCALLED]*/                             ,""
+/*[UNCALLED]*/                             ,""
+/*[UNCALLED]*/                             ,OUTPUT nv_SAVEmsgerror).
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     IF nv_SAVEmsgerror <> "" THEN RETURN.
+/*[UNCALLED]*/                     /* ---------------------------------------------------- */
+/*[UNCALLED]*/                     FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RECIDIntPol7072
+/*[UNCALLED]*/                     NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                     nv_firstchk   = YES.
+/*[UNCALLED]*/                     /*PAUSE 1 NO-MESSAGE.*/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     RUN PD_SAVEPD1ChkFile
+/*[UNCALLED]*/                         (INPUT nv_NameCompCd
+/*[UNCALLED]*/                         ,INPUT "V70"
+/*[UNCALLED]*/                         ,INPUT IntPol7072.PolicyTypeCd
+/*[UNCALLED]*/                         ,OUTPUT nv_SAVEmsgerror).
+/*[UNCALLED]*/                     IF nv_SAVEmsgerror <> "" THEN DO:
+/*[UNCALLED]*/                       nv_verror = "ERRPDF70_" + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99")
+/*[UNCALLED]*/                                 + SUBSTR(STRING(TIME,"HH:MM:SS"),1,2)
+/*[UNCALLED]*/                                 + SUBSTR(STRING(TIME,"HH:MM:SS"),4,2)
+/*[UNCALLED]*/                                 + SUBSTR(STRING(TIME,"HH:MM:SS"),7,2)
+/*[UNCALLED]*/                                 + ".TXT".
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       OUTPUT TO VALUE(nv_verror).
+/*[UNCALLED]*/                       PUT 
+/*[UNCALLED]*/                       "Not found file pdf: Company: " IntPol7072.CompanyCode 
+/*[UNCALLED]*/                       " Policy no.: "   IntPol7072.PolicyNumber   FORMAT "X(16)"
+/*[UNCALLED]*/                       " Contract no.: " IntPol7072.ContractNumber FORMAT "X(20)"
+/*[UNCALLED]*/                       " " TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                       SKIP.
+/*[UNCALLED]*/                       OUTPUT CLOSE.
+/*[UNCALLED]*/                       RETURN. 
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     /* ËéÒÁ Åº µéÍ§ÃÍ PDFCreator file pdf ÁÔ©Ð¹Ñé¹¨ÐÁÕáµèª×èÍ File */
+/*[UNCALLED]*/                     /* -------------------------------------------------------------------------------- */
+/*[UNCALLED]*/                   /*
+/*[UNCALLED]*/                     OUTPUT TO PrnTIME.txt APPEND.
+/*[UNCALLED]*/                     PUT "3. SvFile:"
+/*[UNCALLED]*/                        /*1234567890*/
+/*[UNCALLED]*/                       IntPol7072.CompanyCode 
+/*[UNCALLED]*/                       IntPol7072.PolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       IntPol7072.CMIPolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       TODAY FORMAT "99/99/9999" " "
+/*[UNCALLED]*/                       STRING(TIME,"HH:MM:SS")   "." 
+/*[UNCALLED]*/                       SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                     SKIP.
+/*[UNCALLED]*/                     OUTPUT CLOSE.
+/*[UNCALLED]*/                   */
+/*[UNCALLED]*/                     FOR EACH FNameAttach WHERE
+/*[UNCALLED]*/                              FNameAttach.CompanyCode  = nv_NameCompCd
+/*[UNCALLED]*/                          AND FNameAttach.PolicyTypeCd = "V70"
+/*[UNCALLED]*/                          AND FNameAttach.CoverTypeCd  = IntPol7072.PolicyTypeCd
+/*[UNCALLED]*/                          AND FNameAttach.EffDate     <= TODAY
+/*[UNCALLED]*/                     NO-LOCK
+/*[UNCALLED]*/                     BREAK BY FNameAttach.SelectNumber:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       IF FNameAttach.CopyFileName = "" THEN LEAVE.
+/*[UNCALLED]*/                                                        ELSE nv_INPUTFileName = FNameAttach.CopyFileName.
+/*[UNCALLED]*/                       /**/
+/*[UNCALLED]*/                       IF FNameAttach.ToFileName   = "" THEN
+/*[UNCALLED]*/                              nv_COPYTOFILE = TRIM(IntPol7072.PolicyNumber) + ".PDF".
+/*[UNCALLED]*/                       ELSE DO:
+/*[UNCALLED]*/                         IF INDEX(FNameAttach.ToFileName, ".PDF") = 0 THEN
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                              nv_COPYTOFILE = TRIM(IntPol7072.PolicyNumber)          /*àºÍÃì¡ÃÁ¸ÃÃÁì*/
+/*[UNCALLED]*/                                            + TRIM(FNameAttach.ToFileName) + ".PDF". /*µÑÇÂèÍ§Ò¹*/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                         ELSE nv_COPYTOFILE = FNameAttach.ToFileName.
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       nv_errortext = "".
+/*[UNCALLED]*/                       IF nv_INPUTFileName = "" OR nv_COPYTOFILE = "" THEN LEAVE.
+/*[UNCALLED]*/                       /**/
+/*[UNCALLED]*/                       loop1:
+/*[UNCALLED]*/                       REPEAT:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                         IF nv_firstchk = NO THEN DO:   
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                           NV_Lcount = 0.
+/*[UNCALLED]*/                           DO  WHILE NV_Lcount <= NV_Lwaitcount:
+/*[UNCALLED]*/                             NV_Lcount = NV_Lcount + 1.
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         nv_firstchk = NO.
+/*[UNCALLED]*/                         IF SEARCH(nv_INPUTFileName) = ? THEN DO:
+/*[UNCALLED]*/                           NV_StartCount = NV_StartCount + NV_Lcount.
+/*[UNCALLED]*/                           IF NV_StartCount >= NV_LastCount THEN LEAVE loop1.
+/*[UNCALLED]*/                           NEXT loop1.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         /* nv_INPUTFileName = "FormCMI.PDF". /*"D:\WebBU\FormCMI.PDF".*/
+/*[UNCALLED]*/                         nv_COPYTOFILE    = TRIM(IntPol7072.PolicyNumber) + ".PDF". */
+/*[UNCALLED]*/                         DOS SILENT COPY VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE)  /Y.
+/*[UNCALLED]*/                         /*
+/*[UNCALLED]*/                         DOS SILENT RENAME VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE). */
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                         IF SEARCH(nv_COPYTOFILE) = ? THEN DO:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                           DOS SILENT COPY VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE)  /Y.
+/*[UNCALLED]*/                           /*
+/*[UNCALLED]*/                           NV_Lcount = 0.
+/*[UNCALLED]*/                           DO  WHILE NV_Lcount <= 1000000:
+/*[UNCALLED]*/                             NV_Lcount = NV_Lcount + 1.
+/*[UNCALLED]*/                           END. */
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                         IF SEARCH(nv_COPYTOFILE) <> ? THEN DO:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                           FOR EACH TFileAttach: DELETE TFileAttach. END.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                           CREATE TFileAttach.
+/*[UNCALLED]*/                           TFileAttach.FileNameAttach = nv_COPYTOFILE.
+/*[UNCALLED]*/                           /* TFileAttach.FileNameAttach = TRIM(IntPol7072.PolicyNumber) + ".PDF".*/
+/*[UNCALLED]*/                     
+/*[UNCALLED]*/                           COPY-LOB FROM FILE nv_COPYTOFILE TO TFileAttach.FileBinary NO-CONVERT NO-ERROR.
+/*[UNCALLED]*/                           /* INPUTFileName  = "D:\TEMP\DBBUInt.zip".
+/*[UNCALLED]*/                           OUTPUT TO FileAtt1.pdf BINARY NO-CONVERT.
+/*[UNCALLED]*/                             EXPORT TFileAttach.FileBinary.
+/*[UNCALLED]*/                           OUTPUT CLOSE. */
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                           IF ERROR-STATUS:ERROR  THEN DO:
+/*[UNCALLED]*/                             nv_errortext = "äÁèÊÒÁÒÃ¶ Load File: " + TRIM(nv_COPYTOFILE) + " "
+/*[UNCALLED]*/                                          + ERROR-STATUS:GET-MESSAGE(1) + ERROR-STATUS:GET-MESSAGE(2).
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                           /* äÁèdelete à¾×èÍ monitor / ãªé¨ÃÔ§ àÍÒ remark ÍÍ¡
+/*[UNCALLED]*/                           IF SEARCH(nv_COPYTOFILE) <> ? THEN DOS SILENT DEL VALUE(nv_COPYTOFILE). */
+/*[UNCALLED]*/                           IF SEARCH(nv_INPUTFileName) <> ? THEN DOS SILENT DEL VALUE(nv_INPUTFileName).
+/*[UNCALLED]*/                           /**/
+/*[UNCALLED]*/                           FIND IntS7072 WHERE RECID(IntS7072) = nv_RECIDIntS7072
+/*[UNCALLED]*/                           NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                           IF AVAILABLE IntS7072 THEN DO:
+/*[UNCALLED]*/                             nv_LineSeqno = nv_LineSeqno + 1. /*ÅÓ´Ñº¡ÒÃ add data*/
+/*[UNCALLED]*/                             IF nv_LineSeqno = 1 THEN DO:
+/*[UNCALLED]*/                               ASSIGN
+/*[UNCALLED]*/                               IntPol7072.FileNameAttach1 = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntPol7072.AttachFile1     = TFileAttach.FileBinary
+/*[UNCALLED]*/                               IntS7072.FileNameAttach1   = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntS7072.AttachFile1       = TFileAttach.FileBinary .
+/*[UNCALLED]*/                             END.
+/*[UNCALLED]*/                             IF nv_LineSeqno = 2 THEN DO:
+/*[UNCALLED]*/                               ASSIGN
+/*[UNCALLED]*/                               IntPol7072.FileNameAttach2 = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntPol7072.AttachFile2     = TFileAttach.FileBinary
+/*[UNCALLED]*/                               IntS7072.FileNameAttach2   = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntS7072.AttachFile2       = TFileAttach.FileBinary .
+/*[UNCALLED]*/                             END.
+/*[UNCALLED]*/                             IF nv_errortext <> "" THEN
+/*[UNCALLED]*/                               ASSIGN
+/*[UNCALLED]*/                               IntPol7072.RemarkText = TRIM(TRIM(IntPol7072.RemarkText) + " " + nv_errortext).
+/*[UNCALLED]*/                               IntS7072.RemarkText   = TRIM(TRIM(IntS7072.RemarkText)   + " " + nv_errortext).
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                         END. /*IF SEARCH(nv_COPYTOFILE) <> ?*/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                         LEAVE loop1.
+/*[UNCALLED]*/                       END. /*loop1:*/
+/*[UNCALLED]*/                     END. /*FOR EACH FNameAttach*/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   END. /*IF IntPol7072.PolicyTypeCd <> "" AND IntPol7072.RateGroup <> ""*/
+/*[UNCALLED]*/                   /*  -------------------------------------------------------------------------------------------- */
+/*[UNCALLED]*/                   /* ¾Ãº. / Compulsory */
+/*[UNCALLED]*/                   IF IntPol7072.CMIPolicyTypeCd <> "" AND IntPol7072.CMIVehTypeCd <> "" THEN DO:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     RUN WSP/WSPMCpny.P
+/*[UNCALLED]*/                          (IntPol7072.CompanyCode
+/*[UNCALLED]*/                          ,IntPol7072.BranchCd
+/*[UNCALLED]*/                          ,"V72"
+/*[UNCALLED]*/                          ,OUTPUT nv_BrokerCompany /*ËÒºÃÔÉÑ··Õèsetã¹ÃÐºº*/
+/*[UNCALLED]*/                          ,OUTPUT nv_BrokerBranch 
+/*[UNCALLED]*/                          ,OUTPUT nv_Acno1
+/*[UNCALLED]*/                          ,OUTPUT nv_Agent
+/*[UNCALLED]*/                          ,OUTPUT nv_errort).
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     IF nv_errort <> "" THEN RETURN.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     NV_StartCount = 0.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     /* ---------------------------------------------------- */
+/*[UNCALLED]*/                     /* ProgramPrint ¾Ãº. form PDF àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
+/*[UNCALLED]*/                     ASSIGN nv_NameCompCd = "" nv_PrmPrg = "" nv_PrgName = "".
+/*[UNCALLED]*/                     RUN PD_FNameAttach
+/*[UNCALLED]*/                         (INPUT        IntPol7072.CompanyCode
+/*[UNCALLED]*/                         ,INPUT        "V72"      /*v70,v72*/
+/*[UNCALLED]*/                         ,INPUT        IntPol7072.CMIPolicyTypeCd
+/*[UNCALLED]*/                         /**/
+/*[UNCALLED]*/                         ,INPUT-OUTPUT nv_NameCompCd
+/*[UNCALLED]*/                         ,INPUT-OUTPUT nv_PrgName
+/*[UNCALLED]*/                         ,INPUT-OUTPUT nv_PrmPrg ).
+/*[UNCALLED]*/                     /**/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     /*Blank form Compulsory */
+/*[UNCALLED]*/                     IF IntPol7072.CompanyCode = "833" THEN DO:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       RUN PD_ChkBlankForm
+/*[UNCALLED]*/                            (INPUT-OUTPUT nv_NameCompCd
+/*[UNCALLED]*/                            ,INPUT-OUTPUT nv_PrgName
+/*[UNCALLED]*/                            ,INPUT-OUTPUT nv_PrmPrg).
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     IF nv_PrgName = "" THEN DO:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       RUN Wctx/wctxr702.P
+/*[UNCALLED]*/                            (IntPol7072.CompanyCode     /*nv_BrokerCompany*/
+/*[UNCALLED]*/                            ,IntPol7072.CMIPolicyNumber
+/*[UNCALLED]*/                            ,IntPol7072.Rencnt
+/*[UNCALLED]*/                            ,IntPol7072.Endcnt
+/*[UNCALLED]*/                            ,IntPol7072.CMIDocumentUID
+/*[UNCALLED]*/                            ,IntPol7072.RqUID /*nv_code  keyRequestIndRq*/
+/*[UNCALLED]*/                            ,""         /*n_user   */
+/*[UNCALLED]*/                            ,""         /*n_passwd */
+/*[UNCALLED]*/                            ,nv_PrmPrg  /*Name Report*/
+/*[UNCALLED]*/                            ,OUTPUT nv_SAVEmsgerror).
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     ELSE DO:
+/*[UNCALLED]*/                       nv_PrgName = "Wctx/" + nv_PrgName.
+/*[UNCALLED]*/                       /*
+/*[UNCALLED]*/                       RUN Wctx/wctxr702A4.P ( IntPol7072.CompanyCode */
+/*[UNCALLED]*/                       RUN VALUE(nv_PrgName)
+/*[UNCALLED]*/                            (IntPol7072.CompanyCode   /*nv_BrokerCompany*/
+/*[UNCALLED]*/                            ,IntPol7072.CMIPolicyNumber
+/*[UNCALLED]*/                            ,IntPol7072.Rencnt
+/*[UNCALLED]*/                            ,IntPol7072.Endcnt
+/*[UNCALLED]*/                            ,IntPol7072.CMIDocumentUID
+/*[UNCALLED]*/                            ,IntPol7072.RqUID /*nv_code  keyRequestIndRq*/
+/*[UNCALLED]*/                            ,""         /*n_user   */
+/*[UNCALLED]*/                            ,""         /*n_passwd */
+/*[UNCALLED]*/                            ,nv_PrmPrg  /*Name Report="V72A4"*/
+/*[UNCALLED]*/                            ,""         /*remark*/
+/*[UNCALLED]*/                            ,OUTPUT nv_SAVEmsgerror).
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     IF nv_SAVEmsgerror <> "" THEN RETURN.
+/*[UNCALLED]*/                   /*
+/*[UNCALLED]*/                     OUTPUT TO PrnTIME.txt APPEND.
+/*[UNCALLED]*/                     PUT "2. ChkPDF:"
+/*[UNCALLED]*/                        /*1234567890*/
+/*[UNCALLED]*/                       IntPol7072.CompanyCode 
+/*[UNCALLED]*/                       IntPol7072.PolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       IntPol7072.CMIPolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       TODAY FORMAT "99/99/9999" " "
+/*[UNCALLED]*/                       STRING(TIME,"HH:MM:SS")   "." 
+/*[UNCALLED]*/                       SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                     SKIP.
+/*[UNCALLED]*/                     OUTPUT CLOSE.
+/*[UNCALLED]*/                   */
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     /*PAUSE 1 NO-MESSAGE.*/
+/*[UNCALLED]*/                     RUN PD_SAVEPD1ChkFile
+/*[UNCALLED]*/                         (INPUT nv_NameCompCd
+/*[UNCALLED]*/                         ,INPUT "V72"
+/*[UNCALLED]*/                         ,INPUT IntPol7072.CMIPolicyTypeCd
+/*[UNCALLED]*/                         ,OUTPUT nv_SAVEmsgerror).
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     IF nv_SAVEmsgerror <> "" THEN DO:
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       nv_verror = "ERRPDF72_" + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99")
+/*[UNCALLED]*/                                 + SUBSTR(STRING(TIME,"HH:MM:SS"),1,2)
+/*[UNCALLED]*/                                 + SUBSTR(STRING(TIME,"HH:MM:SS"),4,2)
+/*[UNCALLED]*/                                 + SUBSTR(STRING(TIME,"HH:MM:SS"),7,2)
+/*[UNCALLED]*/                                 + ".TXT".
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       OUTPUT TO VALUE(nv_verror).
+/*[UNCALLED]*/                       PUT 
+/*[UNCALLED]*/                       "Not found file pdf: Company: " IntPol7072.CompanyCode 
+/*[UNCALLED]*/                       " Policy no.: "   IntPol7072.PolicyNumber   FORMAT "X(16)"
+/*[UNCALLED]*/                       " Contract no.: " IntPol7072.ContractNumber FORMAT "X(20)"
+/*[UNCALLED]*/                       " " TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                       SKIP.
+/*[UNCALLED]*/                       OUTPUT CLOSE.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       RETURN. 
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     /* -------------------------------------------------------------------------------- */
+/*[UNCALLED]*/                   /*
+/*[UNCALLED]*/                     OUTPUT TO PrnTIME.txt APPEND.
+/*[UNCALLED]*/                     PUT "3. SvFile:"
+/*[UNCALLED]*/                        /*1234567890*/
+/*[UNCALLED]*/                       IntPol7072.CompanyCode 
+/*[UNCALLED]*/                       IntPol7072.PolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       IntPol7072.CMIPolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       TODAY FORMAT "99/99/9999" " "
+/*[UNCALLED]*/                       STRING(TIME,"HH:MM:SS")   "." 
+/*[UNCALLED]*/                       SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                     SKIP.
+/*[UNCALLED]*/                     OUTPUT CLOSE.
+/*[UNCALLED]*/                   */
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     ASSIGN
+/*[UNCALLED]*/                     nv_INPUTFileName = "" nv_COPYTOFILE = "" nv_firstchk = YES.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     FOR EACH FNameAttach WHERE
+/*[UNCALLED]*/                              FNameAttach.CompanyCode  = nv_NameCompCd
+/*[UNCALLED]*/                          AND FNameAttach.PolicyTypeCd = "V72"
+/*[UNCALLED]*/                          AND FNameAttach.CoverTypeCd  = IntPol7072.CMIPolicyTypeCd /*¾Ãº ËÃ×Í "T"*/
+/*[UNCALLED]*/                          AND FNameAttach.EffDate     <= TODAY
+/*[UNCALLED]*/                     NO-LOCK
+/*[UNCALLED]*/                     BREAK BY FNameAttach.SelectNumber
+/*[UNCALLED]*/                     :
+/*[UNCALLED]*/                       IF FNameAttach.CopyFileName = "" THEN LEAVE.
+/*[UNCALLED]*/                                                        ELSE nv_INPUTFileName = FNameAttach.CopyFileName.
+/*[UNCALLED]*/                       /**/
+/*[UNCALLED]*/                       IF FNameAttach.ToFileName   = "" THEN
+/*[UNCALLED]*/                              nv_COPYTOFILE = TRIM(IntPol7072.CMIPolicyNumber) + ".PDF".
+/*[UNCALLED]*/                       ELSE DO:
+/*[UNCALLED]*/                         IF INDEX(FNameAttach.ToFileName, ".PDF") = 0 THEN
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                              nv_COPYTOFILE = TRIM(IntPol7072.CMIPolicyNumber)       /*àºÍÃì¡ÃÁ¸ÃÃÁì*/
+/*[UNCALLED]*/                                            + TRIM(FNameAttach.ToFileName) + ".PDF". /*µÑÇÂèÍ§Ò¹*/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                         ELSE nv_COPYTOFILE = FNameAttach.ToFileName.
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       nv_errortext = "".
+/*[UNCALLED]*/                       IF nv_INPUTFileName = "" OR nv_COPYTOFILE = "" THEN LEAVE.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       IF TRIM(nv_COPYTOFILE) = ".PDF" THEN
+/*[UNCALLED]*/                               nv_COPYTOFILE = TRIM(IntPol7072.CMIPolicyNumber) + ".PDF".
+/*[UNCALLED]*/                       /**/
+/*[UNCALLED]*/                       loop2:
+/*[UNCALLED]*/                       REPEAT:
+/*[UNCALLED]*/                         IF nv_firstchk = NO THEN DO:   
+/*[UNCALLED]*/                           NV_Lcount = 0.
+/*[UNCALLED]*/                           DO  WHILE NV_Lcount <= NV_Lwaitcount:
+/*[UNCALLED]*/                             NV_Lcount = NV_Lcount + 1.
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         nv_firstchk = NO.
+/*[UNCALLED]*/                         IF SEARCH(nv_INPUTFileName) = ? THEN DO:
+/*[UNCALLED]*/                           NV_StartCount = NV_StartCount + NV_Lcount.
+/*[UNCALLED]*/                           IF NV_StartCount >= NV_LastCount THEN LEAVE loop2.
+/*[UNCALLED]*/                           NEXT loop2.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         DOS SILENT COPY VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE)  /Y.
+/*[UNCALLED]*/                         /*
+/*[UNCALLED]*/                         DOS SILENT RENAME VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE). */
+/*[UNCALLED]*/                         IF SEARCH(nv_COPYTOFILE) <> ? THEN DO:
+/*[UNCALLED]*/                           FOR EACH TFileAttach: DELETE TFileAttach. END.
+/*[UNCALLED]*/                           CREATE TFileAttach.
+/*[UNCALLED]*/                           TFileAttach.FileNameAttach = nv_COPYTOFILE.
+/*[UNCALLED]*/                           COPY-LOB FROM FILE nv_COPYTOFILE TO TFileAttach.FileBinary NO-CONVERT NO-ERROR.
+/*[UNCALLED]*/                           IF ERROR-STATUS:ERROR  THEN DO:
+/*[UNCALLED]*/                             nv_errortext = "äÁèÊÒÁÒÃ¶ Load File: " + TRIM(nv_COPYTOFILE) + " "
+/*[UNCALLED]*/                                          + ERROR-STATUS:GET-MESSAGE(1) + ERROR-STATUS:GET-MESSAGE(2).
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                           IF SEARCH(nv_INPUTFileName) <> ? THEN DOS SILENT DEL VALUE(nv_INPUTFileName).
+/*[UNCALLED]*/                           /**/
+/*[UNCALLED]*/                           FIND IntS7072 WHERE RECID(IntS7072) = nv_RECIDIntS7072
+/*[UNCALLED]*/                           NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                           IF AVAILABLE IntS7072 THEN DO:
+/*[UNCALLED]*/                             nv_LineSeqno = nv_LineSeqno + 1. /*ÅÓ´Ñº¡ÒÃ add data ÍÔ§¡Ñº´éÒ¹º¹*/
+/*[UNCALLED]*/                             IF nv_LineSeqno = 1 THEN DO:
+/*[UNCALLED]*/                               ASSIGN
+/*[UNCALLED]*/                               IntPol7072.FileNameAttach1 = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntPol7072.AttachFile1     = TFileAttach.FileBinary
+/*[UNCALLED]*/                               IntS7072.FileNameAttach1   = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntS7072.AttachFile1       = TFileAttach.FileBinary .
+/*[UNCALLED]*/                             END.
+/*[UNCALLED]*/                             IF nv_LineSeqno = 2 THEN DO:
+/*[UNCALLED]*/                               ASSIGN
+/*[UNCALLED]*/                               IntPol7072.FileNameAttach2 = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntPol7072.AttachFile2     = TFileAttach.FileBinary
+/*[UNCALLED]*/                               IntS7072.FileNameAttach2   = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntS7072.AttachFile2       = TFileAttach.FileBinary .
+/*[UNCALLED]*/                             END.
+/*[UNCALLED]*/                             IF nv_errortext <> "" THEN
+/*[UNCALLED]*/                               ASSIGN
+/*[UNCALLED]*/                               IntPol7072.RemarkText = TRIM(TRIM(IntPol7072.RemarkText) + " " + nv_errortext).
+/*[UNCALLED]*/                               IntS7072.RemarkText   = TRIM(TRIM(IntS7072.RemarkText)   + " " + nv_errortext).
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         LEAVE loop2.
+/*[UNCALLED]*/                       END. /*loop2:*/
+/*[UNCALLED]*/                     END. /*FOR EACH FNameAttach*/
+/*[UNCALLED]*/                   END. /*IF IntPol7072.CMIPolicyTypeCd <> "" AND IntPol7072.CMIVehTypeCd <> "" */
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   FOR EACH TFileAttach: DELETE TFileAttach. END.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   RELEASE FNameAttach.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   END PROCEDURE.
 /*[BLANK]*/                      
 /*[COMMENT]*/                    /* _UIB-CODE-BLOCK-END */
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
@@ -6822,508 +6822,508 @@
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
 /*[BLANK]*/                      
 /*[EXECUTABLE]*/                 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE PD_SAVEPD1FileAtt_Old C-Win 
-/*[EXECUTABLE]*/                 PROCEDURE PD_SAVEPD1FileAtt_Old :
-/*[COMMENT]*/                    /*------------------------------------------------------------------------------
-/*[COMMENT]*/                      Purpose:     
-/*[COMMENT]*/                      Parameters:  <none>
-/*[COMMENT]*/                      Notes:       
-/*[COMMENT]*/                    ------------------------------------------------------------------------------*/
-/*[COMMENT]*/                    /*
-/*[COMMENT]*/                    DEFINE INPUT PARAMETER nv_RECIDIntPol7072 AS RECID NO-UNDO.
-/*[COMMENT]*/                    DEFINE INPUT PARAMETER nv_RECIDIntS7072   AS RECID NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_errortext     AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_INPUTFileName AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_COPYTOFILE    AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_LineSeqno     AS INTEGER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE NV_Lwaitcount    AS INTEGER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE NV_LcountAgain   AS INTEGER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE NV_Lcount        AS INTEGER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE NV_StartCount    AS INTEGER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE NV_LastCount     AS INTEGER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_SAVECompanyNo AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_SAVEmsgerror  AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_BrokerCompany AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_BrokerBranch  AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_Acno1      AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_Agent      AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_errort     AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_NameCompCd AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_PrgName    AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_PrmPrg     AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_firstchk   AS LOGICAL   NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_verror     AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    ASSIGN
-/*[COMMENT]*/                    NV_Lwaitcount = 110000
-/*[COMMENT]*/                    NV_StartCount = 0
-/*[COMMENT]*/                    NV_LastCount  = 6220000. /*3ÇÔ¹Ò·Õ¡ÇèÒæ*/
-/*[COMMENT]*/                    FOR EACH TFileAttach: DELETE TFileAttach. END.
-/*[COMMENT]*/                    FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RECIDIntPol7072
-/*[COMMENT]*/                    NO-ERROR NO-WAIT.
-/*[COMMENT]*/                    IF NOT AVAILABLE IntPol7072 THEN RETURN.
-/*[COMMENT]*/                    nv_LineSeqno = 0.
-/*[COMMENT]*/                    /*
-/*[COMMENT]*/                    OUTPUT TO PrnTIME.txt APPEND.
-/*[COMMENT]*/                    PUT "1. Print :"
-/*[COMMENT]*/                       /*12345678901*/
-/*[COMMENT]*/                      IntPol7072.CompanyCode 
-/*[COMMENT]*/                      IntPol7072.PolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                      IntPol7072.CMIPolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                      TODAY FORMAT "99/99/9999" " "
-/*[COMMENT]*/                      STRING(TIME,"HH:MM:SS")   "." 
-/*[COMMENT]*/                      SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                    SKIP.
-/*[COMMENT]*/                    OUTPUT CLOSE.
-/*[COMMENT]*/                    */
-/*[COMMENT]*/                    /*¾ÔÁ¾ì file pdf Êè§ÍÍ¡*/
-/*[COMMENT]*/                       /* 2.1                             110 */
-/*[COMMENT]*/                    IF IntPol7072.PolicyTypeCd <> "" AND IntPol7072.RateGroup <> "" THEN DO:
-/*[COMMENT]*/                      RUN WSP/WSPMCpny.P
-/*[COMMENT]*/                           (IntPol7072.CompanyCode
-/*[COMMENT]*/                           ,IntPol7072.BranchCd
-/*[COMMENT]*/                           ,"V70"
-/*[COMMENT]*/                           ,OUTPUT nv_BrokerCompany /*ËÒºÃÔÉÑ··Õèsetã¹ÃÐºº*/
-/*[COMMENT]*/                           ,OUTPUT nv_BrokerBranch 
-/*[COMMENT]*/                           ,OUTPUT nv_Acno1
-/*[COMMENT]*/                           ,OUTPUT nv_Agent
-/*[COMMENT]*/                           ,OUTPUT nv_errort).
-/*[COMMENT]*/                      IF nv_errort <> "" THEN RETURN.
-/*[COMMENT]*/                      /* ProgramPrint form PDF ¡ÃÁ¸ÃÃÁì V70 àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
-/*[COMMENT]*/                      ASSIGN nv_NameCompCd = "" nv_PrmPrg = "" nv_PrgName = "".
-/*[COMMENT]*/                      RUN PD_FNameAttach
-/*[COMMENT]*/                          (INPUT IntPol7072.CompanyCode
-/*[COMMENT]*/                          ,INPUT "V70"      /*v70,v72*/
-/*[COMMENT]*/                          ,INPUT IntPol7072.PolicyTypeCd
-/*[COMMENT]*/                          /**/
-/*[COMMENT]*/                          ,INPUT-OUTPUT nv_NameCompCd
-/*[COMMENT]*/                          ,INPUT-OUTPUT nv_PrgName
-/*[COMMENT]*/                          ,INPUT-OUTPUT nv_PrmPrg ).
-/*[COMMENT]*/                      /**/
-/*[COMMENT]*/                      IF    IntPol7072.PolicyTypeCd = "1"
-/*[COMMENT]*/                         OR IntPol7072.PolicyTypeCd = "2"
-/*[COMMENT]*/                         OR IntPol7072.PolicyTypeCd = "3"
-/*[COMMENT]*/                      THEN DO:
-/*[COMMENT]*/                        /* Add by Kridtiya i...Lockton */
-/*[COMMENT]*/                        IF IntPol7072.CompanyCode = "469" THEN DO:   
-/*[COMMENT]*/                          IF nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr708".
-/*[COMMENT]*/                          ELSE nv_PrgName = "Wctx/" + nv_PrgName.  /*Wctxr708.p Form 1 Policy*/
-/*[COMMENT]*/                          RUN VALUE(nv_PrgName)        
-/*[COMMENT]*/                              (IntPol7072.CompanyCode   /*nv_BrokerCompany*/
-/*[COMMENT]*/                              ,IntPol7072.PolicyNumber
-/*[COMMENT]*/                              ,IntPol7072.Rencnt
-/*[COMMENT]*/                              ,IntPol7072.Endcnt
-/*[COMMENT]*/                              ,IntPol7072.DocumentUID
-/*[COMMENT]*/                              ,IntPol7072.RqUID /*nv_code  keyRequestIndRq*/
-/*[COMMENT]*/                              ,""               /*n_user   */
-/*[COMMENT]*/                              ,""               /*n_passwd */
-/*[COMMENT]*/                              ,OUTPUT nv_SAVEmsgerror).
-/*[COMMENT]*/                          RUN proc_FileAttach2               /* print cer */
-/*[COMMENT]*/                              (INPUT IntPol7072.CompanyCode
-/*[COMMENT]*/                              ,INPUT "V70"      /*v70,v72*/
-/*[COMMENT]*/                              ,INPUT IntPol7072.PolicyTypeCd
-/*[COMMENT]*/                              /**/
-/*[COMMENT]*/                              ,INPUT-OUTPUT nv_NameCompCd
-/*[COMMENT]*/                              ,INPUT-OUTPUT nv_PrgName
-/*[COMMENT]*/                              ,INPUT-OUTPUT nv_PrmPrg ).
-/*[COMMENT]*/                        END. /*End add Kridtiya i. */
-/*[COMMENT]*/                        ELSE DO:
-/*[COMMENT]*/                          /*IF  IntPol7072.PolicyTypeCd = "3"    OR*/ /*kridtiya i.*/
-/*[COMMENT]*/                           IF  (IntPol7072.PolicyTypeCd = "3"   AND substr(IntPol7072.PolicyNumber,1,1) <> "R" ) OR  /*kridtiya i.*/
-/*[COMMENT]*/                              /*TEST Prn cover 1*/
-/*[COMMENT]*/                             (IntPol7072.CompanyCode  = "242" AND IntPol7072.PolicyTypeCd = "1" )
-/*[COMMENT]*/                              /*Isuzu */
-/*[COMMENT]*/                          OR (IntPol7072.CompanyCode  = "476" AND IntPol7072.PolicyTypeCd = "1" )
-/*[COMMENT]*/                          THEN DO:
-/*[COMMENT]*/                            IF nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr701_1".
-/*[COMMENT]*/                                               ELSE nv_PrgName = "Wctx/" + nv_PrgName. /*Wctxr701A4.p*/
-/*[COMMENT]*/                            RUN VALUE(nv_PrgName)
-/*[COMMENT]*/                               (IntPol7072.CompanyCode  /*nv_BrokerCompany*/
-/*[COMMENT]*/                               ,IntPol7072.PolicyNumber
-/*[COMMENT]*/                               ,IntPol7072.Rencnt
-/*[COMMENT]*/                               ,IntPol7072.Endcnt
-/*[COMMENT]*/                               ,IntPol7072.DocumentUID
-/*[COMMENT]*/                               ,IntPol7072.RqUID /*nv_code keyRequestIndRq*/
-/*[COMMENT]*/                               ,""               /*n_user  */
-/*[COMMENT]*/                               ,""               /*n_passwd */
-/*[COMMENT]*/                               ,OUTPUT nv_SAVEmsgerror).
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                      ELSE DO:
-/*[COMMENT]*/                        /*».3.1 + àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
-/*[COMMENT]*/                        /*ãºàÊÃç¨/ãº¡Ó¡ÑºÀÒÉÕ à©¾ÒÐ »3, 3+*/
-/*[COMMENT]*/                        IF SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "3"
-/*[COMMENT]*/                           OR  ((IntPol7072.CompanyCode = "833" OR IntPol7072.CompanyCode = "834" 
-/*[COMMENT]*/                           OR    IntPol7072.CompanyCode = "442" OR IntPol7072.CompanyCode = "701"
-/*[COMMENT]*/                           OR    IntPol7072.CompanyCode = "242" OR IntPol7072.CompanyCode = "476" ) /*isuzu*/
-/*[COMMENT]*/                               /**/
-/*[COMMENT]*/                           AND (IntPol7072.PolicyTypeCd = "2.1" OR IntPol7072.PolicyTypeCd = "2.2") )
-/*[COMMENT]*/                                /*·Ø»»ÃÐ¡Ñ¹ 1 áÊ¹¾ÔÁ¾ì¡ÃÁ¸ÃÃÁìä´é*/
-/*[COMMENT]*/                        THEN DO:
-/*[COMMENT]*/                          IF nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr703_1".
-/*[COMMENT]*/                                             ELSE nv_PrgName = "Wctx/" + nv_PrgName. /*Wctxr703A4*/
-/*[BLANK]*/                      
-/*[COMMENT]*/                          RUN VALUE(nv_PrgName)
-/*[COMMENT]*/                              (IntPol7072.CompanyCode
-/*[COMMENT]*/                              ,IntPol7072.PolicyNumber
-/*[COMMENT]*/                              ,IntPol7072.Rencnt
-/*[COMMENT]*/                              ,IntPol7072.Endcnt
-/*[COMMENT]*/                              ,IntPol7072.DocumentUID 
-/*[COMMENT]*/                              ,IntPol7072.RqUID
-/*[COMMENT]*/                              ,""
-/*[COMMENT]*/                              ,""
-/*[COMMENT]*/                              ,OUTPUT nv_SAVEmsgerror).
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                      IF nv_SAVEmsgerror <> "" THEN RETURN.
-/*[BLANK]*/                      
-/*[COMMENT]*/                      /* ---------------------------------------------------- */
-/*[COMMENT]*/                      FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RECIDIntPol7072
-/*[COMMENT]*/                      NO-ERROR NO-WAIT.
-/*[COMMENT]*/                      nv_firstchk   = YES.
-/*[COMMENT]*/                    /*
-/*[COMMENT]*/                      OUTPUT TO PrnTIME.txt APPEND.
-/*[COMMENT]*/                      PUT "2. ChkPDF:"
-/*[COMMENT]*/                         /*1234567890*/
-/*[COMMENT]*/                        IntPol7072.CompanyCode 
-/*[COMMENT]*/                        IntPol7072.PolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        IntPol7072.CMIPolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        TODAY FORMAT "99/99/9999" " "
-/*[COMMENT]*/                        STRING(TIME,"HH:MM:SS")   "." 
-/*[COMMENT]*/                        SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                      SKIP.
-/*[COMMENT]*/                      OUTPUT CLOSE.
-/*[COMMENT]*/                    */
-/*[COMMENT]*/                      PAUSE 1 NO-MESSAGE.
-/*[COMMENT]*/                      RUN PD_SAVEPD1ChkFile
-/*[COMMENT]*/                          (INPUT nv_NameCompCd
-/*[COMMENT]*/                          ,INPUT "V70"
-/*[COMMENT]*/                          ,INPUT IntPol7072.PolicyTypeCd
-/*[COMMENT]*/                          ,OUTPUT nv_SAVEmsgerror).
-/*[COMMENT]*/                      IF nv_SAVEmsgerror <> "" THEN DO:
-/*[COMMENT]*/                        nv_verror = "ERRPDF70_" + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99")
-/*[COMMENT]*/                                  + SUBSTR(STRING(TIME,"HH:MM:SS"),1,2)
-/*[COMMENT]*/                                  + SUBSTR(STRING(TIME,"HH:MM:SS"),4,2)
-/*[COMMENT]*/                                  + SUBSTR(STRING(TIME,"HH:MM:SS"),7,2)
-/*[COMMENT]*/                                  + ".TXT".
-/*[BLANK]*/                      
-/*[COMMENT]*/                        OUTPUT TO VALUE(nv_verror).
-/*[COMMENT]*/                        PUT 
-/*[COMMENT]*/                        "Not found file pdf: Company: " IntPol7072.CompanyCode 
-/*[COMMENT]*/                        " Policy no.: "   IntPol7072.PolicyNumber   FORMAT "X(16)"
-/*[COMMENT]*/                        " Contract no.: " IntPol7072.ContractNumber FORMAT "X(20)"
-/*[COMMENT]*/                        " " TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                        SKIP.
-/*[COMMENT]*/                        OUTPUT CLOSE.
-/*[COMMENT]*/                        RETURN. 
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                      /* ËéÒÁ Åº µéÍ§ÃÍ PDFCreator file pdf ÁÔ©Ð¹Ñé¹¨ÐÁÕáµèª×èÍ File */
-/*[COMMENT]*/                      /* -------------------------------------------------------------------------------- */
-/*[COMMENT]*/                    /*
-/*[COMMENT]*/                      OUTPUT TO PrnTIME.txt APPEND.
-/*[COMMENT]*/                      PUT "3. SvFile:"
-/*[COMMENT]*/                         /*1234567890*/
-/*[COMMENT]*/                        IntPol7072.CompanyCode 
-/*[COMMENT]*/                        IntPol7072.PolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        IntPol7072.CMIPolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        TODAY FORMAT "99/99/9999" " "
-/*[COMMENT]*/                        STRING(TIME,"HH:MM:SS")   "." 
-/*[COMMENT]*/                        SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                      SKIP.
-/*[COMMENT]*/                      OUTPUT CLOSE.
-/*[COMMENT]*/                    */
-/*[COMMENT]*/                      FOR EACH FNameAttach WHERE
-/*[COMMENT]*/                               FNameAttach.CompanyCode  = nv_NameCompCd
-/*[COMMENT]*/                           AND FNameAttach.PolicyTypeCd = "V70"
-/*[COMMENT]*/                           AND FNameAttach.CoverTypeCd  = IntPol7072.PolicyTypeCd
-/*[COMMENT]*/                           AND FNameAttach.EffDate     <= TODAY
-/*[COMMENT]*/                      NO-LOCK
-/*[COMMENT]*/                      BREAK BY FNameAttach.SelectNumber:
-/*[COMMENT]*/                        IF FNameAttach.CopyFileName = "" THEN LEAVE.
-/*[COMMENT]*/                                                         ELSE nv_INPUTFileName = FNameAttach.CopyFileName.
-/*[COMMENT]*/                        /**/
-/*[COMMENT]*/                        IF FNameAttach.ToFileName   = "" THEN
-/*[COMMENT]*/                               nv_COPYTOFILE = TRIM(IntPol7072.PolicyNumber) + ".PDF".
-/*[COMMENT]*/                        ELSE DO:
-/*[COMMENT]*/                          IF INDEX(FNameAttach.ToFileName, ".PDF") = 0 THEN
-/*[BLANK]*/                      
-/*[COMMENT]*/                               nv_COPYTOFILE = TRIM(IntPol7072.PolicyNumber)          /*àºÍÃì¡ÃÁ¸ÃÃÁì*/
-/*[COMMENT]*/                                             + TRIM(FNameAttach.ToFileName) + ".PDF". /*µÑÇÂèÍ§Ò¹*/
-/*[COMMENT]*/                          ELSE nv_COPYTOFILE = FNameAttach.ToFileName.
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                        nv_errortext = "".
-/*[COMMENT]*/                        IF nv_INPUTFileName = "" OR nv_COPYTOFILE = "" THEN LEAVE.
-/*[COMMENT]*/                        /**/
-/*[COMMENT]*/                        loop1:
-/*[COMMENT]*/                        REPEAT:
-/*[COMMENT]*/                          IF nv_firstchk = NO THEN DO:   
-/*[COMMENT]*/                            NV_Lcount = 0.
-/*[COMMENT]*/                            DO  WHILE NV_Lcount <= NV_Lwaitcount:
-/*[COMMENT]*/                              NV_Lcount = NV_Lcount + 1.
-/*[COMMENT]*/                            END.
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                          nv_firstchk = NO.
-/*[COMMENT]*/                          IF SEARCH(nv_INPUTFileName) = ? THEN DO:
-/*[COMMENT]*/                            NV_StartCount = NV_StartCount + NV_Lcount.
-/*[COMMENT]*/                            IF NV_StartCount >= NV_LastCount THEN LEAVE loop1.
-/*[COMMENT]*/                            NEXT loop1.
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                          /* nv_INPUTFileName = "FormCMI.PDF". /*"D:\WebBU\FormCMI.PDF".*/
-/*[COMMENT]*/                          nv_COPYTOFILE    = TRIM(IntPol7072.PolicyNumber) + ".PDF". */
-/*[COMMENT]*/                          DOS SILENT COPY VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE)  /Y.
-/*[COMMENT]*/                          /*
-/*[COMMENT]*/                          DOS SILENT RENAME VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE). */
-/*[COMMENT]*/                          IF SEARCH(nv_COPYTOFILE) = ? THEN DO:
-/*[COMMENT]*/                            DOS SILENT COPY VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE)  /Y.
-/*[COMMENT]*/                            /*
-/*[COMMENT]*/                            NV_Lcount = 0.
-/*[COMMENT]*/                            DO  WHILE NV_Lcount <= 1000000:
-/*[COMMENT]*/                              NV_Lcount = NV_Lcount + 1.
-/*[COMMENT]*/                            END. */
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                          IF SEARCH(nv_COPYTOFILE) <> ? THEN DO:
-/*[COMMENT]*/                            FOR EACH TFileAttach: DELETE TFileAttach. END.
-/*[COMMENT]*/                            CREATE TFileAttach.
-/*[COMMENT]*/                            TFileAttach.FileNameAttach = nv_COPYTOFILE.
-/*[COMMENT]*/                            /* TFileAttach.FileNameAttach = TRIM(IntPol7072.PolicyNumber) + ".PDF".*/
-/*[COMMENT]*/                            COPY-LOB FROM FILE nv_COPYTOFILE TO TFileAttach.FileBinary NO-CONVERT NO-ERROR.
-/*[COMMENT]*/                            /* INPUTFileName  = "D:\TEMP\DBBUInt.zip".
-/*[COMMENT]*/                            OUTPUT TO FileAtt1.pdf BINARY NO-CONVERT.
-/*[COMMENT]*/                              EXPORT TFileAttach.FileBinary.
-/*[COMMENT]*/                            OUTPUT CLOSE. */
-/*[COMMENT]*/                            IF ERROR-STATUS:ERROR  THEN DO:
-/*[COMMENT]*/                              nv_errortext = "äÁèÊÒÁÒÃ¶ Load File: " + TRIM(nv_COPYTOFILE) + " "
-/*[COMMENT]*/                                           + ERROR-STATUS:GET-MESSAGE(1) + ERROR-STATUS:GET-MESSAGE(2).
-/*[COMMENT]*/                            END.
-/*[COMMENT]*/                            /* äÁèdelete à¾×èÍ monitor / ãªé¨ÃÔ§ àÍÒ remark ÍÍ¡
-/*[COMMENT]*/                            IF SEARCH(nv_COPYTOFILE) <> ? THEN DOS SILENT DEL VALUE(nv_COPYTOFILE). */
-/*[COMMENT]*/                            IF SEARCH(nv_INPUTFileName) <> ? THEN DOS SILENT DEL VALUE(nv_INPUTFileName).
-/*[COMMENT]*/                            /**/
-/*[COMMENT]*/                            FIND IntS7072 WHERE RECID(IntS7072) = nv_RECIDIntS7072
-/*[COMMENT]*/                            NO-ERROR NO-WAIT.
-/*[COMMENT]*/                            IF AVAILABLE IntS7072 THEN DO:
-/*[COMMENT]*/                              nv_LineSeqno = nv_LineSeqno + 1. /*ÅÓ´Ñº¡ÒÃ add data*/
-/*[COMMENT]*/                              IF nv_LineSeqno = 1 THEN DO:
-/*[COMMENT]*/                                ASSIGN
-/*[COMMENT]*/                                IntPol7072.FileNameAttach1 = TFileAttach.FileNameAttach
-/*[COMMENT]*/                                IntPol7072.AttachFile1     = TFileAttach.FileBinary
-/*[COMMENT]*/                                IntS7072.FileNameAttach1   = TFileAttach.FileNameAttach
-/*[COMMENT]*/                                IntS7072.AttachFile1       = TFileAttach.FileBinary .
-/*[COMMENT]*/                              END.
-/*[COMMENT]*/                              IF nv_LineSeqno = 2 THEN DO:
-/*[COMMENT]*/                                ASSIGN
-/*[COMMENT]*/                                IntPol7072.FileNameAttach2 = TFileAttach.FileNameAttach
-/*[COMMENT]*/                                IntPol7072.AttachFile2     = TFileAttach.FileBinary
-/*[COMMENT]*/                                IntS7072.FileNameAttach2   = TFileAttach.FileNameAttach
-/*[COMMENT]*/                                IntS7072.AttachFile2       = TFileAttach.FileBinary .
-/*[COMMENT]*/                              END.
-/*[COMMENT]*/                              IF nv_errortext <> "" THEN
-/*[COMMENT]*/                                ASSIGN
-/*[COMMENT]*/                                IntPol7072.RemarkText = TRIM(TRIM(IntPol7072.RemarkText) + " " + nv_errortext).
-/*[COMMENT]*/                                IntS7072.RemarkText   = TRIM(TRIM(IntS7072.RemarkText)   + " " + nv_errortext).
-/*[COMMENT]*/                            END.
-/*[COMMENT]*/                          END. /*IF SEARCH(nv_COPYTOFILE) <> ?*/
-/*[COMMENT]*/                          LEAVE loop1.
-/*[COMMENT]*/                        END. /*loop1:*/
-/*[COMMENT]*/                      END. /*FOR EACH FNameAttach*/
-/*[COMMENT]*/                    END. /*IF IntPol7072.PolicyTypeCd <> "" AND IntPol7072.RateGroup <> ""*/
-/*[COMMENT]*/                    /*  -------------------------------------------------------------------------------------------- */
-/*[COMMENT]*/                    /* ¾Ãº. / Compulsory */
-/*[COMMENT]*/                    IF IntPol7072.CMIPolicyTypeCd <> "" AND IntPol7072.CMIVehTypeCd <> "" THEN DO:
-/*[COMMENT]*/                      RUN WSP/WSPMCpny.P
-/*[COMMENT]*/                           (IntPol7072.CompanyCode
-/*[COMMENT]*/                           ,IntPol7072.BranchCd
-/*[COMMENT]*/                           ,"V72"
-/*[COMMENT]*/                           ,OUTPUT nv_BrokerCompany /*ËÒºÃÔÉÑ··Õèsetã¹ÃÐºº*/
-/*[COMMENT]*/                           ,OUTPUT nv_BrokerBranch 
-/*[COMMENT]*/                           ,OUTPUT nv_Acno1
-/*[COMMENT]*/                           ,OUTPUT nv_Agent
-/*[COMMENT]*/                           ,OUTPUT nv_errort).
-/*[COMMENT]*/                      IF nv_errort <> "" THEN RETURN.
-/*[COMMENT]*/                      NV_StartCount = 0.
-/*[COMMENT]*/                      /* ---------------------------------------------------- */
-/*[COMMENT]*/                      /* ProgramPrint ¾Ãº. form PDF àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
-/*[COMMENT]*/                      ASSIGN nv_NameCompCd = "" nv_PrmPrg = "" nv_PrgName = "".
-/*[BLANK]*/                      
-/*[COMMENT]*/                      RUN PD_FNameAttach
-/*[COMMENT]*/                          (INPUT        IntPol7072.CompanyCode
-/*[COMMENT]*/                          ,INPUT        "V72"      /*v70,v72*/
-/*[COMMENT]*/                          ,INPUT        IntPol7072.CMIPolicyTypeCd
-/*[COMMENT]*/                          /**/
-/*[COMMENT]*/                          ,INPUT-OUTPUT nv_NameCompCd
-/*[COMMENT]*/                          ,INPUT-OUTPUT nv_PrgName
-/*[COMMENT]*/                          ,INPUT-OUTPUT nv_PrmPrg ).
-/*[COMMENT]*/                      /**/
-/*[COMMENT]*/                      /*Blank form Compulsory */
-/*[COMMENT]*/                      IF IntPol7072.CompanyCode = "833" THEN DO:
-/*[COMMENT]*/                        RUN PD_ChkBlankForm
-/*[COMMENT]*/                             (INPUT-OUTPUT nv_NameCompCd
-/*[COMMENT]*/                             ,INPUT-OUTPUT nv_PrgName
-/*[COMMENT]*/                             ,INPUT-OUTPUT nv_PrmPrg).
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                      IF nv_PrgName = "" THEN DO:
-/*[COMMENT]*/                        RUN Wctx/wctxr702.P
-/*[COMMENT]*/                             (IntPol7072.CompanyCode     /*nv_BrokerCompany*/
-/*[COMMENT]*/                             ,IntPol7072.CMIPolicyNumber
-/*[COMMENT]*/                             ,IntPol7072.Rencnt
-/*[COMMENT]*/                             ,IntPol7072.Endcnt
-/*[COMMENT]*/                             ,IntPol7072.CMIDocumentUID
-/*[COMMENT]*/                             ,IntPol7072.RqUID /*nv_code  keyRequestIndRq*/
-/*[COMMENT]*/                             ,""         /*n_user   */
-/*[COMMENT]*/                             ,""         /*n_passwd */
-/*[COMMENT]*/                             ,nv_PrmPrg  /*Name Report*/
-/*[COMMENT]*/                             ,OUTPUT nv_SAVEmsgerror).
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                      ELSE DO:
-/*[COMMENT]*/                        nv_PrgName = "Wctx/" + nv_PrgName.
-/*[COMMENT]*/                        /*
-/*[COMMENT]*/                        RUN Wctx/wctxr702A4.P ( IntPol7072.CompanyCode */
-/*[COMMENT]*/                        RUN VALUE(nv_PrgName)
-/*[COMMENT]*/                             (IntPol7072.CompanyCode   /*nv_BrokerCompany*/
-/*[COMMENT]*/                             ,IntPol7072.CMIPolicyNumber
-/*[COMMENT]*/                             ,IntPol7072.Rencnt
-/*[COMMENT]*/                             ,IntPol7072.Endcnt
-/*[COMMENT]*/                             ,IntPol7072.CMIDocumentUID
-/*[COMMENT]*/                             ,IntPol7072.RqUID /*nv_code  keyRequestIndRq*/
-/*[COMMENT]*/                             ,""        /*n_user   */
-/*[COMMENT]*/                             ,""        /*n_passwd */
-/*[COMMENT]*/                             ,nv_PrmPrg /*Name Report="V72A4"*/
-/*[COMMENT]*/                             ,OUTPUT nv_SAVEmsgerror).
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                      IF nv_SAVEmsgerror <> "" THEN RETURN.
-/*[COMMENT]*/                    /*
-/*[COMMENT]*/                      OUTPUT TO PrnTIME.txt APPEND.
-/*[COMMENT]*/                      PUT "2. ChkPDF:"
-/*[COMMENT]*/                         /*1234567890*/
-/*[COMMENT]*/                        IntPol7072.CompanyCode 
-/*[COMMENT]*/                        IntPol7072.PolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        IntPol7072.CMIPolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        TODAY FORMAT "99/99/9999" " "
-/*[COMMENT]*/                        STRING(TIME,"HH:MM:SS")   "." 
-/*[COMMENT]*/                        SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                      SKIP.
-/*[COMMENT]*/                      OUTPUT CLOSE.
-/*[COMMENT]*/                    */
-/*[COMMENT]*/                      PAUSE 1 NO-MESSAGE.
-/*[COMMENT]*/                      RUN PD_SAVEPD1ChkFile
-/*[COMMENT]*/                          (INPUT nv_NameCompCd
-/*[COMMENT]*/                          ,INPUT "V72"
-/*[COMMENT]*/                          ,INPUT IntPol7072.CMIPolicyTypeCd
-/*[COMMENT]*/                          ,OUTPUT nv_SAVEmsgerror).
-/*[COMMENT]*/                      IF nv_SAVEmsgerror <> "" THEN DO:
-/*[COMMENT]*/                        nv_verror = "ERRPDF72_" + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99")
-/*[COMMENT]*/                                  + SUBSTR(STRING(TIME,"HH:MM:SS"),1,2)
-/*[COMMENT]*/                                  + SUBSTR(STRING(TIME,"HH:MM:SS"),4,2)
-/*[COMMENT]*/                                  + SUBSTR(STRING(TIME,"HH:MM:SS"),7,2)
-/*[COMMENT]*/                                  + ".TXT".
-/*[COMMENT]*/                        OUTPUT TO VALUE(nv_verror).
-/*[COMMENT]*/                        PUT 
-/*[COMMENT]*/                        "Not found file pdf: Company: " IntPol7072.CompanyCode 
-/*[COMMENT]*/                        " Policy no.: "   IntPol7072.PolicyNumber   FORMAT "X(16)"
-/*[COMMENT]*/                        " Contract no.: " IntPol7072.ContractNumber FORMAT "X(20)"
-/*[COMMENT]*/                        " " TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                        SKIP.
-/*[COMMENT]*/                        OUTPUT CLOSE.
-/*[COMMENT]*/                        RETURN. 
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                      /* -------------------------------------------------------------------------------- */
-/*[COMMENT]*/                    /*
-/*[COMMENT]*/                      OUTPUT TO PrnTIME.txt APPEND.
-/*[COMMENT]*/                      PUT "3. SvFile:"
-/*[COMMENT]*/                         /*1234567890*/
-/*[COMMENT]*/                        IntPol7072.CompanyCode 
-/*[COMMENT]*/                        IntPol7072.PolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        IntPol7072.CMIPolicyNumber FORMAT "X(16)"
-/*[COMMENT]*/                        TODAY FORMAT "99/99/9999" " "
-/*[COMMENT]*/                        STRING(TIME,"HH:MM:SS")   "." 
-/*[COMMENT]*/                        SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                      SKIP.
-/*[COMMENT]*/                      OUTPUT CLOSE.
-/*[COMMENT]*/                    */
-/*[COMMENT]*/                      ASSIGN
-/*[COMMENT]*/                      nv_INPUTFileName = "" nv_COPYTOFILE = "" nv_firstchk = YES.
-/*[COMMENT]*/                      FOR EACH FNameAttach WHERE
-/*[COMMENT]*/                               FNameAttach.CompanyCode  = nv_NameCompCd
-/*[COMMENT]*/                           AND FNameAttach.PolicyTypeCd = "V72"
-/*[COMMENT]*/                           AND FNameAttach.CoverTypeCd  = IntPol7072.CMIPolicyTypeCd /*¾Ãº ËÃ×Í "T"*/
-/*[COMMENT]*/                           AND FNameAttach.EffDate     <= TODAY
-/*[COMMENT]*/                      NO-LOCK
-/*[COMMENT]*/                      BREAK BY FNameAttach.SelectNumber
-/*[COMMENT]*/                      :
-/*[COMMENT]*/                        IF FNameAttach.CopyFileName = "" THEN LEAVE.
-/*[COMMENT]*/                                                         ELSE nv_INPUTFileName = FNameAttach.CopyFileName.
-/*[COMMENT]*/                        /**/
-/*[COMMENT]*/                        IF FNameAttach.ToFileName   = "" THEN
-/*[COMMENT]*/                               nv_COPYTOFILE = TRIM(IntPol7072.CMIPolicyNumber) + ".PDF".
-/*[COMMENT]*/                        ELSE DO:
-/*[COMMENT]*/                          IF INDEX(FNameAttach.ToFileName, ".PDF") = 0 THEN
-/*[COMMENT]*/                               nv_COPYTOFILE = TRIM(IntPol7072.CMIPolicyNumber)       /*àºÍÃì¡ÃÁ¸ÃÃÁì*/
-/*[COMMENT]*/                                             + TRIM(FNameAttach.ToFileName) + ".PDF". /*µÑÇÂèÍ§Ò¹*/
-/*[COMMENT]*/                          ELSE nv_COPYTOFILE = FNameAttach.ToFileName.
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                        nv_errortext = "".
-/*[COMMENT]*/                        IF nv_INPUTFileName = "" OR nv_COPYTOFILE = "" THEN LEAVE.
-/*[COMMENT]*/                        IF TRIM(nv_COPYTOFILE) = ".PDF" THEN
-/*[COMMENT]*/                                nv_COPYTOFILE = TRIM(IntPol7072.CMIPolicyNumber) + ".PDF".
-/*[COMMENT]*/                        /**/
-/*[COMMENT]*/                        loop2:
-/*[COMMENT]*/                        REPEAT:
-/*[COMMENT]*/                          IF nv_firstchk = NO THEN DO:   
-/*[COMMENT]*/                            NV_Lcount = 0.
-/*[COMMENT]*/                            DO  WHILE NV_Lcount <= NV_Lwaitcount:
-/*[COMMENT]*/                              NV_Lcount = NV_Lcount + 1.
-/*[COMMENT]*/                            END.
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                          nv_firstchk = NO.
-/*[COMMENT]*/                          IF SEARCH(nv_INPUTFileName) = ? THEN DO:
-/*[COMMENT]*/                            NV_StartCount = NV_StartCount + NV_Lcount.
-/*[COMMENT]*/                            IF NV_StartCount >= NV_LastCount THEN LEAVE loop2.
-/*[COMMENT]*/                            NEXT loop2.
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                          DOS SILENT COPY VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE)  /Y.
-/*[COMMENT]*/                          /*
-/*[COMMENT]*/                          DOS SILENT RENAME VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE). */
-/*[COMMENT]*/                          IF SEARCH(nv_COPYTOFILE) <> ? THEN DO:
-/*[COMMENT]*/                            FOR EACH TFileAttach: DELETE TFileAttach. END.
-/*[COMMENT]*/                            CREATE TFileAttach.
-/*[COMMENT]*/                            TFileAttach.FileNameAttach = nv_COPYTOFILE.
-/*[COMMENT]*/                            COPY-LOB FROM FILE nv_COPYTOFILE TO TFileAttach.FileBinary NO-CONVERT NO-ERROR.
-/*[COMMENT]*/                            IF ERROR-STATUS:ERROR  THEN DO:
-/*[COMMENT]*/                              nv_errortext = "äÁèÊÒÁÒÃ¶ Load File: " + TRIM(nv_COPYTOFILE) + " "
-/*[COMMENT]*/                                           + ERROR-STATUS:GET-MESSAGE(1) + ERROR-STATUS:GET-MESSAGE(2).
-/*[COMMENT]*/                            END.
-/*[COMMENT]*/                            IF SEARCH(nv_INPUTFileName) <> ? THEN DOS SILENT DEL VALUE(nv_INPUTFileName).
-/*[COMMENT]*/                            /**/
-/*[COMMENT]*/                            FIND IntS7072 WHERE RECID(IntS7072) = nv_RECIDIntS7072
-/*[COMMENT]*/                            NO-ERROR NO-WAIT.
-/*[COMMENT]*/                            IF AVAILABLE IntS7072 THEN DO:
-/*[COMMENT]*/                              nv_LineSeqno = nv_LineSeqno + 1. /*ÅÓ´Ñº¡ÒÃ add data ÍÔ§¡Ñº´éÒ¹º¹*/
-/*[COMMENT]*/                              IF nv_LineSeqno = 1 THEN DO:
-/*[COMMENT]*/                                ASSIGN
-/*[COMMENT]*/                                IntPol7072.FileNameAttach1 = TFileAttach.FileNameAttach
-/*[COMMENT]*/                                IntPol7072.AttachFile1     = TFileAttach.FileBinary
-/*[COMMENT]*/                                IntS7072.FileNameAttach1   = TFileAttach.FileNameAttach
-/*[COMMENT]*/                                IntS7072.AttachFile1       = TFileAttach.FileBinary .
-/*[COMMENT]*/                              END.
-/*[COMMENT]*/                              IF nv_LineSeqno = 2 THEN DO:
-/*[COMMENT]*/                                ASSIGN
-/*[COMMENT]*/                                IntPol7072.FileNameAttach2 = TFileAttach.FileNameAttach
-/*[COMMENT]*/                                IntPol7072.AttachFile2     = TFileAttach.FileBinary
-/*[COMMENT]*/                                IntS7072.FileNameAttach2   = TFileAttach.FileNameAttach
-/*[COMMENT]*/                                IntS7072.AttachFile2       = TFileAttach.FileBinary .
-/*[COMMENT]*/                              END.
-/*[COMMENT]*/                              IF nv_errortext <> "" THEN
-/*[COMMENT]*/                                ASSIGN
-/*[COMMENT]*/                                IntPol7072.RemarkText = TRIM(TRIM(IntPol7072.RemarkText) + " " + nv_errortext).
-/*[COMMENT]*/                                IntS7072.RemarkText   = TRIM(TRIM(IntS7072.RemarkText)   + " " + nv_errortext).
-/*[COMMENT]*/                            END.
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                          LEAVE loop2.
-/*[COMMENT]*/                        END. /*loop2:*/
-/*[COMMENT]*/                      END. /*FOR EACH FNameAttach*/
-/*[COMMENT]*/                    END. /*IF IntPol7072.CMIPolicyTypeCd <> "" AND IntPol7072.CMIVehTypeCd <> "" */
-/*[COMMENT]*/                    FOR EACH TFileAttach: DELETE TFileAttach. END.
-/*[COMMENT]*/                    RELEASE FNameAttach.  */
-/*[EXECUTABLE]*/                 END PROCEDURE.
+/*[UNCALLED]*/                   PROCEDURE PD_SAVEPD1FileAtt_Old :
+/*[UNCALLED]*/                   /*------------------------------------------------------------------------------
+/*[UNCALLED]*/                     Purpose:     
+/*[UNCALLED]*/                     Parameters:  <none>
+/*[UNCALLED]*/                     Notes:       
+/*[UNCALLED]*/                   ------------------------------------------------------------------------------*/
+/*[UNCALLED]*/                   /*
+/*[UNCALLED]*/                   DEFINE INPUT PARAMETER nv_RECIDIntPol7072 AS RECID NO-UNDO.
+/*[UNCALLED]*/                   DEFINE INPUT PARAMETER nv_RECIDIntS7072   AS RECID NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_errortext     AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_INPUTFileName AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_COPYTOFILE    AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_LineSeqno     AS INTEGER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE NV_Lwaitcount    AS INTEGER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE NV_LcountAgain   AS INTEGER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE NV_Lcount        AS INTEGER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE NV_StartCount    AS INTEGER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE NV_LastCount     AS INTEGER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_SAVECompanyNo AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_SAVEmsgerror  AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_BrokerCompany AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_BrokerBranch  AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_Acno1      AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_Agent      AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_errort     AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_NameCompCd AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_PrgName    AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_PrmPrg     AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_firstchk   AS LOGICAL   NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_verror     AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   ASSIGN
+/*[UNCALLED]*/                   NV_Lwaitcount = 110000
+/*[UNCALLED]*/                   NV_StartCount = 0
+/*[UNCALLED]*/                   NV_LastCount  = 6220000. /*3ÇÔ¹Ò·Õ¡ÇèÒæ*/
+/*[UNCALLED]*/                   FOR EACH TFileAttach: DELETE TFileAttach. END.
+/*[UNCALLED]*/                   FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RECIDIntPol7072
+/*[UNCALLED]*/                   NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                   IF NOT AVAILABLE IntPol7072 THEN RETURN.
+/*[UNCALLED]*/                   nv_LineSeqno = 0.
+/*[UNCALLED]*/                   /*
+/*[UNCALLED]*/                   OUTPUT TO PrnTIME.txt APPEND.
+/*[UNCALLED]*/                   PUT "1. Print :"
+/*[UNCALLED]*/                      /*12345678901*/
+/*[UNCALLED]*/                     IntPol7072.CompanyCode 
+/*[UNCALLED]*/                     IntPol7072.PolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                     IntPol7072.CMIPolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                     TODAY FORMAT "99/99/9999" " "
+/*[UNCALLED]*/                     STRING(TIME,"HH:MM:SS")   "." 
+/*[UNCALLED]*/                     SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                   SKIP.
+/*[UNCALLED]*/                   OUTPUT CLOSE.
+/*[UNCALLED]*/                   */
+/*[UNCALLED]*/                   /*¾ÔÁ¾ì file pdf Êè§ÍÍ¡*/
+/*[UNCALLED]*/                      /* 2.1                             110 */
+/*[UNCALLED]*/                   IF IntPol7072.PolicyTypeCd <> "" AND IntPol7072.RateGroup <> "" THEN DO:
+/*[UNCALLED]*/                     RUN WSP/WSPMCpny.P
+/*[UNCALLED]*/                          (IntPol7072.CompanyCode
+/*[UNCALLED]*/                          ,IntPol7072.BranchCd
+/*[UNCALLED]*/                          ,"V70"
+/*[UNCALLED]*/                          ,OUTPUT nv_BrokerCompany /*ËÒºÃÔÉÑ··Õèsetã¹ÃÐºº*/
+/*[UNCALLED]*/                          ,OUTPUT nv_BrokerBranch 
+/*[UNCALLED]*/                          ,OUTPUT nv_Acno1
+/*[UNCALLED]*/                          ,OUTPUT nv_Agent
+/*[UNCALLED]*/                          ,OUTPUT nv_errort).
+/*[UNCALLED]*/                     IF nv_errort <> "" THEN RETURN.
+/*[UNCALLED]*/                     /* ProgramPrint form PDF ¡ÃÁ¸ÃÃÁì V70 àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
+/*[UNCALLED]*/                     ASSIGN nv_NameCompCd = "" nv_PrmPrg = "" nv_PrgName = "".
+/*[UNCALLED]*/                     RUN PD_FNameAttach
+/*[UNCALLED]*/                         (INPUT IntPol7072.CompanyCode
+/*[UNCALLED]*/                         ,INPUT "V70"      /*v70,v72*/
+/*[UNCALLED]*/                         ,INPUT IntPol7072.PolicyTypeCd
+/*[UNCALLED]*/                         /**/
+/*[UNCALLED]*/                         ,INPUT-OUTPUT nv_NameCompCd
+/*[UNCALLED]*/                         ,INPUT-OUTPUT nv_PrgName
+/*[UNCALLED]*/                         ,INPUT-OUTPUT nv_PrmPrg ).
+/*[UNCALLED]*/                     /**/
+/*[UNCALLED]*/                     IF    IntPol7072.PolicyTypeCd = "1"
+/*[UNCALLED]*/                        OR IntPol7072.PolicyTypeCd = "2"
+/*[UNCALLED]*/                        OR IntPol7072.PolicyTypeCd = "3"
+/*[UNCALLED]*/                     THEN DO:
+/*[UNCALLED]*/                       /* Add by Kridtiya i...Lockton */
+/*[UNCALLED]*/                       IF IntPol7072.CompanyCode = "469" THEN DO:   
+/*[UNCALLED]*/                         IF nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr708".
+/*[UNCALLED]*/                         ELSE nv_PrgName = "Wctx/" + nv_PrgName.  /*Wctxr708.p Form 1 Policy*/
+/*[UNCALLED]*/                         RUN VALUE(nv_PrgName)        
+/*[UNCALLED]*/                             (IntPol7072.CompanyCode   /*nv_BrokerCompany*/
+/*[UNCALLED]*/                             ,IntPol7072.PolicyNumber
+/*[UNCALLED]*/                             ,IntPol7072.Rencnt
+/*[UNCALLED]*/                             ,IntPol7072.Endcnt
+/*[UNCALLED]*/                             ,IntPol7072.DocumentUID
+/*[UNCALLED]*/                             ,IntPol7072.RqUID /*nv_code  keyRequestIndRq*/
+/*[UNCALLED]*/                             ,""               /*n_user   */
+/*[UNCALLED]*/                             ,""               /*n_passwd */
+/*[UNCALLED]*/                             ,OUTPUT nv_SAVEmsgerror).
+/*[UNCALLED]*/                         RUN proc_FileAttach2               /* print cer */
+/*[UNCALLED]*/                             (INPUT IntPol7072.CompanyCode
+/*[UNCALLED]*/                             ,INPUT "V70"      /*v70,v72*/
+/*[UNCALLED]*/                             ,INPUT IntPol7072.PolicyTypeCd
+/*[UNCALLED]*/                             /**/
+/*[UNCALLED]*/                             ,INPUT-OUTPUT nv_NameCompCd
+/*[UNCALLED]*/                             ,INPUT-OUTPUT nv_PrgName
+/*[UNCALLED]*/                             ,INPUT-OUTPUT nv_PrmPrg ).
+/*[UNCALLED]*/                       END. /*End add Kridtiya i. */
+/*[UNCALLED]*/                       ELSE DO:
+/*[UNCALLED]*/                         /*IF  IntPol7072.PolicyTypeCd = "3"    OR*/ /*kridtiya i.*/
+/*[UNCALLED]*/                          IF  (IntPol7072.PolicyTypeCd = "3"   AND substr(IntPol7072.PolicyNumber,1,1) <> "R" ) OR  /*kridtiya i.*/
+/*[UNCALLED]*/                             /*TEST Prn cover 1*/
+/*[UNCALLED]*/                            (IntPol7072.CompanyCode  = "242" AND IntPol7072.PolicyTypeCd = "1" )
+/*[UNCALLED]*/                             /*Isuzu */
+/*[UNCALLED]*/                         OR (IntPol7072.CompanyCode  = "476" AND IntPol7072.PolicyTypeCd = "1" )
+/*[UNCALLED]*/                         THEN DO:
+/*[UNCALLED]*/                           IF nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr701_1".
+/*[UNCALLED]*/                                              ELSE nv_PrgName = "Wctx/" + nv_PrgName. /*Wctxr701A4.p*/
+/*[UNCALLED]*/                           RUN VALUE(nv_PrgName)
+/*[UNCALLED]*/                              (IntPol7072.CompanyCode  /*nv_BrokerCompany*/
+/*[UNCALLED]*/                              ,IntPol7072.PolicyNumber
+/*[UNCALLED]*/                              ,IntPol7072.Rencnt
+/*[UNCALLED]*/                              ,IntPol7072.Endcnt
+/*[UNCALLED]*/                              ,IntPol7072.DocumentUID
+/*[UNCALLED]*/                              ,IntPol7072.RqUID /*nv_code keyRequestIndRq*/
+/*[UNCALLED]*/                              ,""               /*n_user  */
+/*[UNCALLED]*/                              ,""               /*n_passwd */
+/*[UNCALLED]*/                              ,OUTPUT nv_SAVEmsgerror).
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     ELSE DO:
+/*[UNCALLED]*/                       /*».3.1 + àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
+/*[UNCALLED]*/                       /*ãºàÊÃç¨/ãº¡Ó¡ÑºÀÒÉÕ à©¾ÒÐ »3, 3+*/
+/*[UNCALLED]*/                       IF SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "3"
+/*[UNCALLED]*/                          OR  ((IntPol7072.CompanyCode = "833" OR IntPol7072.CompanyCode = "834" 
+/*[UNCALLED]*/                          OR    IntPol7072.CompanyCode = "442" OR IntPol7072.CompanyCode = "701"
+/*[UNCALLED]*/                          OR    IntPol7072.CompanyCode = "242" OR IntPol7072.CompanyCode = "476" ) /*isuzu*/
+/*[UNCALLED]*/                              /**/
+/*[UNCALLED]*/                          AND (IntPol7072.PolicyTypeCd = "2.1" OR IntPol7072.PolicyTypeCd = "2.2") )
+/*[UNCALLED]*/                               /*·Ø»»ÃÐ¡Ñ¹ 1 áÊ¹¾ÔÁ¾ì¡ÃÁ¸ÃÃÁìä´é*/
+/*[UNCALLED]*/                       THEN DO:
+/*[UNCALLED]*/                         IF nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr703_1".
+/*[UNCALLED]*/                                            ELSE nv_PrgName = "Wctx/" + nv_PrgName. /*Wctxr703A4*/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                         RUN VALUE(nv_PrgName)
+/*[UNCALLED]*/                             (IntPol7072.CompanyCode
+/*[UNCALLED]*/                             ,IntPol7072.PolicyNumber
+/*[UNCALLED]*/                             ,IntPol7072.Rencnt
+/*[UNCALLED]*/                             ,IntPol7072.Endcnt
+/*[UNCALLED]*/                             ,IntPol7072.DocumentUID 
+/*[UNCALLED]*/                             ,IntPol7072.RqUID
+/*[UNCALLED]*/                             ,""
+/*[UNCALLED]*/                             ,""
+/*[UNCALLED]*/                             ,OUTPUT nv_SAVEmsgerror).
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     IF nv_SAVEmsgerror <> "" THEN RETURN.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     /* ---------------------------------------------------- */
+/*[UNCALLED]*/                     FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RECIDIntPol7072
+/*[UNCALLED]*/                     NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                     nv_firstchk   = YES.
+/*[UNCALLED]*/                   /*
+/*[UNCALLED]*/                     OUTPUT TO PrnTIME.txt APPEND.
+/*[UNCALLED]*/                     PUT "2. ChkPDF:"
+/*[UNCALLED]*/                        /*1234567890*/
+/*[UNCALLED]*/                       IntPol7072.CompanyCode 
+/*[UNCALLED]*/                       IntPol7072.PolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       IntPol7072.CMIPolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       TODAY FORMAT "99/99/9999" " "
+/*[UNCALLED]*/                       STRING(TIME,"HH:MM:SS")   "." 
+/*[UNCALLED]*/                       SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                     SKIP.
+/*[UNCALLED]*/                     OUTPUT CLOSE.
+/*[UNCALLED]*/                   */
+/*[UNCALLED]*/                     PAUSE 1 NO-MESSAGE.
+/*[UNCALLED]*/                     RUN PD_SAVEPD1ChkFile
+/*[UNCALLED]*/                         (INPUT nv_NameCompCd
+/*[UNCALLED]*/                         ,INPUT "V70"
+/*[UNCALLED]*/                         ,INPUT IntPol7072.PolicyTypeCd
+/*[UNCALLED]*/                         ,OUTPUT nv_SAVEmsgerror).
+/*[UNCALLED]*/                     IF nv_SAVEmsgerror <> "" THEN DO:
+/*[UNCALLED]*/                       nv_verror = "ERRPDF70_" + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99")
+/*[UNCALLED]*/                                 + SUBSTR(STRING(TIME,"HH:MM:SS"),1,2)
+/*[UNCALLED]*/                                 + SUBSTR(STRING(TIME,"HH:MM:SS"),4,2)
+/*[UNCALLED]*/                                 + SUBSTR(STRING(TIME,"HH:MM:SS"),7,2)
+/*[UNCALLED]*/                                 + ".TXT".
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                       OUTPUT TO VALUE(nv_verror).
+/*[UNCALLED]*/                       PUT 
+/*[UNCALLED]*/                       "Not found file pdf: Company: " IntPol7072.CompanyCode 
+/*[UNCALLED]*/                       " Policy no.: "   IntPol7072.PolicyNumber   FORMAT "X(16)"
+/*[UNCALLED]*/                       " Contract no.: " IntPol7072.ContractNumber FORMAT "X(20)"
+/*[UNCALLED]*/                       " " TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                       SKIP.
+/*[UNCALLED]*/                       OUTPUT CLOSE.
+/*[UNCALLED]*/                       RETURN. 
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     /* ËéÒÁ Åº µéÍ§ÃÍ PDFCreator file pdf ÁÔ©Ð¹Ñé¹¨ÐÁÕáµèª×èÍ File */
+/*[UNCALLED]*/                     /* -------------------------------------------------------------------------------- */
+/*[UNCALLED]*/                   /*
+/*[UNCALLED]*/                     OUTPUT TO PrnTIME.txt APPEND.
+/*[UNCALLED]*/                     PUT "3. SvFile:"
+/*[UNCALLED]*/                        /*1234567890*/
+/*[UNCALLED]*/                       IntPol7072.CompanyCode 
+/*[UNCALLED]*/                       IntPol7072.PolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       IntPol7072.CMIPolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       TODAY FORMAT "99/99/9999" " "
+/*[UNCALLED]*/                       STRING(TIME,"HH:MM:SS")   "." 
+/*[UNCALLED]*/                       SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                     SKIP.
+/*[UNCALLED]*/                     OUTPUT CLOSE.
+/*[UNCALLED]*/                   */
+/*[UNCALLED]*/                     FOR EACH FNameAttach WHERE
+/*[UNCALLED]*/                              FNameAttach.CompanyCode  = nv_NameCompCd
+/*[UNCALLED]*/                          AND FNameAttach.PolicyTypeCd = "V70"
+/*[UNCALLED]*/                          AND FNameAttach.CoverTypeCd  = IntPol7072.PolicyTypeCd
+/*[UNCALLED]*/                          AND FNameAttach.EffDate     <= TODAY
+/*[UNCALLED]*/                     NO-LOCK
+/*[UNCALLED]*/                     BREAK BY FNameAttach.SelectNumber:
+/*[UNCALLED]*/                       IF FNameAttach.CopyFileName = "" THEN LEAVE.
+/*[UNCALLED]*/                                                        ELSE nv_INPUTFileName = FNameAttach.CopyFileName.
+/*[UNCALLED]*/                       /**/
+/*[UNCALLED]*/                       IF FNameAttach.ToFileName   = "" THEN
+/*[UNCALLED]*/                              nv_COPYTOFILE = TRIM(IntPol7072.PolicyNumber) + ".PDF".
+/*[UNCALLED]*/                       ELSE DO:
+/*[UNCALLED]*/                         IF INDEX(FNameAttach.ToFileName, ".PDF") = 0 THEN
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                              nv_COPYTOFILE = TRIM(IntPol7072.PolicyNumber)          /*àºÍÃì¡ÃÁ¸ÃÃÁì*/
+/*[UNCALLED]*/                                            + TRIM(FNameAttach.ToFileName) + ".PDF". /*µÑÇÂèÍ§Ò¹*/
+/*[UNCALLED]*/                         ELSE nv_COPYTOFILE = FNameAttach.ToFileName.
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       nv_errortext = "".
+/*[UNCALLED]*/                       IF nv_INPUTFileName = "" OR nv_COPYTOFILE = "" THEN LEAVE.
+/*[UNCALLED]*/                       /**/
+/*[UNCALLED]*/                       loop1:
+/*[UNCALLED]*/                       REPEAT:
+/*[UNCALLED]*/                         IF nv_firstchk = NO THEN DO:   
+/*[UNCALLED]*/                           NV_Lcount = 0.
+/*[UNCALLED]*/                           DO  WHILE NV_Lcount <= NV_Lwaitcount:
+/*[UNCALLED]*/                             NV_Lcount = NV_Lcount + 1.
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         nv_firstchk = NO.
+/*[UNCALLED]*/                         IF SEARCH(nv_INPUTFileName) = ? THEN DO:
+/*[UNCALLED]*/                           NV_StartCount = NV_StartCount + NV_Lcount.
+/*[UNCALLED]*/                           IF NV_StartCount >= NV_LastCount THEN LEAVE loop1.
+/*[UNCALLED]*/                           NEXT loop1.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         /* nv_INPUTFileName = "FormCMI.PDF". /*"D:\WebBU\FormCMI.PDF".*/
+/*[UNCALLED]*/                         nv_COPYTOFILE    = TRIM(IntPol7072.PolicyNumber) + ".PDF". */
+/*[UNCALLED]*/                         DOS SILENT COPY VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE)  /Y.
+/*[UNCALLED]*/                         /*
+/*[UNCALLED]*/                         DOS SILENT RENAME VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE). */
+/*[UNCALLED]*/                         IF SEARCH(nv_COPYTOFILE) = ? THEN DO:
+/*[UNCALLED]*/                           DOS SILENT COPY VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE)  /Y.
+/*[UNCALLED]*/                           /*
+/*[UNCALLED]*/                           NV_Lcount = 0.
+/*[UNCALLED]*/                           DO  WHILE NV_Lcount <= 1000000:
+/*[UNCALLED]*/                             NV_Lcount = NV_Lcount + 1.
+/*[UNCALLED]*/                           END. */
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         IF SEARCH(nv_COPYTOFILE) <> ? THEN DO:
+/*[UNCALLED]*/                           FOR EACH TFileAttach: DELETE TFileAttach. END.
+/*[UNCALLED]*/                           CREATE TFileAttach.
+/*[UNCALLED]*/                           TFileAttach.FileNameAttach = nv_COPYTOFILE.
+/*[UNCALLED]*/                           /* TFileAttach.FileNameAttach = TRIM(IntPol7072.PolicyNumber) + ".PDF".*/
+/*[UNCALLED]*/                           COPY-LOB FROM FILE nv_COPYTOFILE TO TFileAttach.FileBinary NO-CONVERT NO-ERROR.
+/*[UNCALLED]*/                           /* INPUTFileName  = "D:\TEMP\DBBUInt.zip".
+/*[UNCALLED]*/                           OUTPUT TO FileAtt1.pdf BINARY NO-CONVERT.
+/*[UNCALLED]*/                             EXPORT TFileAttach.FileBinary.
+/*[UNCALLED]*/                           OUTPUT CLOSE. */
+/*[UNCALLED]*/                           IF ERROR-STATUS:ERROR  THEN DO:
+/*[UNCALLED]*/                             nv_errortext = "äÁèÊÒÁÒÃ¶ Load File: " + TRIM(nv_COPYTOFILE) + " "
+/*[UNCALLED]*/                                          + ERROR-STATUS:GET-MESSAGE(1) + ERROR-STATUS:GET-MESSAGE(2).
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                           /* äÁèdelete à¾×èÍ monitor / ãªé¨ÃÔ§ àÍÒ remark ÍÍ¡
+/*[UNCALLED]*/                           IF SEARCH(nv_COPYTOFILE) <> ? THEN DOS SILENT DEL VALUE(nv_COPYTOFILE). */
+/*[UNCALLED]*/                           IF SEARCH(nv_INPUTFileName) <> ? THEN DOS SILENT DEL VALUE(nv_INPUTFileName).
+/*[UNCALLED]*/                           /**/
+/*[UNCALLED]*/                           FIND IntS7072 WHERE RECID(IntS7072) = nv_RECIDIntS7072
+/*[UNCALLED]*/                           NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                           IF AVAILABLE IntS7072 THEN DO:
+/*[UNCALLED]*/                             nv_LineSeqno = nv_LineSeqno + 1. /*ÅÓ´Ñº¡ÒÃ add data*/
+/*[UNCALLED]*/                             IF nv_LineSeqno = 1 THEN DO:
+/*[UNCALLED]*/                               ASSIGN
+/*[UNCALLED]*/                               IntPol7072.FileNameAttach1 = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntPol7072.AttachFile1     = TFileAttach.FileBinary
+/*[UNCALLED]*/                               IntS7072.FileNameAttach1   = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntS7072.AttachFile1       = TFileAttach.FileBinary .
+/*[UNCALLED]*/                             END.
+/*[UNCALLED]*/                             IF nv_LineSeqno = 2 THEN DO:
+/*[UNCALLED]*/                               ASSIGN
+/*[UNCALLED]*/                               IntPol7072.FileNameAttach2 = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntPol7072.AttachFile2     = TFileAttach.FileBinary
+/*[UNCALLED]*/                               IntS7072.FileNameAttach2   = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntS7072.AttachFile2       = TFileAttach.FileBinary .
+/*[UNCALLED]*/                             END.
+/*[UNCALLED]*/                             IF nv_errortext <> "" THEN
+/*[UNCALLED]*/                               ASSIGN
+/*[UNCALLED]*/                               IntPol7072.RemarkText = TRIM(TRIM(IntPol7072.RemarkText) + " " + nv_errortext).
+/*[UNCALLED]*/                               IntS7072.RemarkText   = TRIM(TRIM(IntS7072.RemarkText)   + " " + nv_errortext).
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                         END. /*IF SEARCH(nv_COPYTOFILE) <> ?*/
+/*[UNCALLED]*/                         LEAVE loop1.
+/*[UNCALLED]*/                       END. /*loop1:*/
+/*[UNCALLED]*/                     END. /*FOR EACH FNameAttach*/
+/*[UNCALLED]*/                   END. /*IF IntPol7072.PolicyTypeCd <> "" AND IntPol7072.RateGroup <> ""*/
+/*[UNCALLED]*/                   /*  -------------------------------------------------------------------------------------------- */
+/*[UNCALLED]*/                   /* ¾Ãº. / Compulsory */
+/*[UNCALLED]*/                   IF IntPol7072.CMIPolicyTypeCd <> "" AND IntPol7072.CMIVehTypeCd <> "" THEN DO:
+/*[UNCALLED]*/                     RUN WSP/WSPMCpny.P
+/*[UNCALLED]*/                          (IntPol7072.CompanyCode
+/*[UNCALLED]*/                          ,IntPol7072.BranchCd
+/*[UNCALLED]*/                          ,"V72"
+/*[UNCALLED]*/                          ,OUTPUT nv_BrokerCompany /*ËÒºÃÔÉÑ··Õèsetã¹ÃÐºº*/
+/*[UNCALLED]*/                          ,OUTPUT nv_BrokerBranch 
+/*[UNCALLED]*/                          ,OUTPUT nv_Acno1
+/*[UNCALLED]*/                          ,OUTPUT nv_Agent
+/*[UNCALLED]*/                          ,OUTPUT nv_errort).
+/*[UNCALLED]*/                     IF nv_errort <> "" THEN RETURN.
+/*[UNCALLED]*/                     NV_StartCount = 0.
+/*[UNCALLED]*/                     /* ---------------------------------------------------- */
+/*[UNCALLED]*/                     /* ProgramPrint ¾Ãº. form PDF àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
+/*[UNCALLED]*/                     ASSIGN nv_NameCompCd = "" nv_PrmPrg = "" nv_PrgName = "".
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     RUN PD_FNameAttach
+/*[UNCALLED]*/                         (INPUT        IntPol7072.CompanyCode
+/*[UNCALLED]*/                         ,INPUT        "V72"      /*v70,v72*/
+/*[UNCALLED]*/                         ,INPUT        IntPol7072.CMIPolicyTypeCd
+/*[UNCALLED]*/                         /**/
+/*[UNCALLED]*/                         ,INPUT-OUTPUT nv_NameCompCd
+/*[UNCALLED]*/                         ,INPUT-OUTPUT nv_PrgName
+/*[UNCALLED]*/                         ,INPUT-OUTPUT nv_PrmPrg ).
+/*[UNCALLED]*/                     /**/
+/*[UNCALLED]*/                     /*Blank form Compulsory */
+/*[UNCALLED]*/                     IF IntPol7072.CompanyCode = "833" THEN DO:
+/*[UNCALLED]*/                       RUN PD_ChkBlankForm
+/*[UNCALLED]*/                            (INPUT-OUTPUT nv_NameCompCd
+/*[UNCALLED]*/                            ,INPUT-OUTPUT nv_PrgName
+/*[UNCALLED]*/                            ,INPUT-OUTPUT nv_PrmPrg).
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     IF nv_PrgName = "" THEN DO:
+/*[UNCALLED]*/                       RUN Wctx/wctxr702.P
+/*[UNCALLED]*/                            (IntPol7072.CompanyCode     /*nv_BrokerCompany*/
+/*[UNCALLED]*/                            ,IntPol7072.CMIPolicyNumber
+/*[UNCALLED]*/                            ,IntPol7072.Rencnt
+/*[UNCALLED]*/                            ,IntPol7072.Endcnt
+/*[UNCALLED]*/                            ,IntPol7072.CMIDocumentUID
+/*[UNCALLED]*/                            ,IntPol7072.RqUID /*nv_code  keyRequestIndRq*/
+/*[UNCALLED]*/                            ,""         /*n_user   */
+/*[UNCALLED]*/                            ,""         /*n_passwd */
+/*[UNCALLED]*/                            ,nv_PrmPrg  /*Name Report*/
+/*[UNCALLED]*/                            ,OUTPUT nv_SAVEmsgerror).
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     ELSE DO:
+/*[UNCALLED]*/                       nv_PrgName = "Wctx/" + nv_PrgName.
+/*[UNCALLED]*/                       /*
+/*[UNCALLED]*/                       RUN Wctx/wctxr702A4.P ( IntPol7072.CompanyCode */
+/*[UNCALLED]*/                       RUN VALUE(nv_PrgName)
+/*[UNCALLED]*/                            (IntPol7072.CompanyCode   /*nv_BrokerCompany*/
+/*[UNCALLED]*/                            ,IntPol7072.CMIPolicyNumber
+/*[UNCALLED]*/                            ,IntPol7072.Rencnt
+/*[UNCALLED]*/                            ,IntPol7072.Endcnt
+/*[UNCALLED]*/                            ,IntPol7072.CMIDocumentUID
+/*[UNCALLED]*/                            ,IntPol7072.RqUID /*nv_code  keyRequestIndRq*/
+/*[UNCALLED]*/                            ,""        /*n_user   */
+/*[UNCALLED]*/                            ,""        /*n_passwd */
+/*[UNCALLED]*/                            ,nv_PrmPrg /*Name Report="V72A4"*/
+/*[UNCALLED]*/                            ,OUTPUT nv_SAVEmsgerror).
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     IF nv_SAVEmsgerror <> "" THEN RETURN.
+/*[UNCALLED]*/                   /*
+/*[UNCALLED]*/                     OUTPUT TO PrnTIME.txt APPEND.
+/*[UNCALLED]*/                     PUT "2. ChkPDF:"
+/*[UNCALLED]*/                        /*1234567890*/
+/*[UNCALLED]*/                       IntPol7072.CompanyCode 
+/*[UNCALLED]*/                       IntPol7072.PolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       IntPol7072.CMIPolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       TODAY FORMAT "99/99/9999" " "
+/*[UNCALLED]*/                       STRING(TIME,"HH:MM:SS")   "." 
+/*[UNCALLED]*/                       SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                     SKIP.
+/*[UNCALLED]*/                     OUTPUT CLOSE.
+/*[UNCALLED]*/                   */
+/*[UNCALLED]*/                     PAUSE 1 NO-MESSAGE.
+/*[UNCALLED]*/                     RUN PD_SAVEPD1ChkFile
+/*[UNCALLED]*/                         (INPUT nv_NameCompCd
+/*[UNCALLED]*/                         ,INPUT "V72"
+/*[UNCALLED]*/                         ,INPUT IntPol7072.CMIPolicyTypeCd
+/*[UNCALLED]*/                         ,OUTPUT nv_SAVEmsgerror).
+/*[UNCALLED]*/                     IF nv_SAVEmsgerror <> "" THEN DO:
+/*[UNCALLED]*/                       nv_verror = "ERRPDF72_" + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99")
+/*[UNCALLED]*/                                 + SUBSTR(STRING(TIME,"HH:MM:SS"),1,2)
+/*[UNCALLED]*/                                 + SUBSTR(STRING(TIME,"HH:MM:SS"),4,2)
+/*[UNCALLED]*/                                 + SUBSTR(STRING(TIME,"HH:MM:SS"),7,2)
+/*[UNCALLED]*/                                 + ".TXT".
+/*[UNCALLED]*/                       OUTPUT TO VALUE(nv_verror).
+/*[UNCALLED]*/                       PUT 
+/*[UNCALLED]*/                       "Not found file pdf: Company: " IntPol7072.CompanyCode 
+/*[UNCALLED]*/                       " Policy no.: "   IntPol7072.PolicyNumber   FORMAT "X(16)"
+/*[UNCALLED]*/                       " Contract no.: " IntPol7072.ContractNumber FORMAT "X(20)"
+/*[UNCALLED]*/                       " " TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                       SKIP.
+/*[UNCALLED]*/                       OUTPUT CLOSE.
+/*[UNCALLED]*/                       RETURN. 
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     /* -------------------------------------------------------------------------------- */
+/*[UNCALLED]*/                   /*
+/*[UNCALLED]*/                     OUTPUT TO PrnTIME.txt APPEND.
+/*[UNCALLED]*/                     PUT "3. SvFile:"
+/*[UNCALLED]*/                        /*1234567890*/
+/*[UNCALLED]*/                       IntPol7072.CompanyCode 
+/*[UNCALLED]*/                       IntPol7072.PolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       IntPol7072.CMIPolicyNumber FORMAT "X(16)"
+/*[UNCALLED]*/                       TODAY FORMAT "99/99/9999" " "
+/*[UNCALLED]*/                       STRING(TIME,"HH:MM:SS")   "." 
+/*[UNCALLED]*/                       SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                     SKIP.
+/*[UNCALLED]*/                     OUTPUT CLOSE.
+/*[UNCALLED]*/                   */
+/*[UNCALLED]*/                     ASSIGN
+/*[UNCALLED]*/                     nv_INPUTFileName = "" nv_COPYTOFILE = "" nv_firstchk = YES.
+/*[UNCALLED]*/                     FOR EACH FNameAttach WHERE
+/*[UNCALLED]*/                              FNameAttach.CompanyCode  = nv_NameCompCd
+/*[UNCALLED]*/                          AND FNameAttach.PolicyTypeCd = "V72"
+/*[UNCALLED]*/                          AND FNameAttach.CoverTypeCd  = IntPol7072.CMIPolicyTypeCd /*¾Ãº ËÃ×Í "T"*/
+/*[UNCALLED]*/                          AND FNameAttach.EffDate     <= TODAY
+/*[UNCALLED]*/                     NO-LOCK
+/*[UNCALLED]*/                     BREAK BY FNameAttach.SelectNumber
+/*[UNCALLED]*/                     :
+/*[UNCALLED]*/                       IF FNameAttach.CopyFileName = "" THEN LEAVE.
+/*[UNCALLED]*/                                                        ELSE nv_INPUTFileName = FNameAttach.CopyFileName.
+/*[UNCALLED]*/                       /**/
+/*[UNCALLED]*/                       IF FNameAttach.ToFileName   = "" THEN
+/*[UNCALLED]*/                              nv_COPYTOFILE = TRIM(IntPol7072.CMIPolicyNumber) + ".PDF".
+/*[UNCALLED]*/                       ELSE DO:
+/*[UNCALLED]*/                         IF INDEX(FNameAttach.ToFileName, ".PDF") = 0 THEN
+/*[UNCALLED]*/                              nv_COPYTOFILE = TRIM(IntPol7072.CMIPolicyNumber)       /*àºÍÃì¡ÃÁ¸ÃÃÁì*/
+/*[UNCALLED]*/                                            + TRIM(FNameAttach.ToFileName) + ".PDF". /*µÑÇÂèÍ§Ò¹*/
+/*[UNCALLED]*/                         ELSE nv_COPYTOFILE = FNameAttach.ToFileName.
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       nv_errortext = "".
+/*[UNCALLED]*/                       IF nv_INPUTFileName = "" OR nv_COPYTOFILE = "" THEN LEAVE.
+/*[UNCALLED]*/                       IF TRIM(nv_COPYTOFILE) = ".PDF" THEN
+/*[UNCALLED]*/                               nv_COPYTOFILE = TRIM(IntPol7072.CMIPolicyNumber) + ".PDF".
+/*[UNCALLED]*/                       /**/
+/*[UNCALLED]*/                       loop2:
+/*[UNCALLED]*/                       REPEAT:
+/*[UNCALLED]*/                         IF nv_firstchk = NO THEN DO:   
+/*[UNCALLED]*/                           NV_Lcount = 0.
+/*[UNCALLED]*/                           DO  WHILE NV_Lcount <= NV_Lwaitcount:
+/*[UNCALLED]*/                             NV_Lcount = NV_Lcount + 1.
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         nv_firstchk = NO.
+/*[UNCALLED]*/                         IF SEARCH(nv_INPUTFileName) = ? THEN DO:
+/*[UNCALLED]*/                           NV_StartCount = NV_StartCount + NV_Lcount.
+/*[UNCALLED]*/                           IF NV_StartCount >= NV_LastCount THEN LEAVE loop2.
+/*[UNCALLED]*/                           NEXT loop2.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         DOS SILENT COPY VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE)  /Y.
+/*[UNCALLED]*/                         /*
+/*[UNCALLED]*/                         DOS SILENT RENAME VALUE(nv_INPUTFileName) VALUE(nv_COPYTOFILE). */
+/*[UNCALLED]*/                         IF SEARCH(nv_COPYTOFILE) <> ? THEN DO:
+/*[UNCALLED]*/                           FOR EACH TFileAttach: DELETE TFileAttach. END.
+/*[UNCALLED]*/                           CREATE TFileAttach.
+/*[UNCALLED]*/                           TFileAttach.FileNameAttach = nv_COPYTOFILE.
+/*[UNCALLED]*/                           COPY-LOB FROM FILE nv_COPYTOFILE TO TFileAttach.FileBinary NO-CONVERT NO-ERROR.
+/*[UNCALLED]*/                           IF ERROR-STATUS:ERROR  THEN DO:
+/*[UNCALLED]*/                             nv_errortext = "äÁèÊÒÁÒÃ¶ Load File: " + TRIM(nv_COPYTOFILE) + " "
+/*[UNCALLED]*/                                          + ERROR-STATUS:GET-MESSAGE(1) + ERROR-STATUS:GET-MESSAGE(2).
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                           IF SEARCH(nv_INPUTFileName) <> ? THEN DOS SILENT DEL VALUE(nv_INPUTFileName).
+/*[UNCALLED]*/                           /**/
+/*[UNCALLED]*/                           FIND IntS7072 WHERE RECID(IntS7072) = nv_RECIDIntS7072
+/*[UNCALLED]*/                           NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                           IF AVAILABLE IntS7072 THEN DO:
+/*[UNCALLED]*/                             nv_LineSeqno = nv_LineSeqno + 1. /*ÅÓ´Ñº¡ÒÃ add data ÍÔ§¡Ñº´éÒ¹º¹*/
+/*[UNCALLED]*/                             IF nv_LineSeqno = 1 THEN DO:
+/*[UNCALLED]*/                               ASSIGN
+/*[UNCALLED]*/                               IntPol7072.FileNameAttach1 = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntPol7072.AttachFile1     = TFileAttach.FileBinary
+/*[UNCALLED]*/                               IntS7072.FileNameAttach1   = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntS7072.AttachFile1       = TFileAttach.FileBinary .
+/*[UNCALLED]*/                             END.
+/*[UNCALLED]*/                             IF nv_LineSeqno = 2 THEN DO:
+/*[UNCALLED]*/                               ASSIGN
+/*[UNCALLED]*/                               IntPol7072.FileNameAttach2 = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntPol7072.AttachFile2     = TFileAttach.FileBinary
+/*[UNCALLED]*/                               IntS7072.FileNameAttach2   = TFileAttach.FileNameAttach
+/*[UNCALLED]*/                               IntS7072.AttachFile2       = TFileAttach.FileBinary .
+/*[UNCALLED]*/                             END.
+/*[UNCALLED]*/                             IF nv_errortext <> "" THEN
+/*[UNCALLED]*/                               ASSIGN
+/*[UNCALLED]*/                               IntPol7072.RemarkText = TRIM(TRIM(IntPol7072.RemarkText) + " " + nv_errortext).
+/*[UNCALLED]*/                               IntS7072.RemarkText   = TRIM(TRIM(IntS7072.RemarkText)   + " " + nv_errortext).
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         LEAVE loop2.
+/*[UNCALLED]*/                       END. /*loop2:*/
+/*[UNCALLED]*/                     END. /*FOR EACH FNameAttach*/
+/*[UNCALLED]*/                   END. /*IF IntPol7072.CMIPolicyTypeCd <> "" AND IntPol7072.CMIVehTypeCd <> "" */
+/*[UNCALLED]*/                   FOR EACH TFileAttach: DELETE TFileAttach. END.
+/*[UNCALLED]*/                   RELEASE FNameAttach.  */
+/*[UNCALLED]*/                   END PROCEDURE.
 /*[BLANK]*/                      
 /*[COMMENT]*/                    /* _UIB-CODE-BLOCK-END */
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
@@ -7768,516 +7768,516 @@
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
 /*[BLANK]*/                      
 /*[EXECUTABLE]*/                 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE PD_SAVEPD1_OLD C-Win 
-/*[EXECUTABLE]*/                 PROCEDURE PD_SAVEPD1_OLD :
-/*[COMMENT]*/                    /*------------------------------------------------------------------------------
-/*[COMMENT]*/                      Purpose:     
-/*[COMMENT]*/                      Parameters:  <none>
-/*[COMMENT]*/                      Notes:       
-/*[COMMENT]*/                    ------------------------------------------------------------------------------*/
-/*[COMMENT]*/                    /*
-/*[COMMENT]*/                    DEFINE INPUT PARAMETER nv_rec_rq    AS RECID     NO-UNDO.
-/*[COMMENT]*/                    DEFINE INPUT PARAMETER nv_PolicyV70 AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE INPUT PARAMETER nv_PolicyV72 AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE INPUT-OUTPUT PARAMETER  nv_recinout7072   AS RECID     NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_trty11  AS CHARACTER NO-UNDO. /*M,T*/
-/*[COMMENT]*/                    DEFINE VARIABLE nv_docno1  AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_STdocno AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_Renew   AS LOGICAL   NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_STKNo   AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE crCompanyNo AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE crBranchNo  AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_acno1 AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_agent AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    DEFINE VARIABLE nv_okprn AS LOGICAL   NO-UNDO.
-/*[COMMENT]*/                    /* ------------------------------------------------------ */
-/*[COMMENT]*/                    RUN PD_ConDBExp. /* DB EXPIRY */
-/*[COMMENT]*/                    /* ------------------------------------------------------ */
-/*[COMMENT]*/                    nv_resulttext = "".
-/*[COMMENT]*/                    FIND IntS7072 WHERE RECID(IntS7072) = nv_rec_rq
-/*[COMMENT]*/                    NO-ERROR NO-WAIT.
-/*[COMMENT]*/                    IF NOT AVAILABLE IntS7072 THEN RETURN.
-/*[COMMENT]*/                    /*¡ÃÁ¸ÃÃÁì»... + ¾Ãº. */
-/*[COMMENT]*/                    IF IntS7072.PolicyTypeCd <> "" AND IntS7072.RateGroup <> "" THEN DO:
-/*[COMMENT]*/                      nv_octets = "".
-/*[COMMENT]*/                      FIND FIRST IntPol7072 WHERE IntPol7072.PolicyNumber = nv_PolicyV70 /*70,72*/
-/*[COMMENT]*/                      NO-ERROR NO-WAIT.
-/*[COMMENT]*/                      IF NOT AVAILABLE IntPol7072 THEN DO:
-/*[COMMENT]*/                        RUN WRS/WRSDigit.p (output nv_octets).
-/*[COMMENT]*/                        CREATE IntPol7072.
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                      ELSE nv_octets = IntPol7072.RqUID.
-/*[COMMENT]*/                    END.
-/*[COMMENT]*/                    ELSE DO:   /* ¡ÃÁ¸ÃÃÁì ¾Ãº.*/
-/*[COMMENT]*/                      IF IntS7072.CMIPolicyTypeCd <> "" AND IntS7072.CMIVehTypeCd <> "" THEN DO:
-/*[COMMENT]*/                        FIND FIRST IntPol7072 WHERE IntPol7072.CMIPolicyNumber = nv_PolicyV72
-/*[COMMENT]*/                        NO-ERROR NO-WAIT.
-/*[COMMENT]*/                        IF NOT AVAILABLE IntPol7072 THEN DO:
-/*[COMMENT]*/                          nv_octets = "".
-/*[COMMENT]*/                          RUN WRS/WRSDigit.p (output nv_octets).
-/*[COMMENT]*/                          CREATE IntPol7072.
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                        ELSE nv_octets = IntPol7072.RqUID.
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                    END.
-/*[COMMENT]*/                    nv_RecIntPol7072 = RECID(IntPol7072).
-/*[COMMENT]*/                    nv_recinout7072  = RECID(IntPol7072).
-/*[COMMENT]*/                    RUN PD_SAVEPD2.    /*Save data to IntPol7072*/
-/*[COMMENT]*/                    /* ----------------------------------------------------------------------- */
-/*[COMMENT]*/                    /* ËÒàÅ¢ Docno1 */
-/*[COMMENT]*/                    FIND IntS7072 WHERE RECID(IntS7072) = nv_rec_rq
-/*[COMMENT]*/                    NO-ERROR NO-WAIT.
-/*[COMMENT]*/                    IF NOT AVAILABLE IntS7072 THEN RETURN.
-/*[COMMENT]*/                    FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
-/*[COMMENT]*/                    NO-ERROR NO-WAIT.
-/*[COMMENT]*/                    IF NOT AVAILABLE IntPol7072 THEN RETURN.
-/*[COMMENT]*/                    /*20/3/2015*/
-/*[COMMENT]*/                    nv_okprn = NO.
-/*[COMMENT]*/                    RUN WRS\WRSFutil.p 
-/*[COMMENT]*/                        (IntPol7072.PolicyTypeCd
-/*[COMMENT]*/                        ,IntPol7072.SumInsureAmt
-/*[COMMENT]*/                        ,IntPol7072.CompanyCode
-/*[COMMENT]*/                        ,INPUT-OUTPUT nv_okprn).
-/*[COMMENT]*/                    /* ---------------------------------------------------- */
-/*[COMMENT]*/                    IF    SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1)  = "3"
-/*[COMMENT]*/                       OR                IntPol7072.CMIPolicyTypeCd    <> ""
-/*[COMMENT]*/                       OR  (IntPol7072.CompanyCode = "833" AND 
-/*[COMMENT]*/                           (SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "R" AND SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "Q")
-/*[COMMENT]*/                       AND nv_okprn = YES )
-/*[COMMENT]*/                    /**AND (IntPol7072.PolicyTypeCd = "2.1" OR IntPol7072.PolicyTypeCd = "2.2")
-/*[COMMENT]*/                       AND DECIMAL(IntPol7072.SumInsureAmt) <= 200000) */
-/*[COMMENT]*/                    THEN DO:
-/*[COMMENT]*/                      IF     IntS7072.DocumentUID      = "" /*nv_DocnoV70*/
-/*[COMMENT]*/                         AND IntS7072.CMIDocumentUID   = "" /*nv_DocnoV72*/
-/*[COMMENT]*/                         AND IntS7072.StickerNumber    = ""
-/*[COMMENT]*/                         AND IntS7072.CMIBarCodeNumber = ""
-/*[COMMENT]*/                      THEN DO:
-/*[COMMENT]*/                        ASSIGN nv_trty11 = "" nv_docno1 = "" nv_STdocno = "".
-/*[COMMENT]*/                        IF    SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1)  = "3"
-/*[COMMENT]*/                           OR (IntPol7072.CompanyCode = "833" AND 
-/*[COMMENT]*/                         (     IntPol7072.PolicyTypeCd = "2.1" OR IntPol7072.PolicyTypeCd = "2.2"
-/*[COMMENT]*/                           OR  IntPol7072.PolicyTypeCd = "2.3" OR IntPol7072.PolicyTypeCd = "2.4"
-/*[COMMENT]*/                           OR  IntPol7072.PolicyTypeCd = "2.5" OR IntPol7072.PolicyTypeCd = "2.6" ) )
-/*[COMMENT]*/                        THEN DO:
-/*[COMMENT]*/                          FIND FIRST FUtilSetUp WHERE
-/*[COMMENT]*/                               FUtilSetUp.UtilGrp     = "UTGRP01"  /*UtGrp01*/
-/*[COMMENT]*/                           AND FUtilSetUp.KeyUtilGrp1 = "V70"      /*V70,V72*/
-/*[COMMENT]*/                           AND FUtilSetUp.KeyUtilGrp2 = IntPol7072.PolicyTypeCd  /*3,3.1,3.2,T*/
-/*[COMMENT]*/                           AND FUtilSetUp.KeyUtilGrp3 = "DOC"
-/*[COMMENT]*/                           AND FUtilSetUp.KeyUtilGrp4 = "BLK"
-/*[COMMENT]*/                           AND FUtilSetUp.KeyUtilGrp5 = "ALL"  /*833*/
-/*[COMMENT]*/                           AND FUtilSetUp.EffDate    <= TODAY
-/*[COMMENT]*/                          NO-LOCK NO-ERROR NO-WAIT.
-/*[COMMENT]*/                          IF AVAILABLE FUtilSetUp THEN nv_STdocno = FUtilSetUp.UtilGrpCd1.
-/*[COMMENT]*/                          ELSE DO:
-/*[COMMENT]*/                            FIND FIRST FUtilSetUp WHERE
-/*[COMMENT]*/                                 FUtilSetUp.UtilGrp     = "UTGRP01"  /*UtGrp01*/
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp1 = "V70"      /*V70,V72*/
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp2 = IntPol7072.PolicyTypeCd  /*3,3.1,3.2,T*/
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp3 = "DOC"
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp4 = "BLK"
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp5 = IntPol7072.CompanyCode
-/*[COMMENT]*/                             AND FUtilSetUp.EffDate    <= TODAY
-/*[COMMENT]*/                            NO-LOCK NO-ERROR NO-WAIT.
-/*[COMMENT]*/                            IF AVAILABLE FUtilSetUp THEN nv_STdocno = FUtilSetUp.UtilGrpCd1.
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                          IF nv_STdocno = "YES" THEN DO:
-/*[COMMENT]*/                            nv_trty11       = "M".
-/*[COMMENT]*/                            nv_msgerror7072 = "".
-/*[COMMENT]*/                            RUN WSP/WSPFRecp.p
-/*[COMMENT]*/                                (IntPol7072.CompanyCode /*nv_CompanyNo*/
-/*[COMMENT]*/                                ,nv_trty11
-/*[COMMENT]*/                                ,OUTPUT nv_docno1
-/*[COMMENT]*/                                ,OUTPUT nv_STKNo
-/*[COMMENT]*/                                ,OUTPUT nv_msgerror7072
-/*[COMMENT]*/                                ).
-/*[COMMENT]*/                            ASSIGN
-/*[COMMENT]*/                            IntPol7072.DocumentUID = nv_docno1
-/*[COMMENT]*/                            IntS7072.DocumentUID   = nv_docno1.
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                        IF nv_msgerror7072 <> "" THEN DO:
-/*[COMMENT]*/                          ASSIGN
-/*[COMMENT]*/                          IntPol7072.ContractNumber = TRIM(IntPol7072.ContractNumber) + "CA"
-/*[COMMENT]*/                          IntPol7072.GenSicBran     = NO
-/*[COMMENT]*/                          IntPol7072.GenSicBranText = nv_msgerror7072
-/*[COMMENT]*/                          IntPol7072.GenSicBranST   = "ERROR"
-/*[COMMENT]*/                          IntPol7072.ErrorMessage   = nv_msgerror7072.
-/*[COMMENT]*/                          IF IntPol7072.DocumentUID <> "" THEN
-/*[COMMENT]*/                             IntPol7072.DocumentUID = TRIM(IntPol7072.DocumentUID) + "CA".
-/*[COMMENT]*/                          RETURN.
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                        /**/
-/*[COMMENT]*/                        IF IntPol7072.CMIPolicyTypeCd <> "" THEN DO:
-/*[COMMENT]*/                          FIND FIRST FUtilSetUp WHERE
-/*[COMMENT]*/                               FUtilSetUp.UtilGrp     = "UTGRP01"  /*UtGrp01*/
-/*[COMMENT]*/                           AND FUtilSetUp.KeyUtilGrp1 = "V72"      /*V70,V72*/
-/*[COMMENT]*/                           AND FUtilSetUp.KeyUtilGrp2 = "T"        /*3,3.1,3.2,T*/
-/*[COMMENT]*/                           AND FUtilSetUp.KeyUtilGrp3 = "DOC"
-/*[COMMENT]*/                           AND FUtilSetUp.KeyUtilGrp4 = "BLK"
-/*[COMMENT]*/                           AND FUtilSetUp.KeyUtilGrp5 = "ALL"  /*833*/
-/*[COMMENT]*/                           AND FUtilSetUp.EffDate    <= TODAY
-/*[COMMENT]*/                          NO-LOCK NO-ERROR NO-WAIT.
-/*[COMMENT]*/                          IF AVAILABLE FUtilSetUp THEN nv_STdocno = FUtilSetUp.UtilGrpCd1.
-/*[COMMENT]*/                          ELSE DO:
-/*[COMMENT]*/                            FIND FIRST FUtilSetUp WHERE
-/*[COMMENT]*/                                 FUtilSetUp.UtilGrp     = "UTGRP01"  /*UtGrp01*/
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp1 = "V72"      /*V70,V72*/
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp2 = "T"        /*3,3.1,3.2,T*/
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp3 = "DOC"
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp4 = "BLK"
-/*[COMMENT]*/                             AND FUtilSetUp.KeyUtilGrp5 = IntPol7072.CompanyCode
-/*[COMMENT]*/                             AND FUtilSetUp.EffDate    <= TODAY
-/*[COMMENT]*/                            NO-LOCK NO-ERROR NO-WAIT.
-/*[COMMENT]*/                            IF AVAILABLE FUtilSetUp THEN nv_STdocno = FUtilSetUp.UtilGrpCd1.
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                          IF nv_STdocno = "YES" THEN DO:
-/*[COMMENT]*/                            nv_trty11       = "T".
-/*[COMMENT]*/                            nv_msgerror7072 = "".
-/*[COMMENT]*/                            RUN WSP/WSPFRecp.p
-/*[COMMENT]*/                                (IntPol7072.CompanyCode /*nv_CompanyNo*/
-/*[COMMENT]*/                                ,nv_trty11
-/*[COMMENT]*/                                ,OUTPUT nv_docno1
-/*[COMMENT]*/                                ,OUTPUT nv_STKNo
-/*[COMMENT]*/                                ,OUTPUT nv_msgerror7072
-/*[COMMENT]*/                                ).
-/*[COMMENT]*/                            ASSIGN
-/*[COMMENT]*/                            IntPol7072.CMIBarCodeNumber = nv_STKNo
-/*[COMMENT]*/                            IntS7072.CMIBarCodeNumber   = nv_STKNo
-/*[COMMENT]*/                            IntPol7072.CMIDocumentUID = nv_docno1
-/*[COMMENT]*/                            IntS7072.CMIDocumentUID   = nv_docno1 .
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                        IF nv_msgerror7072 <> "" THEN DO:
-/*[COMMENT]*/                          ASSIGN
-/*[COMMENT]*/                          IntPol7072.ContractNumber = TRIM(IntPol7072.ContractNumber) + "CA"
-/*[COMMENT]*/                          IntPol7072.GenSicBran     = NO
-/*[COMMENT]*/                          IntPol7072.GenSicBranText = nv_msgerror7072
-/*[COMMENT]*/                          IntPol7072.GenSicBranST   = "ERROR"
-/*[COMMENT]*/                          IntPol7072.ErrorMessage   = nv_msgerror7072.
-/*[COMMENT]*/                          IF IntPol7072.DocumentUID <> "" THEN
-/*[COMMENT]*/                             IntPol7072.DocumentUID = TRIM(IntPol7072.DocumentUID) + "CA".
-/*[COMMENT]*/                          RETURN.
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                    END.
-/*[COMMENT]*/                    /**/
-/*[COMMENT]*/                    IF SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "R" AND SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "Q" THEN DO:
-/*[COMMENT]*/                      IF    (SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "3" AND IntPol7072.DocumentUID = "") /*nv_DocnoV70*/
-/*[COMMENT]*/                         OR (               IntPol7072.CMIPolicyTypeCd   <> ""  AND IntPol7072.CMIDocumentUID = "") /*nv_DocnoV72*/ 
-/*[COMMENT]*/                         /**/
-/*[COMMENT]*/                         OR ( ( (SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "R" AND SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "Q")
-/*[COMMENT]*/                         AND  nv_okprn = YES ) AND IntPol7072.DocumentUID = "")
-/*[COMMENT]*/                      THEN DO:
-/*[COMMENT]*/                        ASSIGN
-/*[COMMENT]*/                        IntPol7072.ContractNumber = TRIM(IntPol7072.ContractNumber) + "CA"
-/*[COMMENT]*/                        IntPol7072.GenSicBran     = NO
-/*[COMMENT]*/                        IntPol7072.GenSicBranText = "äÁè¾ºàÅ¢·ÕèàÍ¡ÊÒÃã¹ÃÐºº"
-/*[COMMENT]*/                        IntPol7072.GenSicBranST   = "ERROR"
-/*[COMMENT]*/                        IntPol7072.ErrorMessage   = "äÁè¾ºàÅ¢·ÕèàÍ¡ÊÒÃã¹ÃÐºº".
-/*[COMMENT]*/                        IF IntPol7072.DocumentUID <> "" THEN
-/*[COMMENT]*/                           IntPol7072.DocumentUID = TRIM(IntPol7072.DocumentUID) + "CA".
-/*[COMMENT]*/                        RETURN.
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                    END.
-/*[COMMENT]*/                    /* ----------------------------------------------------------------------- */
-/*[COMMENT]*/                    nv_Renew = NO.  /*A57-0300: §Ò¹µèÍÍÒÂØ*/
-/*[COMMENT]*/                    OUTPUT TO PD_SAVEPD1.TXT APPEND.
-/*[COMMENT]*/                    PUT "PD_SAVEPD1: 1. START " FORMAT "x(25)"
-/*[COMMENT]*/                        " " TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                    SKIP.
-/*[COMMENT]*/                    OUTPUT CLOSE.
-/*[COMMENT]*/                    IF IntPol7072.Rencnt <> 0 
-/*[COMMENT]*/                       AND SUBSTR(IntPol7072.PolicyNumber,1,1) =  "R"
-/*[COMMENT]*/                       AND IntPol7072.PreviousPolicyNumber     <> ""
-/*[COMMENT]*/                    THEN nv_Renew = YES.
-/*[COMMENT]*/                    nv_msgerror7072  = "".
-/*[COMMENT]*/                    /* Generate policy, uwm100, uwm120, uwm301, uwm130, uwd132 */
-/*[COMMENT]*/                    IF     IntPol7072.PolicyTypeCd <> "1" 
-/*[COMMENT]*/                       AND IntPol7072.PolicyTypeCd <> "2"
-/*[COMMENT]*/                       AND IntPol7072.PolicyTypeCd <> "3"
-/*[COMMENT]*/                    THEN DO:
-/*[COMMENT]*/                      IF    IntPol7072.PolicyTypeCd = ""
-/*[COMMENT]*/                         OR SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "2"
-/*[COMMENT]*/                         OR SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "3"
-/*[COMMENT]*/                         /**/
-/*[COMMENT]*/                         OR IntPol7072.CMIPolicyTypeCd = "110"
-/*[COMMENT]*/                         OR IntPol7072.CMIPolicyTypeCd = "120A"
-/*[COMMENT]*/                         OR IntPol7072.CMIPolicyTypeCd = "140A"
-/*[COMMENT]*/                      THEN DO:
-/*[COMMENT]*/                        IF  IntPol7072.CMIPolicyTypeCd <> "" THEN DO:
-/*[COMMENT]*/                          nv_msgerror7072 = "".
-/*[COMMENT]*/                          RUN UZ/UZO7201WS.P
-/*[COMMENT]*/                               (nv_RecIntPol7072
-/*[COMMENT]*/                               ,INPUT-OUTPUT nv_msgerror7072).
-/*[COMMENT]*/                          FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
-/*[COMMENT]*/                          NO-ERROR.
-/*[COMMENT]*/                          IF nv_msgerror7072 <> "" THEN DO:
-/*[COMMENT]*/                            OUTPUT TO WSPGP100-ERROR.TXT APPEND.
-/*[COMMENT]*/                            PUT "2. UZO7201WS.P " IntPol7072.CMIPolicyNumber FORMAT "X(18)"
-/*[COMMENT]*/                                TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                                " " nv_msgerror7072 FORMAT "X(150)" SKIP.
-/*[COMMENT]*/                            OUTPUT CLOSE.
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                        END. /*IF  IntPol7072.CMIPolicyTypeCd <> "" THEN DO:*/
-/*[COMMENT]*/                        IF    SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "2"
-/*[COMMENT]*/                           OR SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "3"
-/*[COMMENT]*/                        THEN DO:
-/*[COMMENT]*/                          RUN WRS/WRSGU100.P
-/*[COMMENT]*/                               (nv_RecIntPol7072
-/*[COMMENT]*/                               ,INPUT-OUTPUT nv_msgerror7072).
-/*[COMMENT]*/                          IF nv_msgerror7072 <> "" THEN DO:
-/*[COMMENT]*/                            OUTPUT TO WRSGU100-ERROR.TXT APPEND.
-/*[COMMENT]*/                            PUT "3. WRSGU100.P " IntPol7072.PolicyNumber FORMAT "X(18)"
-/*[COMMENT]*/                                TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                                " " nv_msgerror7072 FORMAT "X(150)" SKIP.
-/*[COMMENT]*/                            OUTPUT CLOSE.
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                      ELSE DO:
-/*[COMMENT]*/                        IF IntPol7072.CMIPolicyTypeCd <> "" THEN DO:
-/*[COMMENT]*/                          RUN UZ/UZO7201WS.P
-/*[COMMENT]*/                               (nv_RecIntPol7072
-/*[COMMENT]*/                               ,INPUT-OUTPUT nv_msgerror7072).
-/*[COMMENT]*/                          FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
-/*[COMMENT]*/                          NO-ERROR.
-/*[COMMENT]*/                          IF nv_msgerror7072 <> "" THEN DO:
-/*[COMMENT]*/                            OUTPUT TO WSPGP100-ERROR.TXT APPEND.
-/*[COMMENT]*/                            PUT "4. UZO7201WS.P " IntPol7072.CMIPolicyNumber FORMAT "X(18)"
-/*[COMMENT]*/                                TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                                " " nv_msgerror7072 FORMAT "X(150)" SKIP.
-/*[COMMENT]*/                            OUTPUT CLOSE.
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                    END.
-/*[COMMENT]*/                    ELSE DO:
-/*[COMMENT]*/                      /* A57-0300: §Ò¹µèÍÍÒÂØ */
-/*[COMMENT]*/                      IF nv_Renew = YES THEN DO:
-/*[COMMENT]*/                        IF NOT CONNECTED ("expiry") THEN DO:
-/*[COMMENT]*/                          RUN WRS/WRSGU1DB.P
-/*[COMMENT]*/                               (""  /*Userid*/
-/*[COMMENT]*/                              ,""  /*Password*/
-/*[COMMENT]*/                              ,"expiry"). /*Database name*/
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                        IF CONNECTED ("expiry") THEN DO:
-/*[COMMENT]*/                          RUN WRS/WRSGU10R.P
-/*[COMMENT]*/                            (nv_RecIntPol7072
-/*[COMMENT]*/                            ,INPUT-OUTPUT nv_msgerror7072).
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                        ELSE  nv_msgerror7072 = "Not Connect Expiry: ".
-/*[COMMENT]*/                        /**/
-/*[COMMENT]*/                        FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
-/*[COMMENT]*/                        NO-ERROR.
-/*[COMMENT]*/                        IF nv_msgerror7072 <> "" THEN DO:
-/*[COMMENT]*/                          OUTPUT TO WRSGU100-ERROR.TXT APPEND.
-/*[COMMENT]*/                          PUT "5. WRSGU10R.P " IntPol7072.PolicyNumber FORMAT "X(18)"
-/*[COMMENT]*/                              TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                              " " nv_msgerror7072 FORMAT "X(150)" SKIP.
-/*[COMMENT]*/                          OUTPUT CLOSE.
-/*[COMMENT]*/                          nv_msgerror7072 = "".
-/*[COMMENT]*/                          RUN WRS/WRSGU100.P
-/*[COMMENT]*/                             (nv_RecIntPol7072
-/*[COMMENT]*/                             ,INPUT-OUTPUT nv_msgerror7072).
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                        FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
-/*[COMMENT]*/                        NO-ERROR.
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                      ELSE DO:
-/*[COMMENT]*/                        IF IntPol7072.PolicyTypeCd <> "1"  THEN DO:
-/*[COMMENT]*/                          RUN WRS/WRSGU100.P
-/*[COMMENT]*/                             (nv_RecIntPol7072
-/*[COMMENT]*/                             ,INPUT-OUTPUT nv_msgerror7072).
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                        ELSE DO:
-/*[COMMENT]*/                          IF SUBSTR(IntPol7072.PolicyNumber,1,1) = "Q" AND IntPol7072.PolicyTypeCd = "1" THEN DO:
-/*[COMMENT]*/                            nv_acno1 = "".
-/*[COMMENT]*/                            /* ËÒ ÃËÑÊµÑÇá·¹  */
-/*[COMMENT]*/                            RUN WSP/WSPMCpny.P 
-/*[COMMENT]*/                                (IntPol7072.CompanyCode
-/*[COMMENT]*/                                ,IntPol7072.BranchCd
-/*[COMMENT]*/                                ,"V" + SUBSTR(IntPol7072.PolicyNumber,3,2) /*nv_Poltyp*/
-/*[COMMENT]*/                                ,OUTPUT crCompanyNo
-/*[COMMENT]*/                                ,OUTPUT crBranchNo
-/*[COMMENT]*/                                ,OUTPUT nv_acno1
-/*[COMMENT]*/                                ,OUTPUT nv_agent
-/*[COMMENT]*/                                ,OUTPUT nv_msgerror7072
-/*[COMMENT]*/                                ).
-/*[COMMENT]*/                            /**/
-/*[COMMENT]*/                            IF nv_acno1 <> "" THEN DO:
-/*[COMMENT]*/                              FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
-/*[COMMENT]*/                              NO-ERROR.
-/*[COMMENT]*/                              IF AVAILABLE IntPol7072 THEN 
-/*[COMMENT]*/                                IntPol7072.AgentBrokerLicenseNumber = nv_acno1.
-/*[COMMENT]*/                            END.
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                          ELSE DO:
-/*[COMMENT]*/                            RUN WRS/WRSGU100.P
-/*[COMMENT]*/                                (nv_RecIntPol7072
-/*[COMMENT]*/                                ,INPUT-OUTPUT nv_msgerror7072).
-/*[COMMENT]*/                          END.
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                      IF nv_msgerror7072 <> "" THEN DO:
-/*[COMMENT]*/                        OUTPUT TO WRSGU100-ERROR.TXT APPEND.
-/*[COMMENT]*/                        PUT "6. WRSGU100.P " IntPol7072.PolicyNumber FORMAT "X(18)"
-/*[COMMENT]*/                            TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                            " " nv_msgerror7072 FORMAT "X(150)" SKIP.
-/*[COMMENT]*/                        OUTPUT CLOSE.
-/*[COMMENT]*/                        FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
-/*[COMMENT]*/                        NO-ERROR.
-/*[COMMENT]*/                        IF AVAILABLE IntPol7072 THEN DO:
-/*[COMMENT]*/                          ASSIGN
-/*[COMMENT]*/                          IntPol7072.ContractNumber = TRIM(IntPol7072.ContractNumber) + "CA"
-/*[COMMENT]*/                          IntPol7072.GenSicBran   = NO
-/*[COMMENT]*/                          IntPol7072.GenSicBranText = nv_msgerror7072
-/*[COMMENT]*/                          IntPol7072.GenSicBranST = "ERROR"
-/*[COMMENT]*/                          IntPol7072.ErrorMessage = nv_msgerror7072.
-/*[COMMENT]*/                          IF IntPol7072.DocumentUID <> "" THEN
-/*[COMMENT]*/                             IntPol7072.DocumentUID = TRIM(IntPol7072.DocumentUID) + "CA".
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                        RETURN.
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                    END.
-/*[COMMENT]*/                    OUTPUT TO PD_SAVEPD1.TXT APPEND.
-/*[COMMENT]*/                    PUT "PD_SAVEPD1: 2. END " FORMAT "x(25)"
-/*[COMMENT]*/                        " " TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                    SKIP.
-/*[COMMENT]*/                    OUTPUT CLOSE.
-/*[COMMENT]*/                    /* ------------------------------------------------------ */
-/*[COMMENT]*/                    FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
-/*[COMMENT]*/                    NO-ERROR NO-WAIT.
-/*[COMMENT]*/                    IF AVAILABLE IntPol7072 THEN DO:
-/*[COMMENT]*/                      ASSIGN
-/*[COMMENT]*/                      IntPol7072.GenSicBran   = YES
-/*[COMMENT]*/                      IntPol7072.GenSicBranBy = "WRSBQ7072.W"
-/*[COMMENT]*/                      IntPol7072.GenSicBranDt = TODAY
-/*[COMMENT]*/                      IntPol7072.GenSicBranTime = STRING(TIME,"HH:MM:SS")
-/*[COMMENT]*/                      IntPol7072.GenSicBranText = ""
-/*[COMMENT]*/                      IntPol7072.GenSicBranST = "".
-/*[COMMENT]*/                      IF SUBSTRING(IntPol7072.PolicyNumber,1,1) = "R" THEN IntPol7072.TransferToPremium = YES. /*kridtiya i.*/
-/*[COMMENT]*/                      IF nv_msgerror7072 <> "" THEN DO:
-/*[COMMENT]*/                        ASSIGN
-/*[COMMENT]*/                        IntPol7072.ContractNumber = TRIM(IntPol7072.ContractNumber) + "CA"
-/*[COMMENT]*/                        IntPol7072.GenSicBran   = NO
-/*[COMMENT]*/                        IntPol7072.GenSicBranText = nv_msgerror7072
-/*[COMMENT]*/                        IntPol7072.GenSicBranST = "ERROR"
-/*[COMMENT]*/                        IntPol7072.ErrorMessage = nv_msgerror7072.
-/*[COMMENT]*/                        IF IntPol7072.DocumentUID <> "" THEN
-/*[COMMENT]*/                           IntPol7072.DocumentUID = TRIM(IntPol7072.DocumentUID) + "CA".
-/*[COMMENT]*/                      END.
-/*[COMMENT]*/                    END.
-/*[COMMENT]*/                    FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
-/*[COMMENT]*/                    NO-LOCK NO-ERROR NO-WAIT.
-/*[COMMENT]*/                    IF AVAILABLE IntPol7072 THEN DO:
-/*[COMMENT]*/                      IF IntPol7072.ConfirmBy <> "AUTO" THEN DO:
-/*[COMMENT]*/                        /*»2.1 2.2 ·Ø¹µèÓ¡ÇèÒ1áÊ¹ÍÍ¡¡ÃÁ¸ÃÃÁì D ËÃ×ÍàÅ¢ÊÒ¢Ò 2 ËÅÑ¡*/
-/*[COMMENT]*/                        IF (SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "R" AND SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "Q")
-/*[COMMENT]*/                           AND  nv_okprn = YES
-/*[COMMENT]*/                        THEN DO:
-/*[COMMENT]*/                          /*¾ÔÁ¾ì áÅÐá¹º file Êè§¡ÅÑº*/
-/*[COMMENT]*/                          RUN PD_SAVEPD1FileAttach (nv_RecIntPol7072
-/*[COMMENT]*/                                                   ,nv_rec_rq ).
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                        ELSE DO:
-/*[COMMENT]*/                          OUTPUT TO ConfirmBy.TXT.
-/*[COMMENT]*/                          PUT IntPol7072.ConfirmBy SKIP.
-/*[COMMENT]*/                          OUTPUT CLOSE.
-/*[COMMENT]*/                          IF IntPol7072.ChkVehicle = YES THEN DO:
-/*[COMMENT]*/                            nv_resulttext = "Êè§µÃÇ¨ÊÀÒ¾Ã¶".
-/*[COMMENT]*/                            nv_cvehtext =
-/*[COMMENT]*/                              "µÃÇ¨ÊÀÒ¾Ã¶ ¡ÃÁ¸ÃÃÁì: " + TRIM(nv_PolicyV70)
-/*[COMMENT]*/                            + " ¡ÃÁ¸ÃÃÁì¾Ãº.: " + TRIM(nv_PolicyV72)
-/*[COMMENT]*/                              + " ·ÐàºÕÂ¹Ã¶ : " + TRIM(IntPol7072.Registration) 
-/*[COMMENT]*/                                          + " " + TRIM(IntPol7072.RegisteredProvCd)
-/*[COMMENT]*/                            + " ¼ÙéàÍÒ»ÃÐ¡Ñ¹ÀÑÂ : " + TRIM(TRIM(TRIM(IntPol7072.InsuredTitle)
-/*[COMMENT]*/                            + " " + TRIM(IntPol7072.InsuredName))
-/*[COMMENT]*/                            + " " + TRIM(IntPol7072.InsuredSurname)).
-/*[COMMENT]*/                            OUTPUT TO ChkVehicle.TXT.
-/*[COMMENT]*/                            PUT " ConfirmBy:" IntPol7072.ConfirmBy  SKIP.
-/*[COMMENT]*/                            PUT "ChkVehicle:" IntPol7072.ChkVehicle SKIP.
-/*[COMMENT]*/                            PUT "           " nv_resulttext FORMAT "X(50)" SKIP.
-/*[COMMENT]*/                            PUT "           " nv_cvehtext   FORMAT "X(200)" SKIP.
-/*[COMMENT]*/                            PUT "ChkVehSend:" IntPol7072.ChkVehSend SKIP.
-/*[COMMENT]*/                            PUT "   Mail to:" IntPol7072.ChkVehMail SKIP.
-/*[COMMENT]*/                            PUT "------------------------------------------------" FORMAT "X(50)" SKIP.
-/*[COMMENT]*/                            PUT "ChkVehAssignSend: " IntPol7072.ChkVehAssignSend SKIP.
-/*[COMMENT]*/                            PUT "ChkVehAssignMail: " IntPol7072.ChkVehAssignMail SKIP.
-/*[COMMENT]*/                            OUTPUT CLOSE.
-/*[COMMENT]*/                            IF IntPol7072.ChkVehSend = YES THEN DO:
-/*[COMMENT]*/                              IF IntPol7072.ChkVehMail <> "" THEN DO:
-/*[COMMENT]*/                                RUN GW/gwtomail 
-/*[COMMENT]*/                                  (IntPol7072.ChkVehMail /*To "USERNAME"*/
-/*[COMMENT]*/                                  ,""          /*CC.*/
-/*[COMMENT]*/                                  ,("WARNING: µÃÇ¨ÊÀÒ¾Ã¶ ¡ÃÁ¸ÃÃÁì: " + TRIM(nv_PolicyV70)) /*Subject: WARNING VIB*/
-/*[COMMENT]*/                                  ,nv_cvehtext /*Body*/
-/*[COMMENT]*/                                  ).
-/*[COMMENT]*/                              END.
-/*[COMMENT]*/                            END.
-/*[COMMENT]*/                            IF IntPol7072.ChkVehAssignSend = YES THEN DO:
-/*[COMMENT]*/                              IF IntPol7072.ChkVehAssignMail <> "" THEN DO:
-/*[COMMENT]*/                                RUN GW/gwtomail
-/*[COMMENT]*/                                  (IntPol7072.ChkVehAssignMail
-/*[COMMENT]*/                                  ,""
-/*[COMMENT]*/                                  ,("WARNING: µÃÇ¨ÊÀÒ¾Ã¶ ¡ÃÁ¸ÃÃÁì: " + TRIM(nv_PolicyV70))
-/*[COMMENT]*/                                  ,nv_cvehtext
-/*[COMMENT]*/                                  ).
-/*[COMMENT]*/                              END.
-/*[COMMENT]*/                            END.
-/*[COMMENT]*/                            IF IntPol7072.TransferToPremium = YES THEN DO: /* Gen Uwm100 to DB GWCtx */
-/*[COMMENT]*/                              RUN WRS\WRSGwCtx 
-/*[COMMENT]*/                                  (IntPol7072.PolicyNumber
-/*[COMMENT]*/                                  ,IntPol7072.Rencnt
-/*[COMMENT]*/                                  ,IntPol7072.Endcnt
-/*[COMMENT]*/                                  ,0  /*RECID(uwm100)*/
-/*[COMMENT]*/                                  ,IntPol7072.CompanyCode  /*833*/
-/*[COMMENT]*/                                  ,IntPol7072.PolicyTypeCd /*2.2*/
-/*[COMMENT]*/                                  ,IntPol7072.RateGroup).  /*110*/
-/*[COMMENT]*/                            END.
-/*[COMMENT]*/                          END. /*IF IntS7072.ChkVehicle = YES*/
-/*[COMMENT]*/                        END. 
-/*[COMMENT]*/                      END. /*IF IntS7072.ConfirmBy <> "AUTO" */
-/*[COMMENT]*/                      IF IntPol7072.ConfirmBy = "AUTO" THEN DO:
-/*[COMMENT]*/                          IF SUBSTRING(IntPol7072.PolicyNumber,1,1) = "R" THEN 
-/*[COMMENT]*/                          RUN WRS\WRSGwCtx 
-/*[COMMENT]*/                                  (IntPol7072.PolicyNumber
-/*[COMMENT]*/                                  ,IntPol7072.Rencnt
-/*[COMMENT]*/                                  ,IntPol7072.Endcnt
-/*[COMMENT]*/                                  ,0  /*RECID(uwm100)*/
-/*[COMMENT]*/                                  ,IntPol7072.CompanyCode  /*833*/
-/*[COMMENT]*/                                  ,IntPol7072.PolicyTypeCd /*2.2*/
-/*[COMMENT]*/                                  ,IntPol7072.RateGroup).  /*110*/ /*kridtiya i.*/
-/*[COMMENT]*/                          ELSE  /*¾ÔÁ¾ì áÅÐá¹º file Êè§¡ÅÑº*/
-/*[COMMENT]*/                             RUN PD_SAVEPD1FileAttach
-/*[COMMENT]*/                                (nv_RecIntPol7072
-/*[COMMENT]*/                                ,nv_rec_rq ).  /*RECID(IntS7072)*/
-/*[COMMENT]*/                        END.
-/*[COMMENT]*/                    END.  /*IF AVAILABLE IntPol7072 */
-/*[COMMENT]*/                    RELEASE IntS7072.
-/*[COMMENT]*/                    RELEASE IntPol7072.
-/*[COMMENT]*/                    RELEASE IntQPolicy.
-/*[EXECUTABLE]*/                 /**/   */
-/*[EXECUTABLE]*/                 END PROCEDURE.
+/*[UNCALLED]*/                   PROCEDURE PD_SAVEPD1_OLD :
+/*[UNCALLED]*/                   /*------------------------------------------------------------------------------
+/*[UNCALLED]*/                     Purpose:     
+/*[UNCALLED]*/                     Parameters:  <none>
+/*[UNCALLED]*/                     Notes:       
+/*[UNCALLED]*/                   ------------------------------------------------------------------------------*/
+/*[UNCALLED]*/                   /*
+/*[UNCALLED]*/                   DEFINE INPUT PARAMETER nv_rec_rq    AS RECID     NO-UNDO.
+/*[UNCALLED]*/                   DEFINE INPUT PARAMETER nv_PolicyV70 AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE INPUT PARAMETER nv_PolicyV72 AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE INPUT-OUTPUT PARAMETER  nv_recinout7072   AS RECID     NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_trty11  AS CHARACTER NO-UNDO. /*M,T*/
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_docno1  AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_STdocno AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_Renew   AS LOGICAL   NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_STKNo   AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE crCompanyNo AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE crBranchNo  AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_acno1 AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_agent AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_okprn AS LOGICAL   NO-UNDO.
+/*[UNCALLED]*/                   /* ------------------------------------------------------ */
+/*[UNCALLED]*/                   RUN PD_ConDBExp. /* DB EXPIRY */
+/*[UNCALLED]*/                   /* ------------------------------------------------------ */
+/*[UNCALLED]*/                   nv_resulttext = "".
+/*[UNCALLED]*/                   FIND IntS7072 WHERE RECID(IntS7072) = nv_rec_rq
+/*[UNCALLED]*/                   NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                   IF NOT AVAILABLE IntS7072 THEN RETURN.
+/*[UNCALLED]*/                   /*¡ÃÁ¸ÃÃÁì»... + ¾Ãº. */
+/*[UNCALLED]*/                   IF IntS7072.PolicyTypeCd <> "" AND IntS7072.RateGroup <> "" THEN DO:
+/*[UNCALLED]*/                     nv_octets = "".
+/*[UNCALLED]*/                     FIND FIRST IntPol7072 WHERE IntPol7072.PolicyNumber = nv_PolicyV70 /*70,72*/
+/*[UNCALLED]*/                     NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                     IF NOT AVAILABLE IntPol7072 THEN DO:
+/*[UNCALLED]*/                       RUN WRS/WRSDigit.p (output nv_octets).
+/*[UNCALLED]*/                       CREATE IntPol7072.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     ELSE nv_octets = IntPol7072.RqUID.
+/*[UNCALLED]*/                   END.
+/*[UNCALLED]*/                   ELSE DO:   /* ¡ÃÁ¸ÃÃÁì ¾Ãº.*/
+/*[UNCALLED]*/                     IF IntS7072.CMIPolicyTypeCd <> "" AND IntS7072.CMIVehTypeCd <> "" THEN DO:
+/*[UNCALLED]*/                       FIND FIRST IntPol7072 WHERE IntPol7072.CMIPolicyNumber = nv_PolicyV72
+/*[UNCALLED]*/                       NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                       IF NOT AVAILABLE IntPol7072 THEN DO:
+/*[UNCALLED]*/                         nv_octets = "".
+/*[UNCALLED]*/                         RUN WRS/WRSDigit.p (output nv_octets).
+/*[UNCALLED]*/                         CREATE IntPol7072.
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       ELSE nv_octets = IntPol7072.RqUID.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                   END.
+/*[UNCALLED]*/                   nv_RecIntPol7072 = RECID(IntPol7072).
+/*[UNCALLED]*/                   nv_recinout7072  = RECID(IntPol7072).
+/*[UNCALLED]*/                   RUN PD_SAVEPD2.    /*Save data to IntPol7072*/
+/*[UNCALLED]*/                   /* ----------------------------------------------------------------------- */
+/*[UNCALLED]*/                   /* ËÒàÅ¢ Docno1 */
+/*[UNCALLED]*/                   FIND IntS7072 WHERE RECID(IntS7072) = nv_rec_rq
+/*[UNCALLED]*/                   NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                   IF NOT AVAILABLE IntS7072 THEN RETURN.
+/*[UNCALLED]*/                   FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
+/*[UNCALLED]*/                   NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                   IF NOT AVAILABLE IntPol7072 THEN RETURN.
+/*[UNCALLED]*/                   /*20/3/2015*/
+/*[UNCALLED]*/                   nv_okprn = NO.
+/*[UNCALLED]*/                   RUN WRS\WRSFutil.p 
+/*[UNCALLED]*/                       (IntPol7072.PolicyTypeCd
+/*[UNCALLED]*/                       ,IntPol7072.SumInsureAmt
+/*[UNCALLED]*/                       ,IntPol7072.CompanyCode
+/*[UNCALLED]*/                       ,INPUT-OUTPUT nv_okprn).
+/*[UNCALLED]*/                   /* ---------------------------------------------------- */
+/*[UNCALLED]*/                   IF    SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1)  = "3"
+/*[UNCALLED]*/                      OR                IntPol7072.CMIPolicyTypeCd    <> ""
+/*[UNCALLED]*/                      OR  (IntPol7072.CompanyCode = "833" AND 
+/*[UNCALLED]*/                          (SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "R" AND SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "Q")
+/*[UNCALLED]*/                      AND nv_okprn = YES )
+/*[UNCALLED]*/                   /**AND (IntPol7072.PolicyTypeCd = "2.1" OR IntPol7072.PolicyTypeCd = "2.2")
+/*[UNCALLED]*/                      AND DECIMAL(IntPol7072.SumInsureAmt) <= 200000) */
+/*[UNCALLED]*/                   THEN DO:
+/*[UNCALLED]*/                     IF     IntS7072.DocumentUID      = "" /*nv_DocnoV70*/
+/*[UNCALLED]*/                        AND IntS7072.CMIDocumentUID   = "" /*nv_DocnoV72*/
+/*[UNCALLED]*/                        AND IntS7072.StickerNumber    = ""
+/*[UNCALLED]*/                        AND IntS7072.CMIBarCodeNumber = ""
+/*[UNCALLED]*/                     THEN DO:
+/*[UNCALLED]*/                       ASSIGN nv_trty11 = "" nv_docno1 = "" nv_STdocno = "".
+/*[UNCALLED]*/                       IF    SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1)  = "3"
+/*[UNCALLED]*/                          OR (IntPol7072.CompanyCode = "833" AND 
+/*[UNCALLED]*/                        (     IntPol7072.PolicyTypeCd = "2.1" OR IntPol7072.PolicyTypeCd = "2.2"
+/*[UNCALLED]*/                          OR  IntPol7072.PolicyTypeCd = "2.3" OR IntPol7072.PolicyTypeCd = "2.4"
+/*[UNCALLED]*/                          OR  IntPol7072.PolicyTypeCd = "2.5" OR IntPol7072.PolicyTypeCd = "2.6" ) )
+/*[UNCALLED]*/                       THEN DO:
+/*[UNCALLED]*/                         FIND FIRST FUtilSetUp WHERE
+/*[UNCALLED]*/                              FUtilSetUp.UtilGrp     = "UTGRP01"  /*UtGrp01*/
+/*[UNCALLED]*/                          AND FUtilSetUp.KeyUtilGrp1 = "V70"      /*V70,V72*/
+/*[UNCALLED]*/                          AND FUtilSetUp.KeyUtilGrp2 = IntPol7072.PolicyTypeCd  /*3,3.1,3.2,T*/
+/*[UNCALLED]*/                          AND FUtilSetUp.KeyUtilGrp3 = "DOC"
+/*[UNCALLED]*/                          AND FUtilSetUp.KeyUtilGrp4 = "BLK"
+/*[UNCALLED]*/                          AND FUtilSetUp.KeyUtilGrp5 = "ALL"  /*833*/
+/*[UNCALLED]*/                          AND FUtilSetUp.EffDate    <= TODAY
+/*[UNCALLED]*/                         NO-LOCK NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                         IF AVAILABLE FUtilSetUp THEN nv_STdocno = FUtilSetUp.UtilGrpCd1.
+/*[UNCALLED]*/                         ELSE DO:
+/*[UNCALLED]*/                           FIND FIRST FUtilSetUp WHERE
+/*[UNCALLED]*/                                FUtilSetUp.UtilGrp     = "UTGRP01"  /*UtGrp01*/
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp1 = "V70"      /*V70,V72*/
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp2 = IntPol7072.PolicyTypeCd  /*3,3.1,3.2,T*/
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp3 = "DOC"
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp4 = "BLK"
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp5 = IntPol7072.CompanyCode
+/*[UNCALLED]*/                            AND FUtilSetUp.EffDate    <= TODAY
+/*[UNCALLED]*/                           NO-LOCK NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                           IF AVAILABLE FUtilSetUp THEN nv_STdocno = FUtilSetUp.UtilGrpCd1.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         IF nv_STdocno = "YES" THEN DO:
+/*[UNCALLED]*/                           nv_trty11       = "M".
+/*[UNCALLED]*/                           nv_msgerror7072 = "".
+/*[UNCALLED]*/                           RUN WSP/WSPFRecp.p
+/*[UNCALLED]*/                               (IntPol7072.CompanyCode /*nv_CompanyNo*/
+/*[UNCALLED]*/                               ,nv_trty11
+/*[UNCALLED]*/                               ,OUTPUT nv_docno1
+/*[UNCALLED]*/                               ,OUTPUT nv_STKNo
+/*[UNCALLED]*/                               ,OUTPUT nv_msgerror7072
+/*[UNCALLED]*/                               ).
+/*[UNCALLED]*/                           ASSIGN
+/*[UNCALLED]*/                           IntPol7072.DocumentUID = nv_docno1
+/*[UNCALLED]*/                           IntS7072.DocumentUID   = nv_docno1.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       IF nv_msgerror7072 <> "" THEN DO:
+/*[UNCALLED]*/                         ASSIGN
+/*[UNCALLED]*/                         IntPol7072.ContractNumber = TRIM(IntPol7072.ContractNumber) + "CA"
+/*[UNCALLED]*/                         IntPol7072.GenSicBran     = NO
+/*[UNCALLED]*/                         IntPol7072.GenSicBranText = nv_msgerror7072
+/*[UNCALLED]*/                         IntPol7072.GenSicBranST   = "ERROR"
+/*[UNCALLED]*/                         IntPol7072.ErrorMessage   = nv_msgerror7072.
+/*[UNCALLED]*/                         IF IntPol7072.DocumentUID <> "" THEN
+/*[UNCALLED]*/                            IntPol7072.DocumentUID = TRIM(IntPol7072.DocumentUID) + "CA".
+/*[UNCALLED]*/                         RETURN.
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       /**/
+/*[UNCALLED]*/                       IF IntPol7072.CMIPolicyTypeCd <> "" THEN DO:
+/*[UNCALLED]*/                         FIND FIRST FUtilSetUp WHERE
+/*[UNCALLED]*/                              FUtilSetUp.UtilGrp     = "UTGRP01"  /*UtGrp01*/
+/*[UNCALLED]*/                          AND FUtilSetUp.KeyUtilGrp1 = "V72"      /*V70,V72*/
+/*[UNCALLED]*/                          AND FUtilSetUp.KeyUtilGrp2 = "T"        /*3,3.1,3.2,T*/
+/*[UNCALLED]*/                          AND FUtilSetUp.KeyUtilGrp3 = "DOC"
+/*[UNCALLED]*/                          AND FUtilSetUp.KeyUtilGrp4 = "BLK"
+/*[UNCALLED]*/                          AND FUtilSetUp.KeyUtilGrp5 = "ALL"  /*833*/
+/*[UNCALLED]*/                          AND FUtilSetUp.EffDate    <= TODAY
+/*[UNCALLED]*/                         NO-LOCK NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                         IF AVAILABLE FUtilSetUp THEN nv_STdocno = FUtilSetUp.UtilGrpCd1.
+/*[UNCALLED]*/                         ELSE DO:
+/*[UNCALLED]*/                           FIND FIRST FUtilSetUp WHERE
+/*[UNCALLED]*/                                FUtilSetUp.UtilGrp     = "UTGRP01"  /*UtGrp01*/
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp1 = "V72"      /*V70,V72*/
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp2 = "T"        /*3,3.1,3.2,T*/
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp3 = "DOC"
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp4 = "BLK"
+/*[UNCALLED]*/                            AND FUtilSetUp.KeyUtilGrp5 = IntPol7072.CompanyCode
+/*[UNCALLED]*/                            AND FUtilSetUp.EffDate    <= TODAY
+/*[UNCALLED]*/                           NO-LOCK NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                           IF AVAILABLE FUtilSetUp THEN nv_STdocno = FUtilSetUp.UtilGrpCd1.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         IF nv_STdocno = "YES" THEN DO:
+/*[UNCALLED]*/                           nv_trty11       = "T".
+/*[UNCALLED]*/                           nv_msgerror7072 = "".
+/*[UNCALLED]*/                           RUN WSP/WSPFRecp.p
+/*[UNCALLED]*/                               (IntPol7072.CompanyCode /*nv_CompanyNo*/
+/*[UNCALLED]*/                               ,nv_trty11
+/*[UNCALLED]*/                               ,OUTPUT nv_docno1
+/*[UNCALLED]*/                               ,OUTPUT nv_STKNo
+/*[UNCALLED]*/                               ,OUTPUT nv_msgerror7072
+/*[UNCALLED]*/                               ).
+/*[UNCALLED]*/                           ASSIGN
+/*[UNCALLED]*/                           IntPol7072.CMIBarCodeNumber = nv_STKNo
+/*[UNCALLED]*/                           IntS7072.CMIBarCodeNumber   = nv_STKNo
+/*[UNCALLED]*/                           IntPol7072.CMIDocumentUID = nv_docno1
+/*[UNCALLED]*/                           IntS7072.CMIDocumentUID   = nv_docno1 .
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       IF nv_msgerror7072 <> "" THEN DO:
+/*[UNCALLED]*/                         ASSIGN
+/*[UNCALLED]*/                         IntPol7072.ContractNumber = TRIM(IntPol7072.ContractNumber) + "CA"
+/*[UNCALLED]*/                         IntPol7072.GenSicBran     = NO
+/*[UNCALLED]*/                         IntPol7072.GenSicBranText = nv_msgerror7072
+/*[UNCALLED]*/                         IntPol7072.GenSicBranST   = "ERROR"
+/*[UNCALLED]*/                         IntPol7072.ErrorMessage   = nv_msgerror7072.
+/*[UNCALLED]*/                         IF IntPol7072.DocumentUID <> "" THEN
+/*[UNCALLED]*/                            IntPol7072.DocumentUID = TRIM(IntPol7072.DocumentUID) + "CA".
+/*[UNCALLED]*/                         RETURN.
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                   END.
+/*[UNCALLED]*/                   /**/
+/*[UNCALLED]*/                   IF SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "R" AND SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "Q" THEN DO:
+/*[UNCALLED]*/                     IF    (SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "3" AND IntPol7072.DocumentUID = "") /*nv_DocnoV70*/
+/*[UNCALLED]*/                        OR (               IntPol7072.CMIPolicyTypeCd   <> ""  AND IntPol7072.CMIDocumentUID = "") /*nv_DocnoV72*/ 
+/*[UNCALLED]*/                        /**/
+/*[UNCALLED]*/                        OR ( ( (SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "R" AND SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "Q")
+/*[UNCALLED]*/                        AND  nv_okprn = YES ) AND IntPol7072.DocumentUID = "")
+/*[UNCALLED]*/                     THEN DO:
+/*[UNCALLED]*/                       ASSIGN
+/*[UNCALLED]*/                       IntPol7072.ContractNumber = TRIM(IntPol7072.ContractNumber) + "CA"
+/*[UNCALLED]*/                       IntPol7072.GenSicBran     = NO
+/*[UNCALLED]*/                       IntPol7072.GenSicBranText = "äÁè¾ºàÅ¢·ÕèàÍ¡ÊÒÃã¹ÃÐºº"
+/*[UNCALLED]*/                       IntPol7072.GenSicBranST   = "ERROR"
+/*[UNCALLED]*/                       IntPol7072.ErrorMessage   = "äÁè¾ºàÅ¢·ÕèàÍ¡ÊÒÃã¹ÃÐºº".
+/*[UNCALLED]*/                       IF IntPol7072.DocumentUID <> "" THEN
+/*[UNCALLED]*/                          IntPol7072.DocumentUID = TRIM(IntPol7072.DocumentUID) + "CA".
+/*[UNCALLED]*/                       RETURN.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                   END.
+/*[UNCALLED]*/                   /* ----------------------------------------------------------------------- */
+/*[UNCALLED]*/                   nv_Renew = NO.  /*A57-0300: §Ò¹µèÍÍÒÂØ*/
+/*[UNCALLED]*/                   OUTPUT TO PD_SAVEPD1.TXT APPEND.
+/*[UNCALLED]*/                   PUT "PD_SAVEPD1: 1. START " FORMAT "x(25)"
+/*[UNCALLED]*/                       " " TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                   SKIP.
+/*[UNCALLED]*/                   OUTPUT CLOSE.
+/*[UNCALLED]*/                   IF IntPol7072.Rencnt <> 0 
+/*[UNCALLED]*/                      AND SUBSTR(IntPol7072.PolicyNumber,1,1) =  "R"
+/*[UNCALLED]*/                      AND IntPol7072.PreviousPolicyNumber     <> ""
+/*[UNCALLED]*/                   THEN nv_Renew = YES.
+/*[UNCALLED]*/                   nv_msgerror7072  = "".
+/*[UNCALLED]*/                   /* Generate policy, uwm100, uwm120, uwm301, uwm130, uwd132 */
+/*[UNCALLED]*/                   IF     IntPol7072.PolicyTypeCd <> "1" 
+/*[UNCALLED]*/                      AND IntPol7072.PolicyTypeCd <> "2"
+/*[UNCALLED]*/                      AND IntPol7072.PolicyTypeCd <> "3"
+/*[UNCALLED]*/                   THEN DO:
+/*[UNCALLED]*/                     IF    IntPol7072.PolicyTypeCd = ""
+/*[UNCALLED]*/                        OR SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "2"
+/*[UNCALLED]*/                        OR SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "3"
+/*[UNCALLED]*/                        /**/
+/*[UNCALLED]*/                        OR IntPol7072.CMIPolicyTypeCd = "110"
+/*[UNCALLED]*/                        OR IntPol7072.CMIPolicyTypeCd = "120A"
+/*[UNCALLED]*/                        OR IntPol7072.CMIPolicyTypeCd = "140A"
+/*[UNCALLED]*/                     THEN DO:
+/*[UNCALLED]*/                       IF  IntPol7072.CMIPolicyTypeCd <> "" THEN DO:
+/*[UNCALLED]*/                         nv_msgerror7072 = "".
+/*[UNCALLED]*/                         RUN UZ/UZO7201WS.P
+/*[UNCALLED]*/                              (nv_RecIntPol7072
+/*[UNCALLED]*/                              ,INPUT-OUTPUT nv_msgerror7072).
+/*[UNCALLED]*/                         FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
+/*[UNCALLED]*/                         NO-ERROR.
+/*[UNCALLED]*/                         IF nv_msgerror7072 <> "" THEN DO:
+/*[UNCALLED]*/                           OUTPUT TO WSPGP100-ERROR.TXT APPEND.
+/*[UNCALLED]*/                           PUT "2. UZO7201WS.P " IntPol7072.CMIPolicyNumber FORMAT "X(18)"
+/*[UNCALLED]*/                               TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                               " " nv_msgerror7072 FORMAT "X(150)" SKIP.
+/*[UNCALLED]*/                           OUTPUT CLOSE.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                       END. /*IF  IntPol7072.CMIPolicyTypeCd <> "" THEN DO:*/
+/*[UNCALLED]*/                       IF    SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "2"
+/*[UNCALLED]*/                          OR SUBSTRING(TRIM(IntPol7072.PolicyTypeCd),1,1) = "3"
+/*[UNCALLED]*/                       THEN DO:
+/*[UNCALLED]*/                         RUN WRS/WRSGU100.P
+/*[UNCALLED]*/                              (nv_RecIntPol7072
+/*[UNCALLED]*/                              ,INPUT-OUTPUT nv_msgerror7072).
+/*[UNCALLED]*/                         IF nv_msgerror7072 <> "" THEN DO:
+/*[UNCALLED]*/                           OUTPUT TO WRSGU100-ERROR.TXT APPEND.
+/*[UNCALLED]*/                           PUT "3. WRSGU100.P " IntPol7072.PolicyNumber FORMAT "X(18)"
+/*[UNCALLED]*/                               TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                               " " nv_msgerror7072 FORMAT "X(150)" SKIP.
+/*[UNCALLED]*/                           OUTPUT CLOSE.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     ELSE DO:
+/*[UNCALLED]*/                       IF IntPol7072.CMIPolicyTypeCd <> "" THEN DO:
+/*[UNCALLED]*/                         RUN UZ/UZO7201WS.P
+/*[UNCALLED]*/                              (nv_RecIntPol7072
+/*[UNCALLED]*/                              ,INPUT-OUTPUT nv_msgerror7072).
+/*[UNCALLED]*/                         FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
+/*[UNCALLED]*/                         NO-ERROR.
+/*[UNCALLED]*/                         IF nv_msgerror7072 <> "" THEN DO:
+/*[UNCALLED]*/                           OUTPUT TO WSPGP100-ERROR.TXT APPEND.
+/*[UNCALLED]*/                           PUT "4. UZO7201WS.P " IntPol7072.CMIPolicyNumber FORMAT "X(18)"
+/*[UNCALLED]*/                               TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                               " " nv_msgerror7072 FORMAT "X(150)" SKIP.
+/*[UNCALLED]*/                           OUTPUT CLOSE.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                   END.
+/*[UNCALLED]*/                   ELSE DO:
+/*[UNCALLED]*/                     /* A57-0300: §Ò¹µèÍÍÒÂØ */
+/*[UNCALLED]*/                     IF nv_Renew = YES THEN DO:
+/*[UNCALLED]*/                       IF NOT CONNECTED ("expiry") THEN DO:
+/*[UNCALLED]*/                         RUN WRS/WRSGU1DB.P
+/*[UNCALLED]*/                              (""  /*Userid*/
+/*[UNCALLED]*/                             ,""  /*Password*/
+/*[UNCALLED]*/                             ,"expiry"). /*Database name*/
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       IF CONNECTED ("expiry") THEN DO:
+/*[UNCALLED]*/                         RUN WRS/WRSGU10R.P
+/*[UNCALLED]*/                           (nv_RecIntPol7072
+/*[UNCALLED]*/                           ,INPUT-OUTPUT nv_msgerror7072).
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       ELSE  nv_msgerror7072 = "Not Connect Expiry: ".
+/*[UNCALLED]*/                       /**/
+/*[UNCALLED]*/                       FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
+/*[UNCALLED]*/                       NO-ERROR.
+/*[UNCALLED]*/                       IF nv_msgerror7072 <> "" THEN DO:
+/*[UNCALLED]*/                         OUTPUT TO WRSGU100-ERROR.TXT APPEND.
+/*[UNCALLED]*/                         PUT "5. WRSGU10R.P " IntPol7072.PolicyNumber FORMAT "X(18)"
+/*[UNCALLED]*/                             TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                             " " nv_msgerror7072 FORMAT "X(150)" SKIP.
+/*[UNCALLED]*/                         OUTPUT CLOSE.
+/*[UNCALLED]*/                         nv_msgerror7072 = "".
+/*[UNCALLED]*/                         RUN WRS/WRSGU100.P
+/*[UNCALLED]*/                            (nv_RecIntPol7072
+/*[UNCALLED]*/                            ,INPUT-OUTPUT nv_msgerror7072).
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
+/*[UNCALLED]*/                       NO-ERROR.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     ELSE DO:
+/*[UNCALLED]*/                       IF IntPol7072.PolicyTypeCd <> "1"  THEN DO:
+/*[UNCALLED]*/                         RUN WRS/WRSGU100.P
+/*[UNCALLED]*/                            (nv_RecIntPol7072
+/*[UNCALLED]*/                            ,INPUT-OUTPUT nv_msgerror7072).
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       ELSE DO:
+/*[UNCALLED]*/                         IF SUBSTR(IntPol7072.PolicyNumber,1,1) = "Q" AND IntPol7072.PolicyTypeCd = "1" THEN DO:
+/*[UNCALLED]*/                           nv_acno1 = "".
+/*[UNCALLED]*/                           /* ËÒ ÃËÑÊµÑÇá·¹  */
+/*[UNCALLED]*/                           RUN WSP/WSPMCpny.P 
+/*[UNCALLED]*/                               (IntPol7072.CompanyCode
+/*[UNCALLED]*/                               ,IntPol7072.BranchCd
+/*[UNCALLED]*/                               ,"V" + SUBSTR(IntPol7072.PolicyNumber,3,2) /*nv_Poltyp*/
+/*[UNCALLED]*/                               ,OUTPUT crCompanyNo
+/*[UNCALLED]*/                               ,OUTPUT crBranchNo
+/*[UNCALLED]*/                               ,OUTPUT nv_acno1
+/*[UNCALLED]*/                               ,OUTPUT nv_agent
+/*[UNCALLED]*/                               ,OUTPUT nv_msgerror7072
+/*[UNCALLED]*/                               ).
+/*[UNCALLED]*/                           /**/
+/*[UNCALLED]*/                           IF nv_acno1 <> "" THEN DO:
+/*[UNCALLED]*/                             FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
+/*[UNCALLED]*/                             NO-ERROR.
+/*[UNCALLED]*/                             IF AVAILABLE IntPol7072 THEN 
+/*[UNCALLED]*/                               IntPol7072.AgentBrokerLicenseNumber = nv_acno1.
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                         ELSE DO:
+/*[UNCALLED]*/                           RUN WRS/WRSGU100.P
+/*[UNCALLED]*/                               (nv_RecIntPol7072
+/*[UNCALLED]*/                               ,INPUT-OUTPUT nv_msgerror7072).
+/*[UNCALLED]*/                         END.
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     IF nv_msgerror7072 <> "" THEN DO:
+/*[UNCALLED]*/                       OUTPUT TO WRSGU100-ERROR.TXT APPEND.
+/*[UNCALLED]*/                       PUT "6. WRSGU100.P " IntPol7072.PolicyNumber FORMAT "X(18)"
+/*[UNCALLED]*/                           TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                           " " nv_msgerror7072 FORMAT "X(150)" SKIP.
+/*[UNCALLED]*/                       OUTPUT CLOSE.
+/*[UNCALLED]*/                       FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
+/*[UNCALLED]*/                       NO-ERROR.
+/*[UNCALLED]*/                       IF AVAILABLE IntPol7072 THEN DO:
+/*[UNCALLED]*/                         ASSIGN
+/*[UNCALLED]*/                         IntPol7072.ContractNumber = TRIM(IntPol7072.ContractNumber) + "CA"
+/*[UNCALLED]*/                         IntPol7072.GenSicBran   = NO
+/*[UNCALLED]*/                         IntPol7072.GenSicBranText = nv_msgerror7072
+/*[UNCALLED]*/                         IntPol7072.GenSicBranST = "ERROR"
+/*[UNCALLED]*/                         IntPol7072.ErrorMessage = nv_msgerror7072.
+/*[UNCALLED]*/                         IF IntPol7072.DocumentUID <> "" THEN
+/*[UNCALLED]*/                            IntPol7072.DocumentUID = TRIM(IntPol7072.DocumentUID) + "CA".
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       RETURN.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                   END.
+/*[UNCALLED]*/                   OUTPUT TO PD_SAVEPD1.TXT APPEND.
+/*[UNCALLED]*/                   PUT "PD_SAVEPD1: 2. END " FORMAT "x(25)"
+/*[UNCALLED]*/                       " " TODAY FORMAT "99/99/9999" " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                   SKIP.
+/*[UNCALLED]*/                   OUTPUT CLOSE.
+/*[UNCALLED]*/                   /* ------------------------------------------------------ */
+/*[UNCALLED]*/                   FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
+/*[UNCALLED]*/                   NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                   IF AVAILABLE IntPol7072 THEN DO:
+/*[UNCALLED]*/                     ASSIGN
+/*[UNCALLED]*/                     IntPol7072.GenSicBran   = YES
+/*[UNCALLED]*/                     IntPol7072.GenSicBranBy = "WRSBQ7072.W"
+/*[UNCALLED]*/                     IntPol7072.GenSicBranDt = TODAY
+/*[UNCALLED]*/                     IntPol7072.GenSicBranTime = STRING(TIME,"HH:MM:SS")
+/*[UNCALLED]*/                     IntPol7072.GenSicBranText = ""
+/*[UNCALLED]*/                     IntPol7072.GenSicBranST = "".
+/*[UNCALLED]*/                     IF SUBSTRING(IntPol7072.PolicyNumber,1,1) = "R" THEN IntPol7072.TransferToPremium = YES. /*kridtiya i.*/
+/*[UNCALLED]*/                     IF nv_msgerror7072 <> "" THEN DO:
+/*[UNCALLED]*/                       ASSIGN
+/*[UNCALLED]*/                       IntPol7072.ContractNumber = TRIM(IntPol7072.ContractNumber) + "CA"
+/*[UNCALLED]*/                       IntPol7072.GenSicBran   = NO
+/*[UNCALLED]*/                       IntPol7072.GenSicBranText = nv_msgerror7072
+/*[UNCALLED]*/                       IntPol7072.GenSicBranST = "ERROR"
+/*[UNCALLED]*/                       IntPol7072.ErrorMessage = nv_msgerror7072.
+/*[UNCALLED]*/                       IF IntPol7072.DocumentUID <> "" THEN
+/*[UNCALLED]*/                          IntPol7072.DocumentUID = TRIM(IntPol7072.DocumentUID) + "CA".
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                   END.
+/*[UNCALLED]*/                   FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RecIntPol7072
+/*[UNCALLED]*/                   NO-LOCK NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                   IF AVAILABLE IntPol7072 THEN DO:
+/*[UNCALLED]*/                     IF IntPol7072.ConfirmBy <> "AUTO" THEN DO:
+/*[UNCALLED]*/                       /*»2.1 2.2 ·Ø¹µèÓ¡ÇèÒ1áÊ¹ÍÍ¡¡ÃÁ¸ÃÃÁì D ËÃ×ÍàÅ¢ÊÒ¢Ò 2 ËÅÑ¡*/
+/*[UNCALLED]*/                       IF (SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "R" AND SUBSTRING(IntPol7072.PolicyNumber,1,1) <> "Q")
+/*[UNCALLED]*/                          AND  nv_okprn = YES
+/*[UNCALLED]*/                       THEN DO:
+/*[UNCALLED]*/                         /*¾ÔÁ¾ì áÅÐá¹º file Êè§¡ÅÑº*/
+/*[UNCALLED]*/                         RUN PD_SAVEPD1FileAttach (nv_RecIntPol7072
+/*[UNCALLED]*/                                                  ,nv_rec_rq ).
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                       ELSE DO:
+/*[UNCALLED]*/                         OUTPUT TO ConfirmBy.TXT.
+/*[UNCALLED]*/                         PUT IntPol7072.ConfirmBy SKIP.
+/*[UNCALLED]*/                         OUTPUT CLOSE.
+/*[UNCALLED]*/                         IF IntPol7072.ChkVehicle = YES THEN DO:
+/*[UNCALLED]*/                           nv_resulttext = "Êè§µÃÇ¨ÊÀÒ¾Ã¶".
+/*[UNCALLED]*/                           nv_cvehtext =
+/*[UNCALLED]*/                             "µÃÇ¨ÊÀÒ¾Ã¶ ¡ÃÁ¸ÃÃÁì: " + TRIM(nv_PolicyV70)
+/*[UNCALLED]*/                           + " ¡ÃÁ¸ÃÃÁì¾Ãº.: " + TRIM(nv_PolicyV72)
+/*[UNCALLED]*/                             + " ·ÐàºÕÂ¹Ã¶ : " + TRIM(IntPol7072.Registration) 
+/*[UNCALLED]*/                                         + " " + TRIM(IntPol7072.RegisteredProvCd)
+/*[UNCALLED]*/                           + " ¼ÙéàÍÒ»ÃÐ¡Ñ¹ÀÑÂ : " + TRIM(TRIM(TRIM(IntPol7072.InsuredTitle)
+/*[UNCALLED]*/                           + " " + TRIM(IntPol7072.InsuredName))
+/*[UNCALLED]*/                           + " " + TRIM(IntPol7072.InsuredSurname)).
+/*[UNCALLED]*/                           OUTPUT TO ChkVehicle.TXT.
+/*[UNCALLED]*/                           PUT " ConfirmBy:" IntPol7072.ConfirmBy  SKIP.
+/*[UNCALLED]*/                           PUT "ChkVehicle:" IntPol7072.ChkVehicle SKIP.
+/*[UNCALLED]*/                           PUT "           " nv_resulttext FORMAT "X(50)" SKIP.
+/*[UNCALLED]*/                           PUT "           " nv_cvehtext   FORMAT "X(200)" SKIP.
+/*[UNCALLED]*/                           PUT "ChkVehSend:" IntPol7072.ChkVehSend SKIP.
+/*[UNCALLED]*/                           PUT "   Mail to:" IntPol7072.ChkVehMail SKIP.
+/*[UNCALLED]*/                           PUT "------------------------------------------------" FORMAT "X(50)" SKIP.
+/*[UNCALLED]*/                           PUT "ChkVehAssignSend: " IntPol7072.ChkVehAssignSend SKIP.
+/*[UNCALLED]*/                           PUT "ChkVehAssignMail: " IntPol7072.ChkVehAssignMail SKIP.
+/*[UNCALLED]*/                           OUTPUT CLOSE.
+/*[UNCALLED]*/                           IF IntPol7072.ChkVehSend = YES THEN DO:
+/*[UNCALLED]*/                             IF IntPol7072.ChkVehMail <> "" THEN DO:
+/*[UNCALLED]*/                               RUN GW/gwtomail 
+/*[UNCALLED]*/                                 (IntPol7072.ChkVehMail /*To "USERNAME"*/
+/*[UNCALLED]*/                                 ,""          /*CC.*/
+/*[UNCALLED]*/                                 ,("WARNING: µÃÇ¨ÊÀÒ¾Ã¶ ¡ÃÁ¸ÃÃÁì: " + TRIM(nv_PolicyV70)) /*Subject: WARNING VIB*/
+/*[UNCALLED]*/                                 ,nv_cvehtext /*Body*/
+/*[UNCALLED]*/                                 ).
+/*[UNCALLED]*/                             END.
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                           IF IntPol7072.ChkVehAssignSend = YES THEN DO:
+/*[UNCALLED]*/                             IF IntPol7072.ChkVehAssignMail <> "" THEN DO:
+/*[UNCALLED]*/                               RUN GW/gwtomail
+/*[UNCALLED]*/                                 (IntPol7072.ChkVehAssignMail
+/*[UNCALLED]*/                                 ,""
+/*[UNCALLED]*/                                 ,("WARNING: µÃÇ¨ÊÀÒ¾Ã¶ ¡ÃÁ¸ÃÃÁì: " + TRIM(nv_PolicyV70))
+/*[UNCALLED]*/                                 ,nv_cvehtext
+/*[UNCALLED]*/                                 ).
+/*[UNCALLED]*/                             END.
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                           IF IntPol7072.TransferToPremium = YES THEN DO: /* Gen Uwm100 to DB GWCtx */
+/*[UNCALLED]*/                             RUN WRS\WRSGwCtx 
+/*[UNCALLED]*/                                 (IntPol7072.PolicyNumber
+/*[UNCALLED]*/                                 ,IntPol7072.Rencnt
+/*[UNCALLED]*/                                 ,IntPol7072.Endcnt
+/*[UNCALLED]*/                                 ,0  /*RECID(uwm100)*/
+/*[UNCALLED]*/                                 ,IntPol7072.CompanyCode  /*833*/
+/*[UNCALLED]*/                                 ,IntPol7072.PolicyTypeCd /*2.2*/
+/*[UNCALLED]*/                                 ,IntPol7072.RateGroup).  /*110*/
+/*[UNCALLED]*/                           END.
+/*[UNCALLED]*/                         END. /*IF IntS7072.ChkVehicle = YES*/
+/*[UNCALLED]*/                       END. 
+/*[UNCALLED]*/                     END. /*IF IntS7072.ConfirmBy <> "AUTO" */
+/*[UNCALLED]*/                     IF IntPol7072.ConfirmBy = "AUTO" THEN DO:
+/*[UNCALLED]*/                         IF SUBSTRING(IntPol7072.PolicyNumber,1,1) = "R" THEN 
+/*[UNCALLED]*/                         RUN WRS\WRSGwCtx 
+/*[UNCALLED]*/                                 (IntPol7072.PolicyNumber
+/*[UNCALLED]*/                                 ,IntPol7072.Rencnt
+/*[UNCALLED]*/                                 ,IntPol7072.Endcnt
+/*[UNCALLED]*/                                 ,0  /*RECID(uwm100)*/
+/*[UNCALLED]*/                                 ,IntPol7072.CompanyCode  /*833*/
+/*[UNCALLED]*/                                 ,IntPol7072.PolicyTypeCd /*2.2*/
+/*[UNCALLED]*/                                 ,IntPol7072.RateGroup).  /*110*/ /*kridtiya i.*/
+/*[UNCALLED]*/                         ELSE  /*¾ÔÁ¾ì áÅÐá¹º file Êè§¡ÅÑº*/
+/*[UNCALLED]*/                            RUN PD_SAVEPD1FileAttach
+/*[UNCALLED]*/                               (nv_RecIntPol7072
+/*[UNCALLED]*/                               ,nv_rec_rq ).  /*RECID(IntS7072)*/
+/*[UNCALLED]*/                       END.
+/*[UNCALLED]*/                   END.  /*IF AVAILABLE IntPol7072 */
+/*[UNCALLED]*/                   RELEASE IntS7072.
+/*[UNCALLED]*/                   RELEASE IntPol7072.
+/*[UNCALLED]*/                   RELEASE IntQPolicy.
+/*[UNCALLED]*/                   /**/   */
+/*[UNCALLED]*/                   END PROCEDURE.
 /*[BLANK]*/                      
 /*[COMMENT]*/                    /* _UIB-CODE-BLOCK-END */
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
 /*[BLANK]*/                      
 /*[EXECUTABLE]*/                 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE PD_SAVEPD1_R C-Win 
-/*[EXECUTABLE]*/                 PROCEDURE PD_SAVEPD1_R :
-/*[COMMENT]*/                    /*------------------------------------------------------------------------------
-/*[COMMENT]*/                      Purpose:     
-/*[COMMENT]*/                      Parameters:  <none>
-/*[COMMENT]*/                      Notes:       
-/*[COMMENT]*/                    ------------------------------------------------------------------------------*/
-/*[EXECUTABLE]*/                 RUN WRS\WRSGwCtx 
-/*[EXECUTABLE]*/                               (IntPol7072.PolicyNumber
-/*[EXECUTABLE]*/                               ,IntPol7072.Rencnt
-/*[EXECUTABLE]*/                               ,IntPol7072.Endcnt
-/*[EXECUTABLE]*/                               ,0  /*RECID(uwm100)*/
-/*[EXECUTABLE]*/                               ,IntPol7072.CompanyCode  /*833*/
-/*[EXECUTABLE]*/                               ,IntPol7072.PolicyTypeCd /*2.2*/
-/*[EXECUTABLE]*/                               ,IntPol7072.RateGroup).  /*110*/
-/*[EXECUTABLE]*/                 END PROCEDURE.
+/*[UNCALLED]*/                   PROCEDURE PD_SAVEPD1_R :
+/*[UNCALLED]*/                   /*------------------------------------------------------------------------------
+/*[UNCALLED]*/                     Purpose:     
+/*[UNCALLED]*/                     Parameters:  <none>
+/*[UNCALLED]*/                     Notes:       
+/*[UNCALLED]*/                   ------------------------------------------------------------------------------*/
+/*[UNCALLED]*/                   RUN WRS\WRSGwCtx 
+/*[UNCALLED]*/                                 (IntPol7072.PolicyNumber
+/*[UNCALLED]*/                                 ,IntPol7072.Rencnt
+/*[UNCALLED]*/                                 ,IntPol7072.Endcnt
+/*[UNCALLED]*/                                 ,0  /*RECID(uwm100)*/
+/*[UNCALLED]*/                                 ,IntPol7072.CompanyCode  /*833*/
+/*[UNCALLED]*/                                 ,IntPol7072.PolicyTypeCd /*2.2*/
+/*[UNCALLED]*/                                 ,IntPol7072.RateGroup).  /*110*/
+/*[UNCALLED]*/                   END PROCEDURE.
 /*[BLANK]*/                      
 /*[COMMENT]*/                    /* _UIB-CODE-BLOCK-END */
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
@@ -8789,127 +8789,127 @@
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
 /*[BLANK]*/                      
 /*[EXECUTABLE]*/                 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE PD_SAVEQGwCtx C-Win 
-/*[EXECUTABLE]*/                 PROCEDURE PD_SAVEQGwCtx :
-/*[COMMENT]*/                    /*------------------------------------------------------------------------------
-/*[COMMENT]*/                      Purpose:     
-/*[COMMENT]*/                      Parameters:  <none>
-/*[COMMENT]*/                      Notes:       
-/*[COMMENT]*/                    ------------------------------------------------------------------------------*/
-/*[COMMENT]*/                    /**
-/*[COMMENT]*/                    DEFINE INPUT PARAMETER nv_QRecIntPol7072  AS RECID NO-UNDO.
-/*[BLANK]*/                      
-/*[COMMENT]*/                    DEFINE VARIABLE nv_NewInputKey            AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    /* ------------------------------------------------------------ */
-/*[BLANK]*/                      
-/*[COMMENT]*/                      FIND IntPol7072 WHERE RECID(IntPol7072) = nv_QRecIntPol7072
-/*[COMMENT]*/                      NO-LOCK NO-ERROR NO-WAIT.
-/*[BLANK]*/                      
-/*[COMMENT]*/                      /*
-/*[COMMENT]*/                      RUN wctx\WCtxGW100 (INPUT IntPol7072.PolicyNumber
-/*[COMMENT]*/                                         ,INPUT IntPol7072.CompanyCode).
-/*[COMMENT]*/                      */
-/*[BLANK]*/                      
-/*[COMMENT]*/                      nv_NewInputKey = STRING(YEAR(TODAY),"9999")
-/*[COMMENT]*/                                     + STRING(MONTH(TODAY),"99")
-/*[COMMENT]*/                                     + STRING(DAY(TODAY),"99")
-/*[COMMENT]*/                                     + SUBSTR(STRING(DATETIME(TODAY, MTIME)),12,12).
-/*[COMMENT]*/                      nv_NewInputKey = REPLACE(nv_NewInputKey,":","").
-/*[COMMENT]*/                      nv_NewInputKey = REPLACE(nv_NewInputKey,".","").
-/*[COMMENT]*/                      /**/
-/*[BLANK]*/                      
-/*[COMMENT]*/                      CREATE IntQPolicy.
-/*[COMMENT]*/                      ASSIGN
-/*[COMMENT]*/                      IntQPolicy.SystemRq        = "SGwCtx"
-/*[COMMENT]*/                      IntQPolicy.keyRequestIndRq = nv_NewInputKey
-/*[COMMENT]*/                      IntQPolicy.ProcessStatus   = ""
-/*[COMMENT]*/                      IntQPolicy.Policy          = IntPol7072.PolicyNumber
-/*[COMMENT]*/                      IntQPolicy.Rencnt          = IntPol7072.Rencnt
-/*[COMMENT]*/                      IntQPolicy.Endcnt          = IntPol7072.Endcnt
-/*[COMMENT]*/                      IntQPolicy.PolicyRec       = 0                       /*RECID(uwm100)*/
-/*[COMMENT]*/                      IntQPolicy.ProcessByUser   = IntPol7072.CompanyCode
-/*[COMMENT]*/                      IntQPolicy.ProcessDate     = TODAY
-/*[COMMENT]*/                      IntQPolicy.ProcessTime     = STRING(TIME,"HH:MM:SS") + "." + SUBSTR(STRING(MTIME,">>>>99999999"),10,3) 
-/*[COMMENT]*/                      IntQPolicy.PolicyTypeCd    = IntPol7072.PolicyTypeCd
-/*[COMMENT]*/                      IntQPolicy.RateGroup       = IntPol7072.RateGroup
-/*[COMMENT]*/                      IntQPolicy.Releas          = YES .                  /*uwm100.releas*/
-/*[BLANK]*/                      
-/*[COMMENT]*/                      OUTPUT TO SavetoIntQPolicy.TXT APPEND.
-/*[COMMENT]*/                      PUT TODAY FORMAT "99/99/9999" 
-/*[COMMENT]*/                      " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
-/*[COMMENT]*/                      " " IntPol7072.PolicyNumber FORMAT "x(16)"
-/*[COMMENT]*/                          IntPol7072.CompanyCode  FORMAT "x(10)" SKIP.
-/*[COMMENT]*/                      OUTPUT CLOSE.
-/*[COMMENT]*/                    **/
-/*[EXECUTABLE]*/                 END PROCEDURE.
+/*[UNCALLED]*/                   PROCEDURE PD_SAVEQGwCtx :
+/*[UNCALLED]*/                   /*------------------------------------------------------------------------------
+/*[UNCALLED]*/                     Purpose:     
+/*[UNCALLED]*/                     Parameters:  <none>
+/*[UNCALLED]*/                     Notes:       
+/*[UNCALLED]*/                   ------------------------------------------------------------------------------*/
+/*[UNCALLED]*/                   /**
+/*[UNCALLED]*/                   DEFINE INPUT PARAMETER nv_QRecIntPol7072  AS RECID NO-UNDO.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   DEFINE VARIABLE nv_NewInputKey            AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   /* ------------------------------------------------------------ */
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     FIND IntPol7072 WHERE RECID(IntPol7072) = nv_QRecIntPol7072
+/*[UNCALLED]*/                     NO-LOCK NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     /*
+/*[UNCALLED]*/                     RUN wctx\WCtxGW100 (INPUT IntPol7072.PolicyNumber
+/*[UNCALLED]*/                                        ,INPUT IntPol7072.CompanyCode).
+/*[UNCALLED]*/                     */
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     nv_NewInputKey = STRING(YEAR(TODAY),"9999")
+/*[UNCALLED]*/                                    + STRING(MONTH(TODAY),"99")
+/*[UNCALLED]*/                                    + STRING(DAY(TODAY),"99")
+/*[UNCALLED]*/                                    + SUBSTR(STRING(DATETIME(TODAY, MTIME)),12,12).
+/*[UNCALLED]*/                     nv_NewInputKey = REPLACE(nv_NewInputKey,":","").
+/*[UNCALLED]*/                     nv_NewInputKey = REPLACE(nv_NewInputKey,".","").
+/*[UNCALLED]*/                     /**/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     CREATE IntQPolicy.
+/*[UNCALLED]*/                     ASSIGN
+/*[UNCALLED]*/                     IntQPolicy.SystemRq        = "SGwCtx"
+/*[UNCALLED]*/                     IntQPolicy.keyRequestIndRq = nv_NewInputKey
+/*[UNCALLED]*/                     IntQPolicy.ProcessStatus   = ""
+/*[UNCALLED]*/                     IntQPolicy.Policy          = IntPol7072.PolicyNumber
+/*[UNCALLED]*/                     IntQPolicy.Rencnt          = IntPol7072.Rencnt
+/*[UNCALLED]*/                     IntQPolicy.Endcnt          = IntPol7072.Endcnt
+/*[UNCALLED]*/                     IntQPolicy.PolicyRec       = 0                       /*RECID(uwm100)*/
+/*[UNCALLED]*/                     IntQPolicy.ProcessByUser   = IntPol7072.CompanyCode
+/*[UNCALLED]*/                     IntQPolicy.ProcessDate     = TODAY
+/*[UNCALLED]*/                     IntQPolicy.ProcessTime     = STRING(TIME,"HH:MM:SS") + "." + SUBSTR(STRING(MTIME,">>>>99999999"),10,3) 
+/*[UNCALLED]*/                     IntQPolicy.PolicyTypeCd    = IntPol7072.PolicyTypeCd
+/*[UNCALLED]*/                     IntQPolicy.RateGroup       = IntPol7072.RateGroup
+/*[UNCALLED]*/                     IntQPolicy.Releas          = YES .                  /*uwm100.releas*/
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     OUTPUT TO SavetoIntQPolicy.TXT APPEND.
+/*[UNCALLED]*/                     PUT TODAY FORMAT "99/99/9999" 
+/*[UNCALLED]*/                     " " STRING(TIME,"HH:MM:SS") "." SUBSTR(STRING(MTIME,">>>>99999999"),10,3)
+/*[UNCALLED]*/                     " " IntPol7072.PolicyNumber FORMAT "x(16)"
+/*[UNCALLED]*/                         IntPol7072.CompanyCode  FORMAT "x(10)" SKIP.
+/*[UNCALLED]*/                     OUTPUT CLOSE.
+/*[UNCALLED]*/                   **/
+/*[UNCALLED]*/                   END PROCEDURE.
 /*[BLANK]*/                      
 /*[COMMENT]*/                    /* _UIB-CODE-BLOCK-END */
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME
 /*[BLANK]*/                      
 /*[EXECUTABLE]*/                 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE proc_FileAttach2 C-Win 
-/*[EXECUTABLE]*/                 PROCEDURE proc_FileAttach2 :
-/*[COMMENT]*/                    /*------------------------------------------------------------------------------
-/*[COMMENT]*/                      Purpose:     
-/*[COMMENT]*/                      Parameters:  <none>
-/*[COMMENT]*/                      Notes:       
-/*[COMMENT]*/                    ------------------------------------------------------------------------------*/
-/*[COMMENT]*/                    /*create by Kridtiya i.    Lockton */
-/*[EXECUTABLE]*/                 DEFINE INPUT        PARAMETER nv_CompanyCode            AS CHARACTER NO-UNDO.              
-/*[EXECUTABLE]*/                 DEFINE INPUT        PARAMETER nv_PolicyType             AS CHARACTER NO-UNDO. /*v70,v72*/  
-/*[EXECUTABLE]*/                 DEFINE INPUT        PARAMETER nv_CMIPolicyTypeCd        AS CHARACTER NO-UNDO.  
-/*[EXECUTABLE]*/                 DEFINE INPUT        PARAMETER nv_RECIDIntPol7072        AS RECID NO-UNDO.
-/*[EXECUTABLE]*/                 DEFINE INPUT-OUTPUT PARAMETER nv_NameCompCd             AS CHARACTER NO-UNDO.              
-/*[EXECUTABLE]*/                 DEFINE INPUT-OUTPUT PARAMETER nv_PrgName                AS CHARACTER NO-UNDO.              
-/*[EXECUTABLE]*/                 DEFINE INPUT-OUTPUT PARAMETER nv_PrmPrg                 AS CHARACTER NO-UNDO.  
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                 DEFINE              VARIABLE  nv_SAVEmsgerror          AS CHARACTER NO-UNDO.
-/*[COMMENT]*/                    /**/
-/*[COMMENT]*/                    /**/
-/*[COMMENT]*/                    /*
-/*[COMMENT]*/                    nv_PolicyType  = "V70".
-/*[COMMENT]*/                    nv_CompanyCode = "210".
-/*[COMMENT]*/                    nv_CMIPolicyTypeCd = "3".
-/*[COMMENT]*/                    */
-/*[COMMENT]*/                      /* ---------------------------------------------------- */
-/*[COMMENT]*/                      /* ProgramPrint ¾Ãº. form PDF àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
-/*[EXECUTABLE]*/                 IF IntPol7072.SERVICE_ID = "online" THEN nv_CompanyCode = TRIM(nv_CompanyCode) + "cer".
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                 ASSIGN
-/*[EXECUTABLE]*/                   nv_NameCompCd = "" nv_PrmPrg = "" nv_PrgName = "".
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                   FIND FIRST FNameAttach WHERE
-/*[EXECUTABLE]*/                              FNameAttach.CompanyCode  = nv_CompanyCode
-/*[EXECUTABLE]*/                          AND FNameAttach.PolicyTypeCd = nv_PolicyType      /*"V70"*/
-/*[EXECUTABLE]*/                          AND FNameAttach.CoverTypeCd  = nv_CMIPolicyTypeCd /*¾Ãº ËÃ×Í "T", 3, 3.1*/
-/*[EXECUTABLE]*/                          AND FNameAttach.EffDate     <= TODAY
-/*[EXECUTABLE]*/                          AND FNameAttach.SelectNumber = 2
-/*[EXECUTABLE]*/                   NO-LOCK NO-ERROR NO-WAIT.
-/*[EXECUTABLE]*/                   IF AVAILABLE FNameAttach THEN DO:
-/*[EXECUTABLE]*/                       ASSIGN 
-/*[EXECUTABLE]*/                           nv_NameCompCd = FNameAttach.CompanyCode
-/*[EXECUTABLE]*/                           nv_PrgName    = FNameAttach.PrgName
-/*[EXECUTABLE]*/                           nv_PrmPrg     = FNameAttach.PrmPrg.
-/*[EXECUTABLE]*/                   END.
-/*[COMMENT]*/                      /*IF nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr709".
-/*[EXECUTABLE]*/                   ELSE nv_PrgName = "Wctx/" + nv_PrgName.  /* Wctxr709 */*/
-/*[EXECUTABLE]*/                   IF   nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr702_RP".
-/*[EXECUTABLE]*/                                        ELSE nv_PrgName = "Wctx/" + nv_PrgName.  /* Wctxr709 */
-/*[EXECUTABLE]*/                 FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RECIDIntPol7072 NO-LOCK NO-ERROR NO-WAIT.
-/*[EXECUTABLE]*/                 IF NOT AVAILABLE IntPol7072 THEN RETURN.
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                 RUN VALUE(nv_PrgName)
-/*[EXECUTABLE]*/                     (IntPol7072.CompanyCode         /*nv_BrokerCompany*/   /*nv_BrokerCompany*/
-/*[EXECUTABLE]*/                     ,IntPol7072.CMIPolicyNumber                        
-/*[EXECUTABLE]*/                     ,IntPol7072.Rencnt                                 
-/*[EXECUTABLE]*/                     ,IntPol7072.Endcnt                                 
-/*[EXECUTABLE]*/                     ,IntPol7072.CMIDocumentUID                         
-/*[EXECUTABLE]*/                     ,IntPol7072.RqUID               /*nv_code  keyRequestIndRq*/     /*nv_code  keyRequestIndRq*/
-/*[EXECUTABLE]*/                     ,""                             /*n_user   */                          /*n_user   */
-/*[EXECUTABLE]*/                     ,""                             /*n_passwd */                          
-/*[EXECUTABLE]*/                     ,nv_PrmPrg                      /*Name Report*/                        /*n_passwd */
-/*[EXECUTABLE]*/                     ,OUTPUT nv_SAVEmsgerror). 
-/*[EXECUTABLE]*/                 IF IntPol7072.SERVICE_ID = "online" THEN nv_NameCompCd = TRIM(IntPol7072.CompanyCode) + "cer".
-/*[BLANK]*/                      
-/*[EXECUTABLE]*/                 END PROCEDURE.
+/*[UNCALLED]*/                   PROCEDURE proc_FileAttach2 :
+/*[UNCALLED]*/                   /*------------------------------------------------------------------------------
+/*[UNCALLED]*/                     Purpose:     
+/*[UNCALLED]*/                     Parameters:  <none>
+/*[UNCALLED]*/                     Notes:       
+/*[UNCALLED]*/                   ------------------------------------------------------------------------------*/
+/*[UNCALLED]*/                   /*create by Kridtiya i.    Lockton */
+/*[UNCALLED]*/                   DEFINE INPUT        PARAMETER nv_CompanyCode            AS CHARACTER NO-UNDO.              
+/*[UNCALLED]*/                   DEFINE INPUT        PARAMETER nv_PolicyType             AS CHARACTER NO-UNDO. /*v70,v72*/  
+/*[UNCALLED]*/                   DEFINE INPUT        PARAMETER nv_CMIPolicyTypeCd        AS CHARACTER NO-UNDO.  
+/*[UNCALLED]*/                   DEFINE INPUT        PARAMETER nv_RECIDIntPol7072        AS RECID NO-UNDO.
+/*[UNCALLED]*/                   DEFINE INPUT-OUTPUT PARAMETER nv_NameCompCd             AS CHARACTER NO-UNDO.              
+/*[UNCALLED]*/                   DEFINE INPUT-OUTPUT PARAMETER nv_PrgName                AS CHARACTER NO-UNDO.              
+/*[UNCALLED]*/                   DEFINE INPUT-OUTPUT PARAMETER nv_PrmPrg                 AS CHARACTER NO-UNDO.  
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   DEFINE              VARIABLE  nv_SAVEmsgerror          AS CHARACTER NO-UNDO.
+/*[UNCALLED]*/                   /**/
+/*[UNCALLED]*/                   /**/
+/*[UNCALLED]*/                   /*
+/*[UNCALLED]*/                   nv_PolicyType  = "V70".
+/*[UNCALLED]*/                   nv_CompanyCode = "210".
+/*[UNCALLED]*/                   nv_CMIPolicyTypeCd = "3".
+/*[UNCALLED]*/                   */
+/*[UNCALLED]*/                     /* ---------------------------------------------------- */
+/*[UNCALLED]*/                     /* ProgramPrint ¾Ãº. form PDF àÅ¢ DOCNO ¢Í§ºÃÔÉÑ··ÕèàºÔ¡ */
+/*[UNCALLED]*/                   IF IntPol7072.SERVICE_ID = "online" THEN nv_CompanyCode = TRIM(nv_CompanyCode) + "cer".
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   ASSIGN
+/*[UNCALLED]*/                     nv_NameCompCd = "" nv_PrmPrg = "" nv_PrgName = "".
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                     FIND FIRST FNameAttach WHERE
+/*[UNCALLED]*/                                FNameAttach.CompanyCode  = nv_CompanyCode
+/*[UNCALLED]*/                            AND FNameAttach.PolicyTypeCd = nv_PolicyType      /*"V70"*/
+/*[UNCALLED]*/                            AND FNameAttach.CoverTypeCd  = nv_CMIPolicyTypeCd /*¾Ãº ËÃ×Í "T", 3, 3.1*/
+/*[UNCALLED]*/                            AND FNameAttach.EffDate     <= TODAY
+/*[UNCALLED]*/                            AND FNameAttach.SelectNumber = 2
+/*[UNCALLED]*/                     NO-LOCK NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                     IF AVAILABLE FNameAttach THEN DO:
+/*[UNCALLED]*/                         ASSIGN 
+/*[UNCALLED]*/                             nv_NameCompCd = FNameAttach.CompanyCode
+/*[UNCALLED]*/                             nv_PrgName    = FNameAttach.PrgName
+/*[UNCALLED]*/                             nv_PrmPrg     = FNameAttach.PrmPrg.
+/*[UNCALLED]*/                     END.
+/*[UNCALLED]*/                     /*IF nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr709".
+/*[UNCALLED]*/                     ELSE nv_PrgName = "Wctx/" + nv_PrgName.  /* Wctxr709 */*/
+/*[UNCALLED]*/                     IF   nv_PrgName = "" THEN nv_PrgName = "Wctx/Wctxr702_RP".
+/*[UNCALLED]*/                                          ELSE nv_PrgName = "Wctx/" + nv_PrgName.  /* Wctxr709 */
+/*[UNCALLED]*/                   FIND IntPol7072 WHERE RECID(IntPol7072) = nv_RECIDIntPol7072 NO-LOCK NO-ERROR NO-WAIT.
+/*[UNCALLED]*/                   IF NOT AVAILABLE IntPol7072 THEN RETURN.
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   RUN VALUE(nv_PrgName)
+/*[UNCALLED]*/                       (IntPol7072.CompanyCode         /*nv_BrokerCompany*/   /*nv_BrokerCompany*/
+/*[UNCALLED]*/                       ,IntPol7072.CMIPolicyNumber                        
+/*[UNCALLED]*/                       ,IntPol7072.Rencnt                                 
+/*[UNCALLED]*/                       ,IntPol7072.Endcnt                                 
+/*[UNCALLED]*/                       ,IntPol7072.CMIDocumentUID                         
+/*[UNCALLED]*/                       ,IntPol7072.RqUID               /*nv_code  keyRequestIndRq*/     /*nv_code  keyRequestIndRq*/
+/*[UNCALLED]*/                       ,""                             /*n_user   */                          /*n_user   */
+/*[UNCALLED]*/                       ,""                             /*n_passwd */                          
+/*[UNCALLED]*/                       ,nv_PrmPrg                      /*Name Report*/                        /*n_passwd */
+/*[UNCALLED]*/                       ,OUTPUT nv_SAVEmsgerror). 
+/*[UNCALLED]*/                   IF IntPol7072.SERVICE_ID = "online" THEN nv_NameCompCd = TRIM(IntPol7072.CompanyCode) + "cer".
+/*[UNCALLED]*/                   
+/*[UNCALLED]*/                   END PROCEDURE.
 /*[BLANK]*/                      
 /*[COMMENT]*/                    /* _UIB-CODE-BLOCK-END */
 /*[EXECUTABLE]*/                 &ANALYZE-RESUME

@@ -42,6 +42,7 @@ namespace AblCommentDetector
                 
                 // Calculate and display statistics
                 var stats = detector.CalculateStatistics(results);
+                var procedureInfo = detector.GetProcedureInfo();
                 
                 Console.WriteLine("Analysis Summary:");
                 Console.WriteLine($"  Total lines: {results.Count}");
@@ -49,6 +50,18 @@ namespace AblCommentDetector
                 Console.WriteLine($"  Pure comments: {stats.CommentLines} lines ({stats.CommentPercentage:F1}%)");
                 Console.WriteLine($"  Mixed content: {stats.MixedLines} lines ({stats.MixedPercentage:F1}%)");
                 Console.WriteLine($"  Empty lines: {stats.EmptyLines} lines ({stats.EmptyPercentage:F1}%)");
+                Console.WriteLine($"  Uncalled procedures: {stats.UncalledProcedures} lines ({stats.UncalledPercentage:F1}%)");
+                Console.WriteLine();
+
+                // Show procedure analysis summary
+                var totalProcedures = procedureInfo.Count;
+                var calledProcedures = procedureInfo.Values.Count(p => p.IsCalled);
+                var uncalledProcedures = totalProcedures - calledProcedures;
+                
+                Console.WriteLine("Procedure Analysis:");
+                Console.WriteLine($"  Total procedures/functions defined: {totalProcedures}");
+                Console.WriteLine($"  Called procedures/functions: {calledProcedures}");
+                Console.WriteLine($"  Uncalled procedures/functions: {uncalledProcedures}");
                 Console.WriteLine();
 
                 // Generate the output file
@@ -91,6 +104,18 @@ namespace AblCommentDetector
                 {
                     Console.WriteLine("Mixed Content Examples (treated as executable):");
                     foreach (var example in mixedExamples)
+                    {
+                        Console.WriteLine($"  Line {example.LineNumber,5}: {example.Content.Trim().Substring(0, Math.Min(80, example.Content.Trim().Length))}...");
+                    }
+                    Console.WriteLine();
+                }
+
+                // Show uncalled procedure examples
+                var uncalledExamples = results.Where(r => r.IsUncalledProcedure).Take(3);
+                if (uncalledExamples.Any())
+                {
+                    Console.WriteLine("Uncalled Procedure Examples:");
+                    foreach (var example in uncalledExamples)
                     {
                         Console.WriteLine($"  Line {example.LineNumber,5}: {example.Content.Trim().Substring(0, Math.Min(80, example.Content.Trim().Length))}...");
                     }
