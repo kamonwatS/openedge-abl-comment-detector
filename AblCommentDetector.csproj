@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>false</ImplicitUsings>
+    <AssemblyName>AblCommentDetector</AssemblyName>
+    <RootNamespace>AblCommentDetector</RootNamespace>
+    <AssemblyTitle>OpenEdge ABL Comment Detection Tool</AssemblyTitle>
+    <AssemblyDescription>Detects executable code in OpenEdge ABL files based on grammar patterns from ezequielgandolfi/openedge-zext</AssemblyDescription>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+  </ItemGroup>
+
+</Project> 
