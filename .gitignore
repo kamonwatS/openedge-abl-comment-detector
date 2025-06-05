@@ -1,0 +1,15 @@
+# Build artifacts
+bin/
+obj/
+
+# Intermediate and test output files
+*-output.w
+*-final.w
+*_enhanced.w
+*-debug.w
+*.analyzed.txt
+analysis-report.txt
+output-csharp.txt
+test-output.txt
+test-sample-output.w
+test-sample.abl 
