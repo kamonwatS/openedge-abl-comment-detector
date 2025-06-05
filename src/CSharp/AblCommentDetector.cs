@@ -20,13 +20,13 @@ namespace AblCommentDetector
         public class LineAnalysisResult
         {
             public int LineNumber { get; set; }
-            public string Content { get; set; }
+            public string Content { get; set; } = string.Empty;
             public LineType Type { get; set; }
             public bool HasExecutableCode { get; set; }
             public bool HasComment { get; set; }
             public int CommentDepthBefore { get; set; }
             public int CommentDepthAfter { get; set; }
-            public string Reason { get; set; }
+            public string Reason { get; set; } = string.Empty;
             public bool IsUncalledProcedure { get; set; }
         }
 
@@ -48,9 +48,6 @@ namespace AblCommentDetector
             EmptyLine
         }
 
-        // Depth counter for nested block comments /* */
-        private int _currentCommentDepth = 0;
-        
         // Storage for line-by-line analysis results
         private readonly List<LineAnalysisResult> _results = new List<LineAnalysisResult>();
         
@@ -69,7 +66,7 @@ namespace AblCommentDetector
         public class ProcedureInfo
         {
             /// <summary>Name of the procedure</summary>
-            public string Name { get; set; }
+            public string Name { get; set; } = string.Empty;
             
             /// <summary>Line number where the procedure is defined</summary>
             public int LineNumber { get; set; }
@@ -78,7 +75,7 @@ namespace AblCommentDetector
             public bool IsCalled { get; set; }
             
             /// <summary>The text of the procedure definition</summary>
-            public string Definition { get; set; }
+            public string Definition { get; set; } = string.Empty;
         }
 
         /// <summary>
@@ -87,7 +84,7 @@ namespace AblCommentDetector
         public class ProcedureBoundary
         {
             /// <summary>Name of the procedure</summary>
-            public string Name { get; set; }
+            public string Name { get; set; } = string.Empty;
             
             /// <summary>Line number where the procedure starts</summary>
             public int StartLine { get; set; }
