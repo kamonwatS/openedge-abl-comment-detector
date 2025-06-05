@@ -1,6 +1,6 @@
 # OpenEdge ABL Code Categories
 
-This document explains the different line categories used in the ABL Comment Detector analysis, with examples of each category.
+This document explains the different line categories used in the ABL Comment Detector analysis, with examples from real OpenEdge ABL code.
 
 ## Categories Overview
 
@@ -19,54 +19,65 @@ This document explains the different line categories used in the ABL Comment Det
 
 Executable LOC are lines of code that contain statements that will be executed. These include:
 
-```
-/* Simple executable statement */
-DISPLAY "Hello, World!".
+```abl
+/* Example: Simple executable statement */
+RUN "app/main.p".       /* this one must be picked up */
 
-/* Variable declaration and assignment */
-DEFINE VARIABLE cName AS CHARACTER NO-UNDO.
-cName = "John".
+/* Example: Procedure call with path */
+RUN path/to/keep-4.p     /* ordinary .p file */
 
-/* Database operations */
-FOR EACH customer WHERE customer.state = "CA":
-  DISPLAY customer.name customer.address.
-END.
+/* Example: Assignment operations */
+CREATE IntTA68.
+ASSIGN
+    IntTA68.SystemRq            = IntPol68.SystemRq    
+    IntTA68.MethodCode          = IntPol68.MethodCode  
+    IntTA68.Policy              = IntPol68.Policy      
+    IntTA68.Rencnt              = IntPol68.Rencnt
 
-/* Procedure calls */
-RUN calculateTotal.
-
-/* Block with executable code */
-IF cTotal > 1000 THEN DO:
-  cDiscount = cTotal * 0.1.
-  cTotal = cTotal - cDiscount.
-END.
+/* Example: Complex expression with built-in functions */
+TB-RESPonseJourney.TransactionResponseDt   = STRING( YEAR(TODAY),"9999")
+                                           + STRING(MONTH(TODAY),"99") 
+                                           + STRING(  DAY(TODAY),"99")
 ```
 
 ### Comments
 
 Comments are lines that contain only comment text and no executable code. There are three types:
 
-```
-/* This is a block comment that spans
-   multiple lines and contains no code */
+```abl
+/* Header block comment: should be ignored
+   RUN ignored1.p. 
+   Total lines: 132, Loc: 41, Comments: 64, Empty: 27
+*/
 
-/** This is an extended block comment
-    sometimes used for documentation **/
+// RUN ignored2.p       -- line comment, ignored
 
-// This is a single-line comment
+# RUN ignored3.i        -- hash comment, ignored
 
-/* Even a single-line block comment counts as a comment line */
+/* block start
+RUN shouldNot.p
+still comment */
 
-# This is a preprocessor directive, also counted as a comment
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:    
+  Empty Lines: 6
+  Loc: 24
+  Comment: 8
+------------------------------------------------------------------------------*/
 ```
 
 ### Blank Lines
 
 Blank lines contain no visible characters or only whitespace:
 
-```
+```abl
+/* Examples of blank lines: */
 
-    
+
+       
+
 /* Blank lines before and after this comment */
 
 ```
@@ -75,20 +86,31 @@ Blank lines contain no visible characters or only whitespace:
 
 These are lines within procedures that are never called with a RUN statement:
 
-```
-/* This procedure is not called anywhere in the code */
-PROCEDURE unusedProcedure:
-  DISPLAY "This code is never executed".
-  calculateValue(10).
+```abl
+/* This procedure is uncalled in the example code */
+PROCEDURE PD_GenDataIntReSend2 :
+/*------------------------------------------------------------------------------
+  Purpose:     Never running this procedure
+  Parameters:  <none>   
+  Empty Lines: 1
+  Loc: 12
+  Comment: 7
+------------------------------------------------------------------------------*/
+CREATE IntTA68.
+ASSIGN
+    IntTA68.SystemRq            = IntPol68.SystemRq    
+    IntTA68.MethodCode          = IntPol68.MethodCode  
+    IntTA68.Policy              = IntPol68.Policy      
+    IntTA68.Rencnt              = IntPol68.Rencnt      
+    IntTA68.Endcnt              = IntPol68.Endcnt      
+    IntTA68.PolicyTypeCd        = IntPol68.PolicyTypeCd
+    IntTA68.RateGroup           = IntPol68.RateGroup   
+    IntTA68.PlanCode            = IntPol68.PlanCode   
+
 END PROCEDURE.
 
-/* But a RUN statement inside a comment doesn't count as a call */
-/* RUN unusedProcedure. */
-
-// RUN unusedProcedure.
-
-/* Similarly, procedure calls in string literals don't count */
-DISPLAY "Example: RUN unusedProcedure.".
+/* Example of a RUN statement in a comment (doesn't count as a call) */
+/* RUN PD_GenDataIntReSend2. */
 ```
 
 For a procedure to be considered "called" and not counted as unused:
@@ -97,35 +119,91 @@ For a procedure to be considered "called" and not counted as unused:
 
 Example of a called procedure:
 
-```
-/* This procedure is called */
-PROCEDURE usedProcedure:
-  DISPLAY "This code is executed".
+```abl
+/* This procedure is called in the example code */
+PROCEDURE PD_GenDataIntReSend :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:    
+  Empty Lines: 6
+  Loc: 24
+  Comment: 8
+------------------------------------------------------------------------------*/
+CREATE IntTA68.
+ASSIGN
+    IntTA68.SystemRq            = IntPol68.SystemRq    
+    IntTA68.MethodCode          = IntPol68.MethodCode  
+    IntTA68.Policy              = IntPol68.Policy      
+    IntTA68.Rencnt              = IntPol68.Rencnt      
+    
+    /* Additional assignments... */
+
 END PROCEDURE.
 
-/* This line makes usedProcedure "called" */
-RUN usedProcedure.
+/* The following line makes PD_GenDataIntReSend a "called" procedure */
+RUN PD_GenDataIntReSend.
 ```
 
 ### Mixed Content
 
 Although not a separate category in the statistics, mixed content lines contain both executable code and comments:
 
-```
-DISPLAY "Hello". /* This is an inline comment */
+```abl
+/* Example: Inline comment after code */
+RUN "app/main.p".       /* this one must be picked up */
 
-OUTPUT TO file.txt. // Write to a file
+/* Example: Code after a block comment */
+/* inline block: RUN skipInline.w */  RUN keep-2.i
+
+/* Example: Another inline comment format */
+RUN  keep-3.W            /* capital "W" extension  */
 ```
 
 Mixed content lines are counted as executable LOC in the statistics.
 
 ## How Totals Are Calculated
 
-The line categories have these relationships:
+The analysis results include metrics like:
 
+```
+Original Lines: 132
+Uncalled Procedure LOC: 12
+Comments: 64
+Blank Lines: 27
+Total Unused Lines: 103
+Executable LOC: 29
+```
+
+These relationships apply:
 ```
 Original Lines = Executable LOC + Comments + Blank Lines + Uncalled Procedure LOC
 Total Unused Lines = Comments + Blank Lines + Uncalled Procedure LOC
+```
+
+## Importance of Procedure Call Detection
+
+The ABL Comment Detector specifically looks for procedure calls using the `RUN` keyword and ensures that:
+
+1. The procedure is called with a valid `RUN` statement 
+2. The `RUN` statement is not inside a comment
+3. The `RUN` statement is not inside a string literal
+
+Example of proper procedure call detection:
+
+```abl
+/* This RUN statement is not in a comment, so it counts */
+RUN PD_GenDataIntReSend.
+
+/* These RUN statements are inside comments, so they don't count */
+/* RUN PD_GenDataIntReSend2. */
+// RUN PD_GenDataIntReSend2.
+
+/* This is inside a block comment that contains nested comments
+/*----- Nested comment ----
+RUN WRS/SendReqP4Ins.P (INPUT nv_URL2, INPUT nv_node-nameHeader2, OUTPUT ResponseResult2).
+*/
+/* None of the above procedures would be counted as called */
 ```
 
 These metrics help developers understand how much of their codebase is actively used and how much is documentation or unused code. 
