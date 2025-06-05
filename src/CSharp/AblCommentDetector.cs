@@ -326,10 +326,14 @@ namespace AblCommentDetector
                 {
                     var procName = match.Groups[1].Value.ToUpper();
                     
-                    _calledProcedures.Add(procName);
-                    if (_procedures.ContainsKey(procName))
+                    // Check if the RUN statement is inside a comment or string literal
+                    if (!IsInNonExecutableContext(line, match.Index))
                     {
-                        _procedures[procName].IsCalled = true;
+                        _calledProcedures.Add(procName);
+                        if (_procedures.ContainsKey(procName))
+                        {
+                            _procedures[procName].IsCalled = true;
+                        }
                     }
                 }
 
@@ -339,8 +343,8 @@ namespace AblCommentDetector
                 {
                     var funcName = match.Groups[1].Value.ToUpper();
                     
-                    // Skip built-in ABL functions and keywords
-                    if (!IsBuiltInFunction(funcName))
+                    // Skip built-in ABL functions and keywords and calls in non-executable contexts
+                    if (!IsBuiltInFunction(funcName) && !IsInNonExecutableContext(line, match.Index))
                     {
                         _calledProcedures.Add(funcName);
                         if (_procedures.ContainsKey(funcName))
@@ -866,6 +870,68 @@ namespace AblCommentDetector
             _procedures.Clear();
             _calledProcedures.Clear();
             _procedureBoundaries.Clear();
+        }
+
+        private bool IsInNonExecutableContext(string line, int index)
+        {
+            // Skip check if index is invalid
+            if (index < 0 || index >= line.Length)
+                return false;
+        
+            // Track state for comments and string literals
+            bool inComment = false;
+            bool inString = false;
+            char stringChar = '\0';
+        
+            for (int i = 0; i < index; i++)
+            {
+                // Skip if we don't have enough characters left
+                if (i + 1 >= line.Length)
+                    break;
+            
+                char current = line[i];
+                char next = i + 1 < line.Length ? line[i + 1] : '\0';
+            
+                // Handle string literals - if we're not in a comment
+                if (!inComment && !inString && (current == '"' || current == '\''))
+                {
+                    inString = true;
+                    stringChar = current;
+                    continue;
+                }
+                if (!inComment && inString && current == stringChar && (i == 0 || line[i - 1] != '~'))
+                {
+                    inString = false;
+                    continue;
+                }
+                
+                // Skip other checks if in string
+                if (inString) continue;
+            
+                // Handle single-line comments
+                if (!inComment && current == '/' && next == '/')
+                {
+                    // Everything after // is a comment
+                    return true;
+                }
+            
+                // Handle block comment delimiters
+                if (!inComment && current == '/' && next == '*')
+                {
+                    inComment = true;
+                    i++; // Skip the next character
+                    continue;
+                }
+                if (inComment && current == '*' && next == '/')
+                {
+                    inComment = false;
+                    i++; // Skip the next character
+                    continue;
+                }
+            }
+        
+            // Return true if we're in a comment OR a string at the position
+            return inComment || inString;
         }
     }
 }
