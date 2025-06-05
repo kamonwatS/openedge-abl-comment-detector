@@ -22,8 +22,6 @@ It also handles complex ABL syntax including string literals, line continuation 
 │   └── Shell/               # Utility scripts
 ├── inputs/                  # Sample ABL code files
 ├── outputs/                 # Generated output files
-├── docs/                    # Documentation files
-│   └── metrics.md           # Detailed metrics explanation
 └── tests/                   # Reference test data
 ```
 
@@ -62,9 +60,8 @@ dotnet run --project src/CSharp/AblCommentDetector.csproj -- <input-file-path>
 
 - Accurate comment detection with proper nesting support
 - Handles executable code mixed with comments
-- Detailed analysis reporting with metrics (see [metrics documentation](docs/metrics.md))
-- Procedure call detection (identifies uncalled procedures)
-- Intelligent handling of commented code (RUN statements in comments are not treated as actual calls)
+- Detailed analysis reporting
+- Procedure call detection
 - Portable path handling with no absolute paths
 
 ## Output
