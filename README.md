@@ -1,60 +1,92 @@
 # OpenEdge ABL Comment Detector
 
-A C# application for detecting and analyzing comments in OpenEdge ABL (Progress 4GL) files.
+A tool for detecting and analyzing comments in OpenEdge ABL (Progress 4GL) files.
 
 ## Overview
 
-This tool accurately identifies comments in OpenEdge ABL code, distinguishing between:
+This tool identifies comments in OpenEdge ABL code, distinguishing between:
 - Single-line comments (`//`)
 - Multi-line comments (`/* ... */`) with proper nesting support
 - Extended block comments (`/** ... **/`)
 
-The tool handles complex ABL syntax features including:
-- String literals with comment-like content
-- Line continuation characters (`~`)
-- Escape sequences
-- Mixed lines (containing both executable code and comments)
+It also handles complex ABL syntax including string literals, line continuation characters, escape sequences, and mixed lines.
+
+## Project Structure
+
+```
+.
+├── run-detector.sh          # Main script for running the detector
+├── setup-outputs.sh         # Script for output directory setup
+├── src/
+│   ├── CSharp/              # C# implementation
+│   └── Shell/               # Utility scripts
+├── inputs/                  # Sample ABL code files
+├── outputs/                 # Generated output files
+└── tests/                   # Reference test data
+```
+
+## Setup & Execution
+
+### First-Time Setup
+
+Run this once to set up the output directory structure:
+
+```bash
+./setup-outputs.sh
+```
+
+This creates a symbolic link between `src/CSharp/outputs` and the root-level `outputs` directory, ensuring consistent output storage regardless of where the application is run from.
+
+### Running the Detector
+
+```bash
+# Process a single file
+./run-detector.sh inputs/sample-code.p
+
+# Process all files in a directory
+./run-detector.sh inputs
+
+# Process and verify against reference data
+./run-detector.sh --verify inputs/WRSBQ7072.W
+```
+
+Direct C# execution is also possible:
+
+```bash
+dotnet run --project src/CSharp/AblCommentDetector.csproj -- <input-file-path>
+```
 
 ## Features
 
-- Sophisticated lexical analysis with state tracking
-- Proper handling of nested comments
-- Context-aware parsing that understands when delimiters are syntax vs. literal text
-- Automatic output file generation with "-modified.w" suffix
-- Support for multiple input files
+- Accurate comment detection with proper nesting support
+- Handles executable code mixed with comments
 - Detailed analysis reporting
+- Procedure call detection
+- Portable path handling with no absolute paths
 
-## Usage
+## Output
 
-```bash
-dotnet run <input-file-path>
-```
-
-This will generate:
-- A modified version of your file with comments marked
-- Analysis output showing comment statistics
-
-## Rules
-
-- Lines with both comment and executable code are treated as executable code
-- Comment markers are preserved in the output for traceability
-- Nested comments are properly handled with depth tracking
+The tool generates:
+- Modified versions of input files with comments marked
+- Statistical analysis (lines of code, comment percentage, etc.)
+- Procedure usage information
+- All outputs are stored in the `outputs` directory
 
 ## Sample Output
 
 For input:
 ```
-PROCEDURE PD_SAVEPD1FileAttach2 : /* This is a comment */
+PROCEDURE PD_GenQMail : /* Send email */
 ```
 
 Output:
 ```
-PROCEDURE PD_SAVEPD1FileAttach2 : /*[COMMENT]*/                    /* This is a comment */
+PROCEDURE PD_GenQMail : /*[COMMENT]*/            /* Send email */
 ```
 
-## Project Structure
+## Development Notes
 
-- `AblCommentDetector.cs`: Main detection engine
-- `Program.cs`: Console application entry point
-- `inputs/`: Sample input files
-- `outputs/`: Generated output files with analysis results 
+- The `.cursorrc` file ensures consistent execution from the project root
+- All output paths are resolved relative to the project root
+- Verification compares analysis results with reference data in `tests/compare-test-data.txt`
+- The symbolic link mechanism avoids absolute paths while maintaining consistent output locations 

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using AblCommentDetector;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace AblCommentDetector
 {
@@ -13,6 +14,10 @@ namespace AblCommentDetector
     {
         static void Main(string[] args)
         {
+            // Ensure root-level outputs directory exists
+            string projectRoot = GetProjectRoot();
+            Directory.CreateDirectory(Path.Combine(projectRoot, "outputs"));
+
             Console.WriteLine("OpenEdge ABL Comment Detection Tool");
             Console.WriteLine("===================================");
             Console.WriteLine("Based on grammar patterns from https://github.com/ezequielgandolfi/openedge-zext.git");
@@ -55,6 +60,48 @@ namespace AblCommentDetector
             }
         }
 
+        // Helper method to get project root directory using relative paths
+        static string GetProjectRoot()
+        {
+            // Get the directory where the executable is running
+            string executableDir = AppDomain.CurrentDomain.BaseDirectory;
+            
+            // If running from bin directory (e.g., bin/Debug/net6.0), navigate up to project root
+            if (executableDir.Contains("bin"))
+            {
+                // Check if we're in src/CSharp/bin or similar structure
+                if (executableDir.Contains(Path.Combine("src", "CSharp", "bin")))
+                {
+                    // Navigate up to project root (three levels up from bin directory)
+                    return Path.GetFullPath(Path.Combine(executableDir, "..", "..", ".."));
+                }
+                else
+                {
+                    // For other bin structures, just navigate two levels up
+                    return Path.GetFullPath(Path.Combine(executableDir, "..", ".."));
+                }
+            }
+            
+            // If not in a bin directory, we might be in the project root already
+            // Check for common project identifiers to confirm
+            string currentDir = Directory.GetCurrentDirectory();
+            if (Directory.Exists(Path.Combine(currentDir, "src")) && 
+                Directory.Exists(Path.Combine(currentDir, "inputs")))
+            {
+                return currentDir;
+            }
+            
+            // If we're in the src/CSharp directory
+            if (Path.GetFileName(currentDir) == "CSharp" && 
+                Path.GetFileName(Path.GetDirectoryName(currentDir)) == "src")
+            {
+                return Path.GetFullPath(Path.Combine(currentDir, "..", ".."));
+            }
+            
+            // Fallback: Just use the current directory
+            return currentDir;
+        }
+
         static void ProcessSingleFile(string filePath)
         {
             Console.WriteLine($"Analyzing file: {Path.GetFileName(filePath)}");
@@ -63,9 +110,10 @@ namespace AblCommentDetector
             var detector = new AblCommentDetector();
             var results = detector.AnalyzeFile(filePath);
 
-            // Create output subdirectory based on filename without extension
+            // Use project root for output paths
+            string projectRoot = GetProjectRoot();
             string fileName = Path.GetFileNameWithoutExtension(filePath);
-            string outputDir = Path.Combine("outputs", fileName);
+            string outputDir = Path.Combine(projectRoot, "outputs", fileName);
             Directory.CreateDirectory(outputDir);
 
             // Copy original file to output directory
@@ -83,6 +131,26 @@ namespace AblCommentDetector
             Console.WriteLine($"Original file copied to: {originalOutputPath}");
             Console.WriteLine($"Modified file saved to: {modifiedOutputPath}");
             Console.WriteLine();
+            
+            // Generate analysis-result.txt for verification
+            var stats = detector.CalculateStatistics(results);
+            var procedureInfo = detector.GetProcedureInfo();
+            
+            var fileResult = new FileAnalysisResult
+            {
+                FileName = Path.GetFileName(filePath),
+                OriginalLines = results.Count,
+                ExecutableLines = stats.ExecutableLines + stats.MixedLines,
+                CommentLines = stats.CommentLines,
+                BlankLines = stats.EmptyLines,
+                UncalledProcedureLines = stats.UncalledProcedures,
+                CalledProcedures = procedureInfo.Values.Where(p => p.IsCalled).Select(p => p.Name).ToList(),
+                UncalledProcedures = procedureInfo.Values.Where(p => !p.IsCalled).Select(p => p.Name).ToList()
+            };
+            
+            var fileResults = new List<FileAnalysisResult> { fileResult };
+            GenerateAnalysisResultFile(fileResults);
+            
             Console.WriteLine("Analysis complete!");
         }
 
@@ -116,6 +184,9 @@ namespace AblCommentDetector
             // List to store detailed file analysis results
             var fileAnalysisResults = new List<FileAnalysisResult>();
 
+            // Use project root for output paths
+            string projectRoot = GetProjectRoot();
+
             foreach (string filePath in ablFiles)
             {
                 try
@@ -124,21 +195,19 @@ namespace AblCommentDetector
                     
                     var results = detector.AnalyzeFile(filePath);
 
-                    // Create individual output subdirectory for each file
-                    string fileName = Path.GetFileNameWithoutExtension(filePath);
-                    string outputDir = Path.Combine("outputs", fileName);
-                    Directory.CreateDirectory(outputDir);
+                    // Create individual output subdirectory for each file (using relative paths)
+                    string fileOutputDir = Path.Combine(projectRoot, "outputs", Path.GetFileNameWithoutExtension(filePath));
+                    Directory.CreateDirectory(fileOutputDir);
 
-                    // Copy original file to its own subdirectory
-                    string originalOutputPath = Path.Combine(outputDir, Path.GetFileName(filePath));
-                    File.Copy(filePath, originalOutputPath, true);
-
+                    // Copy original file to output directory
+                    File.Copy(filePath, Path.Combine(fileOutputDir, Path.GetFileName(filePath)), true);
+                    
                     // Generate modified file in the same subdirectory
-                    string modifiedFileName = $"{fileName}-modified{Path.GetExtension(filePath)}";
-                    string modifiedOutputPath = Path.Combine(outputDir, modifiedFileName);
+                    string modifiedFileName = $"{Path.GetFileNameWithoutExtension(filePath)}-modified{Path.GetExtension(filePath)}";
+                    string modifiedOutputPath = Path.Combine(fileOutputDir, modifiedFileName);
                     detector.GenerateReport(filePath, modifiedOutputPath);
 
-                    Console.WriteLine($"  -> Created: {outputDir}/");
+                    Console.WriteLine($"  -> Created: {fileOutputDir}/");
 
                     // Calculate detailed statistics for this file
                     var stats = detector.CalculateStatistics(results);
@@ -219,7 +288,7 @@ namespace AblCommentDetector
             Console.WriteLine($"Total called procedures: {totalCalledProcedures}");
             Console.WriteLine($"Total uncalled procedures: {totalProcedures - totalCalledProcedures}");
             Console.WriteLine();
-            Console.WriteLine($"Individual subdirectories created in: outputs/");
+            Console.WriteLine($"Individual subdirectories created in: {Path.Combine(GetProjectRoot(), "outputs")}");
 
             // Generate analysis-result.txt
             GenerateAnalysisResultFile(fileAnalysisResults);
@@ -243,7 +312,8 @@ namespace AblCommentDetector
 
         static void GenerateAnalysisResultFile(List<FileAnalysisResult> fileResults)
         {
-            var outputPath = Path.Combine("outputs", "analysis-result.txt");
+            string projectRoot = GetProjectRoot();
+            var outputPath = Path.Combine(projectRoot, "outputs", "analysis-result.txt");
             
             using (var writer = new StreamWriter(outputPath))
             {

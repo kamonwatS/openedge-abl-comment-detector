@@ -1,0 +1,38 @@
+{
+  "name": "ABL Comment Detector Rules",
+  "version": "1.0.0",
+  "rules": [
+    {
+      "name": "verify-execution-path",
+      "description": "Ensures the ABL Comment Detector is always executed from the project root directory",
+      "on": {
+        "trigger": "beforeCommand",
+        "command": "dotnet run"
+      },
+      "do": {
+        "type": "script",
+        "script": "#!/bin/bash\n\n# Get the current working directory\nCURRENT_DIR=$(pwd)\n\n# Get the project root directory (where .cursorrc is located)\nPROJECT_ROOT=$(dirname \"$CURSOR_RULE_FILE\")\n\n# Check if we're in the project root or in the src/CSharp directory\nif [[ \"$CURRENT_DIR\" != \"$PROJECT_ROOT\" && \"$CURRENT_DIR\" != \"$PROJECT_ROOT/src/CSharp\" ]]; then\n  echo \"\\033[0;31mError:\\033[0m The ABL Comment Detector must be run from the project root directory.\"\n  echo \"Please change to the project root directory and run:\"\n  echo \"  cd $PROJECT_ROOT\"\n  echo \"  dotnet run --project src/CSharp/AblCommentDetector.csproj -- <arguments>\"\n  exit 1\nfi\n\n# If in project root, make sure to use the --project flag\nif [[ \"$CURRENT_DIR\" == \"$PROJECT_ROOT\" && ! \"$CURSOR_COMMAND\" =~ --project ]]; then\n  echo \"\\033[0;33mWarning:\\033[0m Running from project root requires specifying the project.\"\n  echo \"Command modified to: dotnet run --project src/CSharp/AblCommentDetector.csproj ${CURSOR_COMMAND#dotnet run}\"\n  CURSOR_COMMAND=\"dotnet run --project src/CSharp/AblCommentDetector.csproj ${CURSOR_COMMAND#dotnet run}\"\nfi\n\n# Continue with the command\nexit 0"
+      }
+    },
+    {
+      "name": "run-verification-after-changes",
+      "description": "Verify results when C# files are saved",
+      "on": {
+        "trigger": "afterSaveFile",
+        "pattern": "**/*.cs"
+      },
+      "do": {
+        "type": "prompt",
+        "message": "C# code has been modified. Do you want to verify the results?",
+        "options": ["Yes", "No"],
+        "then": {
+          "if": "Yes",
+          "do": {
+            "type": "command",
+            "command": "./src/Shell/verify-results.sh"
+          }
+        }
+      }
+    }
+  ]
+} 
