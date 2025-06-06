@@ -6,20 +6,34 @@ using AblCommentDetector;
 
 namespace AblCommentDetector.Tests
 {
+    /// <summary>
+    /// Tests more complex scenarios for the AblCommentDetector, focusing on edge cases
+    /// and complex combinations of comments, strings, and procedure calls.
+    /// These tests verify that the detector handles complex ABL code patterns correctly.
+    /// </summary>
     public class ComplexCasesTests
     {
         private readonly AblCommentDetector _detector;
         private readonly string _testFilesDirectory;
 
+        /// <summary>
+        /// Initializes a new instance of the ComplexCasesTests class.
+        /// Sets up the test environment by creating a temporary directory for test files
+        /// and initializing a new instance of the AblCommentDetector.
+        /// </summary>
         public ComplexCasesTests()
         {
             _detector = new AblCommentDetector();
-            
-            // Set up test files directory
-            _testFilesDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestFiles");
+            _testFilesDirectory = Path.Combine(Path.GetTempPath(), "AblCommentDetectorTests", "ComplexCasesTests");
             Directory.CreateDirectory(_testFilesDirectory);
         }
 
+        /// <summary>
+        /// Tests the detector's ability to handle nested comments.
+        /// Although ABL doesn't officially support nested comments, the detector
+        /// should handle them gracefully and correctly identify procedure calls 
+        /// outside of comments.
+        /// </summary>
         [Fact]
         public void NestedComments_ShouldBeHandledCorrectly()
         {
@@ -57,6 +71,12 @@ RUN NestedProc. /* This call should be counted */
             Assert.NotNull(runLine);
         }
 
+        /// <summary>
+        /// Tests the detector's ability to handle line continuations.
+        /// In ABL, the tilde (~) character can be used to continue a line.
+        /// This test verifies that the detector correctly handles line continuations
+        /// in various contexts (strings, comments, etc.)
+        /// </summary>
         [Fact]
         public void LineContinuation_ShouldBeHandledCorrectly()
         {
@@ -106,6 +126,11 @@ RUN ContProc. // This should call the procedure
             Assert.NotNull(finalRunLine);
         }
 
+        /// <summary>
+        /// Tests the detector's ability to handle mixed strings and comments.
+        /// This verifies that the detector correctly identifies code that includes
+        /// strings that look like comments and comments that look like strings.
+        /// </summary>
         [Fact]
         public void MixedStringAndCommentCases_ShouldBeHandledCorrectly()
         {
@@ -159,6 +184,12 @@ RUN MixedCase.
             Assert.Equal(AblCommentDetector.LineType.ExecutableCode, messageWithCommentLike!.Type);
         }
 
+        /// <summary>
+        /// Tests the detector's ability to handle a complex mixture of all features.
+        /// This comprehensive test verifies that the detector correctly handles a file
+        /// with multiple procedures, nested comments, string literals with various content,
+        /// line continuations, and combinations of these elements.
+        /// </summary>
         [Fact]
         public void ComplexExample_ShouldHandleAllCases()
         {

@@ -6,20 +6,69 @@ using AblCommentDetector;
 
 namespace AblCommentDetector.Tests
 {
+    /// <summary>
+    /// Tests the statistical analysis functionality of the AblCommentDetector.
+    /// These tests focus on verifying that the detector correctly calculates statistics
+    /// about the analyzed code, such as percentages of comment lines, empty lines,
+    /// executable lines, and uncalled procedures.
+    /// </summary>
     public class StatisticsTests
     {
         private readonly AblCommentDetector _detector;
         private readonly string _testFilesDirectory;
 
+        /// <summary>
+        /// Initializes a new instance of the StatisticsTests class.
+        /// Sets up the test environment by creating a temporary directory for test files
+        /// and initializing a new instance of the AblCommentDetector.
+        /// </summary>
         public StatisticsTests()
         {
             _detector = new AblCommentDetector();
-            
-            // Set up test files directory
-            _testFilesDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestFiles");
+            _testFilesDirectory = Path.Combine(Path.GetTempPath(), "AblCommentDetectorTests", "StatisticsTests");
             Directory.CreateDirectory(_testFilesDirectory);
         }
 
+        /// <summary>
+        /// Tests that an empty file returns appropriate zero statistics.
+        /// This verifies the detector's handling of edge cases like empty files.
+        /// </summary>
+        [Fact]
+        public void EmptyFile_ShouldHaveZeroStatistics()
+        {
+            // Create an empty test file
+            var testFilePath = Path.Combine(_testFilesDirectory, "empty_file.p");
+            File.WriteAllText(testFilePath, "");
+
+            // Analyze the file
+            var results = _detector.AnalyzeFile(testFilePath);
+            var stats = _detector.CalculateStatistics(results);
+
+            // Assert - note: the detector might treat empty files differently than expected
+            // either by returning 0 or 1 line, depending on implementation
+            Assert.InRange(results.Count, 0, 1); // Allow either 0 or 1 lines
+            
+            // Check if results are empty or contain a single empty line
+            if (results.Count == 1)
+            {
+                Assert.Equal(1, stats.EmptyLines);
+            }
+            else
+            {
+                Assert.Equal(0, stats.EmptyLines);
+            }
+            
+            Assert.Equal(0, stats.ExecutableLines);
+            Assert.Equal(0, stats.CommentLines);
+            Assert.Equal(0, stats.MixedLines);
+            Assert.Equal(0, stats.UncalledProcedures);
+        }
+
+        /// <summary>
+        /// Tests that the detector correctly calculates statistics for a file with
+        /// various types of content (comments, code, procedures, etc.)
+        /// This verifies the core statistical analysis functionality of the detector.
+        /// </summary>
         [Fact]
         public void CalculateStatistics_ShouldReturnCorrectCounts()
         {
@@ -76,37 +125,10 @@ RUN Proc1.
             Assert.False(procInfo["PROC2"].IsCalled);
         }
 
-        [Fact]
-        public void EmptyFile_ShouldHaveZeroStatistics()
-        {
-            // Create an empty test file
-            var testFilePath = Path.Combine(_testFilesDirectory, "empty_file.p");
-            File.WriteAllText(testFilePath, "");
-
-            // Analyze the file
-            var results = _detector.AnalyzeFile(testFilePath);
-            var stats = _detector.CalculateStatistics(results);
-
-            // Assert - note: the detector might treat empty files differently than expected
-            // either by returning 0 or 1 line, depending on implementation
-            Assert.InRange(results.Count, 0, 1); // Allow either 0 or 1 lines
-            
-            // Check if results are empty or contain a single empty line
-            if (results.Count == 1)
-            {
-                Assert.Equal(1, stats.EmptyLines);
-            }
-            else
-            {
-                Assert.Equal(0, stats.EmptyLines);
-            }
-            
-            Assert.Equal(0, stats.ExecutableLines);
-            Assert.Equal(0, stats.CommentLines);
-            Assert.Equal(0, stats.MixedLines);
-            Assert.Equal(0, stats.UncalledProcedures);
-        }
-
+        /// <summary>
+        /// Tests that a file containing only comments has correct statistics.
+        /// This verifies that the detector handles files with no executable code properly.
+        /// </summary>
         [Fact]
         public void OnlyComments_ShouldHaveFullCommentStatistics()
         {
