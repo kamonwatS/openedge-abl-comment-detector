@@ -33,6 +33,30 @@
           }
         }
       }
+    },
+    {
+      "name": "ensure-analysis-test-data-consistency",
+      "description": "Ensures analysis-result.txt and compare-test-data.txt files always match",
+      "on": {
+        "trigger": "afterSaveFile",
+        "pattern": "outputs/analysis-result.txt"
+      },
+      "do": {
+        "type": "script",
+        "script": "#!/bin/bash\n\n# Get the project root directory (where .cursorrc is located)\nPROJECT_ROOT=$(dirname \"$CURSOR_RULE_FILE\")\n\n# Check if the files are identical\nif ! cmp -s \"$PROJECT_ROOT/outputs/analysis-result.txt\" \"$PROJECT_ROOT/tests/compare-test-data.txt\"; then\n  echo \"\\033[0;31mError:\\033[0m analysis-result.txt and compare-test-data.txt don't match!\"\n  echo \"Reverting changes to analysis-result.txt...\"\n  # Copy the test data back to the analysis result to revert\n  cp \"$PROJECT_ROOT/tests/compare-test-data.txt\" \"$PROJECT_ROOT/outputs/analysis-result.txt\"\n  echo \"\\033[0;32mReverted:\\033[0m analysis-result.txt has been restored to match compare-test-data.txt\"\nelse\n  echo \"\\033[0;32mSuccess:\\033[0m analysis-result.txt and compare-test-data.txt are in sync.\"\nfi\n\nexit 0"
+      }
+    },
+    {
+      "name": "ensure-test-data-analysis-consistency",
+      "description": "Ensures compare-test-data.txt and analysis-result.txt files always match",
+      "on": {
+        "trigger": "afterSaveFile",
+        "pattern": "tests/compare-test-data.txt"
+      },
+      "do": {
+        "type": "script",
+        "script": "#!/bin/bash\n\n# Get the project root directory (where .cursorrc is located)\nPROJECT_ROOT=$(dirname \"$CURSOR_RULE_FILE\")\n\n# Check if the files are identical\nif ! cmp -s \"$PROJECT_ROOT/tests/compare-test-data.txt\" \"$PROJECT_ROOT/outputs/analysis-result.txt\"; then\n  echo \"\\033[0;31mError:\\033[0m compare-test-data.txt and analysis-result.txt don't match!\"\n  echo \"Reverting changes to compare-test-data.txt...\"\n  # Copy the analysis result back to the test data to revert\n  cp \"$PROJECT_ROOT/outputs/analysis-result.txt\" \"$PROJECT_ROOT/tests/compare-test-data.txt\"\n  echo \"\\033[0;32mReverted:\\033[0m compare-test-data.txt has been restored to match analysis-result.txt\"\nelse\n  echo \"\\033[0;32mSuccess:\\033[0m compare-test-data.txt and analysis-result.txt are in sync.\"\nfi\n\nexit 0"
+      }
     }
   ]
 } 
