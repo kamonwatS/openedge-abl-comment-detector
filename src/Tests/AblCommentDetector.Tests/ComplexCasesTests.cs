@@ -53,7 +53,7 @@ RUN NestedProc. /* This call should be counted */
             Assert.True(commentLines.Count >= 5); // At least 5 comment lines in the file
             
             // Find the RUN statement and verify it exists
-            var runLine = results.FirstOrDefault(r => r.Content.Contains("RUN NestedProc."));
+            var runLine = results.FirstOrDefault(r => r.Content?.Contains("RUN NestedProc.") == true);
             Assert.NotNull(runLine);
         }
 
@@ -94,15 +94,15 @@ RUN ContProc. // This should call the procedure
             Assert.True(procInfo.ContainsKey("CONTPROC"));
             
             // Verify the existence of displayLine, don't assert its type directly
-            var displayLine = results.FirstOrDefault(r => r.Content.Contains("This string has a continuation"));
+            var displayLine = results.FirstOrDefault(r => r.Content?.Contains("This string has a continuation") == true);
             Assert.NotNull(displayLine);
             
             // Verify the existence of commentLine, don't assert its type directly
-            var commentLine = results.FirstOrDefault(r => r.Content.Contains("Comment with continuation"));
+            var commentLine = results.FirstOrDefault(r => r.Content?.Contains("Comment with continuation") == true);
             Assert.NotNull(commentLine);
             
             // Verify that there's a RUN ContProc line somewhere
-            var finalRunLine = results.FirstOrDefault(r => r.Content.Contains("RUN ContProc"));
+            var finalRunLine = results.FirstOrDefault(r => r.Content?.Contains("RUN ContProc") == true);
             Assert.NotNull(finalRunLine);
         }
 
@@ -146,14 +146,17 @@ RUN MixedCase.
             Assert.False(procInfo["ESCAPEDQUOTE"].IsCalled);
             
             // Verify line classifications
-            var stringWithCommentLike = results.FirstOrDefault(r => r.Content.Contains("String with /* comment-like"));
-            Assert.Equal(AblCommentDetector.LineType.ExecutableCode, stringWithCommentLike.Type);
+            var stringWithCommentLike = results.FirstOrDefault(r => r.Content != null && r.Content.Contains("String with /* comment-like"));
+            Assert.NotNull(stringWithCommentLike);
+            Assert.Equal(AblCommentDetector.LineType.ExecutableCode, stringWithCommentLike!.Type);
             
-            var commentWithStringLike = results.FirstOrDefault(r => r.Content.Contains("Comment with \"string-like\""));
-            Assert.Equal(AblCommentDetector.LineType.PureComment, commentWithStringLike.Type);
+            var commentWithStringLike = results.FirstOrDefault(r => r.Content != null && r.Content.Contains("Comment with \"string-like\""));
+            Assert.NotNull(commentWithStringLike);
+            Assert.Equal(AblCommentDetector.LineType.PureComment, commentWithStringLike!.Type);
             
-            var messageWithCommentLike = results.FirstOrDefault(r => r.Content.Contains("This /* is not a comment"));
-            Assert.Equal(AblCommentDetector.LineType.ExecutableCode, messageWithCommentLike.Type);
+            var messageWithCommentLike = results.FirstOrDefault(r => r.Content != null && r.Content.Contains("This /* is not a comment"));
+            Assert.NotNull(messageWithCommentLike);
+            Assert.Equal(AblCommentDetector.LineType.ExecutableCode, messageWithCommentLike!.Type);
         }
 
         [Fact]

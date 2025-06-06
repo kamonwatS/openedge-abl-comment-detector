@@ -20,7 +20,7 @@ namespace AblCommentDetector.Tests
         private bool InvokeIsInNonExecutableContext(string line, int index)
         {
             Type type = typeof(AblCommentDetector);
-            MethodInfo method = type.GetMethod("IsInNonExecutableContext", 
+            MethodInfo? method = type.GetMethod("IsInNonExecutableContext", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
             
             if (method == null)
@@ -42,7 +42,8 @@ namespace AblCommentDetector.Tests
                 }
             }
             
-            return (bool)method.Invoke(_detector, new object[] { line, index });
+            var result = method.Invoke(_detector, new object[] { line, index });
+            return result != null && (bool)result;
         }
 
         [Theory]
